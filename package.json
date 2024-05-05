@@ -1,0 +1,60 @@
+{
+  "name": "@open-chat/open-chat-ui",
+  "version": "0.0.1",
+  "description": "UI package for Tim's 'Open-Chat'",
+  "main": "index.ts",
+  "scripts": {
+    "typescript": "tsc --jsx react",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Schupp",
+  "license": "ISC",
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/react": "^18.3.1",
+    "babel-loader": "^9.1.3",
+    "file-loader": "^6.2.0",
+    "fork-ts-checker-webpack-plugin": "^9.0.2",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "url-loader": "^4.1.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "peerDependencies": {
+    "js-cookie": "^3.0.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
+    "@radix-ui/react-accordion": "^1.1.2",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-checkbox": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-hover-card": "^1.0.7",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-navigation-menu": "^1.1.4",
+    "@radix-ui/react-scroll-area": "^1.0.5",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@reduxjs/toolkit": "^2.2.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
+    "embla-carousel-react": "^8.0.2",
+    "js-cookie": "^3.0.5",
+    "lucide-react": "^0.376.0",
+    "next-themes": "^0.3.0",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.51.3",
+    "react-markdown": "^9.0.1",
+    "react-redux": "^9.1.1",
+    "react-resizable-panels": "^2.0.18",
+    "react-responsive": "^10.0.0",
+    "react-use-websocket": "^4.8.1",
+    "sonner": "^1.4.41",
+    "tailwind-merge": "^2.3.0",
+    "zod": "^3.23.4"
+  }
+}
