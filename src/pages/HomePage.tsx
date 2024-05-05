@@ -1,15 +1,15 @@
-import djangoLogo from "../../assets/_external_logos/django.png";
-import k8sLogo from "../../assets/_external_logos/kubernetes.svg";
-import vikeLogo from "../../assets/_external_logos/vike.svg";
-import featureDemontrationImage from "../../assets/feature-demonstration.svg";
+import { Radar, TriangleAlert } from "lucide-react";
+import djangoLogo from "../assets/_external_logos/django.png";
+import k8sLogo from "../assets/_external_logos/kubernetes.svg";
+import vikeLogo from "../assets/_external_logos/vike.svg";
+import featureDemontrationImage from "../assets/feature-demonstration.svg";
+import { Link } from "../atoms/Link";
 import { About } from "../landing_page/About";
 import { Hero } from "../landing_page/Hero";
 import { HowItWorks } from "../landing_page/HowItWorks";
 import { Navbar } from "../landing_page/Navbar";
 import { ScrollToTop } from "../landing_page/ScrollToTop";
 import { Services } from "../landing_page/Services";
-import { Radar, TriangleAlert } from "lucide-react";
-import { Link } from "../atoms/Link";
 import { Team } from "../landing_page/Team";
 
 const HoverLink = ({ href, children }) => {

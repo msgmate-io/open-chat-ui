@@ -1,6 +1,5 @@
-import { Statistics } from "./Statistics";
-import pilot from "@/assets/logo.png";
-import { defaultStatistics } from "./Statistics";
+import pilot from "../assets/logo.png";
+import { Statistics, defaultStatistics } from "./Statistics";
 
 export const About = ({
   header = (

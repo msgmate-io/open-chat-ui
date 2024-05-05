@@ -1,10 +1,10 @@
 export default ThemeSelector;
-import { useEffect } from "react";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Cookies from "js-cookie";
-import { THEMES } from "../../store/frontendTypes";
-import { ReloadIcon } from "@radix-ui/react-icons"
-import { useSelector, useDispatch } from "react-redux";
-import { changeTheme } from "../../store/store";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { THEMES } from "../store/frontendTypes";
+import { changeTheme } from "../store/store";
 
 
 function ThemeSelector() {

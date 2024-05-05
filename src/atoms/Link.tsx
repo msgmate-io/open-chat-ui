@@ -1,5 +1,5 @@
-import { ROUTE_PREFIX } from "../../constants";
 import { forwardRef } from "react";
+import { ROUTE_PREFIX } from "../constants";
 
 function vikeNavigate(href, props = {}) {
     if (href.startsWith("/")) {

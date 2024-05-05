@@ -1,4 +1,11 @@
-import { ErrorResult } from '../../api/apiTypes';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { EyeIcon, EyeOff } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { ErrorResult } from '../api/apiTypes';
+import { LOGIN_AS_GUEST } from '../constants';
 import { Button } from "../ui/button";
 import {
     Card,
@@ -16,13 +23,6 @@ import {
     FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { LOGIN_AS_GUEST } from '../../constants';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { EyeIcon, EyeOff } from 'lucide-react';
-import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
 
 const formSchema = z.object({
     username: z.string().min(2, {

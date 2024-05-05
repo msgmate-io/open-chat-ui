@@ -1,4 +1,6 @@
-import { ChatResult } from "../../api/api";
+import { ChatResult } from "../api/api";
+import { navigateSearch } from "../atoms/Link";
+import { cn } from "../lib/utils";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -14,10 +16,14 @@ import {
     DropdownMenuSeparator
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
-import { cn } from "../../lib/utils";
-import { navigateSearch } from "../atoms/Link";
 
-import { useApi } from "../../api/client2";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { useEffect, useState } from "react";
+import Markdown from 'react-markdown';
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { useApi } from "../api/client2";
+import { deleteChat, updateChatSettings } from "../store/chats";
 import {
     Dialog,
     DialogContent,
@@ -27,12 +33,6 @@ import {
     DialogTitle,
     DialogTrigger
 } from "../ui/dialog";
-import { deleteChat, updateChatSettings } from "../../store/chats";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { useEffect, useState } from "react";
-import Markdown from 'react-markdown';
-import { useDispatch } from "react-redux";
-import { toast } from "sonner";
 
 function DeleteChatButton({ dialogOpen, setDialogOpen, chat, setMarkedForDeletion }) {
     const api = useApi();

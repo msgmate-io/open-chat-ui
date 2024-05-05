@@ -1,4 +1,4 @@
-import cubeLeg from "@/assets/logo.png";
+import cubeLeg from "../assets/logo.png";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartIcon, MagnifierIcon, WalletIcon } from "./Icons";
 

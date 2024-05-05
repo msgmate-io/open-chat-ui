@@ -1,11 +1,11 @@
-import { WEBSOCKET_URL } from "../../constants";
-import { updateNewestMessage, updatePartnerOnlineStatus } from "../../store/chats";
-import { updateContactsOnlineStatus } from "../../store/contacts";
-import { insertMessage, updatePartialMessage } from "../../store/messages";
-import { updatePublicProfilesOnlineStatus } from "../../store/publicProfiles";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { WEBSOCKET_URL } from "../constants";
+import { updateNewestMessage, updatePartnerOnlineStatus } from "../store/chats";
+import { updateContactsOnlineStatus } from "../store/contacts";
+import { insertMessage, updatePartialMessage } from "../store/messages";
+import { updatePublicProfilesOnlineStatus } from "../store/publicProfiles";
 
 const useCustomEventHandler = (dispatch) => {
   return {

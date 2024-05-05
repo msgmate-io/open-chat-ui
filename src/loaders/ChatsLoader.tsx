@@ -1,12 +1,10 @@
-export default ChatsLoader;
-
-import { useApi } from "../../api/client2";
-import { fetchChats } from "../../store/chats";
-import { RootState } from "../../store/store";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../api/client2";
+import { fetchChats } from "../store/chats";
+import { RootState } from "../store/store";
 
-function ChatsLoader() {
+export function ChatsLoader() {
     const api = useApi();
     const dispatch = useDispatch();
     const chats = useSelector((state: RootState) => state.chats.value);

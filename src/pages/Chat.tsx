@@ -1,16 +1,16 @@
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "../ui/resizable";
-import { useBreakpoint } from "../../lib/utils";
-import { RootState } from "../../store/store";
 import Cookies from 'js-cookie';
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import WebsocketBridge from "../atoms/WebsocketBridge";
 import { ChatsList } from "../chat/ChatView";
 import { CreateChatCard, MessagesView, NewChatCard } from "../chat/MessageView";
+import { useBreakpoint } from "../lib/utils";
+import { RootState } from "../store/store";
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "../ui/resizable";
 import { Toaster } from "../ui/sonner";
 
 function CollapseIndicator({

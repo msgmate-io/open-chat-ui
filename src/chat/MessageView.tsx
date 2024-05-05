@@ -1,6 +1,17 @@
-import { useApi } from "../../api/client2";
-import logo from "../../assets/logo.png";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { useApi } from "../api/client2";
+import logo from "../assets/logo.png";
+import { navigateSearch } from "../atoms/Link";
+import ContactsLoader from "../loaders/ContactsLoader";
+import { ChatMessagesLoader } from "../loaders/MessagesLoader";
+import PublicProfilesLoader from "../loaders/PublicProfilesLoader";
+import { getChatByChatId, insertChat, markChatAsRead, updateNewestMessage } from "../store/chats";
+import { getChatPartialMessage, getMessagesByChatId, insertMessage, markChatMessagesAsRead } from "../store/messages";
+import { RootState } from "../store/store";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import {
     Card,
     CardContent,
@@ -12,17 +23,6 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "../ui/carousel";
-import { getChatByChatId, insertChat, markChatAsRead, updateNewestMessage } from "../../store/chats";
-import { getChatPartialMessage, getMessagesByChatId, insertMessage, markChatMessagesAsRead } from "../../store/messages";
-import { RootState } from "../../store/store";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
-import { navigateSearch } from "../atoms/Link";
-import ContactsLoader from "../loaders/ContactsLoader";
-import { ChatMessagesLoader } from "../loaders/MessagesLoader";
-import PublicProfilesLoader from "../loaders/PublicProfilesLoader";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { OnlineIndicator } from "./chat";

@@ -1,6 +1,6 @@
-import Markdown from 'react-markdown'
-import logo from "../../assets/logo.png";
-import { ChatResult, Message } from "../../api/api";
+import Markdown from 'react-markdown';
+import { ChatResult, Message } from "../api/api";
+import logo from "../assets/logo.png";
 
 export function MessageItem({
     message,

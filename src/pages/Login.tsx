@@ -1,18 +1,18 @@
 export default LoginPage;
-import { LoginInfo } from "../../api/api";
-import { ErrorResult } from "../../api/apiTypes";
-import { useApi } from "../../api/client2";
-import { navigate } from "../atoms/Link";
-import LoginHero from "../hero/login";
-import { LoginNavbar } from "../pages/HomePage";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Toaster } from "../ui/sonner";
-import { LOGIN_AS_GUEST } from "../../constants";
-import { fetchUser } from "../../store/user";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import { LoginInfo } from "../api/api";
+import { ErrorResult } from "../api/apiTypes";
+import { useApi } from "../api/client2";
+import { navigate } from "../atoms/Link";
+import { LOGIN_AS_GUEST } from "../constants";
+import LoginHero from "../hero/login";
+import { LoginNavbar } from "../pages/HomePage";
+import { fetchUser } from "../store/user";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Toaster } from "../ui/sonner";
 
 const cinematicTitle = (
     <>

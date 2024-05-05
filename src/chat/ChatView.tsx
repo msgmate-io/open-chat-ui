@@ -1,6 +1,10 @@
-import { useApi } from "../../api/client2";
-import logo from "../../assets/logo.png";
-import ThemeSelector from "../../components/atoms/ThemeSelector";
+import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../api/client2";
+import logo from "../assets/logo.png";
+import { navigateSearch } from "../atoms/Link";
+import ThemeSelector from "../atoms/ThemeSelector";
+import ProfileLoader from "../loaders/ProfileLoader";
+import { AppDispatch, RootState, logoutUser } from "../store/store";
 import {
     Card,
 } from "../ui/card";
@@ -13,10 +17,6 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { AppDispatch, RootState, logoutUser } from "../../store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { navigateSearch } from "../atoms/Link";
-import ProfileLoader from "../loaders/ProfileLoader";
 import { ChatItem, PendingChatItem } from "./chat";
 
 function NewChatCard() {

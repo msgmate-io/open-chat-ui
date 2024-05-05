@@ -1,8 +1,8 @@
-import { useApi } from "../../api/client2";
-import { fetchMessages } from "../../store/messages";
-import { RootState } from "../../store/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../api/client2";
+import { fetchMessages } from "../store/messages";
+import { RootState } from "../store/store";
 
 export function ChatMessagesLoader({ chatId }) {
     const api = useApi();

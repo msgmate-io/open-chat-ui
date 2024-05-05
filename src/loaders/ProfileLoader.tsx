@@ -1,10 +1,10 @@
 export default ProfileLoader;
 
-import { useApi } from "../../api/client2";
-import { fetchProfile } from "../../store/profile";
-import { RootState } from "../../store/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../api/client2";
+import { fetchProfile } from "../store/profile";
+import { RootState } from "../store/store";
 
 function ProfileLoader() {
     const api = useApi();

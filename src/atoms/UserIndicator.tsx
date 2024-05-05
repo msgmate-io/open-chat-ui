@@ -1,9 +1,8 @@
 export default UserIndicator;
 
-import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import { Link } from "../atoms/Link";
+import { RootState } from "../store/store";
 
 function UserIndicator() {
   const user = useSelector((state: RootState) => state.user.value);

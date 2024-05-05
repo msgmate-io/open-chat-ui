@@ -1,10 +1,10 @@
 export default ContactsLoader;
 
-import { useApi } from "../../api/client2";
-import { fetchContacts } from "../../store/contacts";
-import { RootState } from "../../store/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useApi } from "../api/client2";
+import { fetchContacts } from "../store/contacts";
+import { RootState } from "../store/store";
 
 function ContactsLoader() {
     const api = useApi();

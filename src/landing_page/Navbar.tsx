@@ -16,8 +16,8 @@ import {
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Menu } from "lucide-react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import ThemeSelector from "../atoms/ThemeSelector";
+import { RootState } from "../store/store";
 import { buttonVariants } from "../ui/button";
 import { LogoIcon } from "./Icons";
 
@@ -47,6 +47,7 @@ const routeList: RouteProps[] = [
 
 import { CalendarIcon } from "@radix-ui/react-icons";
 
+import { Link } from "../atoms/Link";
 import {
   Avatar,
   AvatarFallback,
@@ -57,7 +58,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
-import { Link } from "../atoms/Link";
 
 export const UserHoverCard = ({ children }) => {
   const user = useSelector((state: RootState) => state.user.value);

@@ -1,15 +1,15 @@
-import { Api } from '../api/api';
-import { navigate } from '../components/atoms/Link';
+import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { Dispatch } from 'redux';
 import { toast } from 'sonner';
+import { Api } from '../api/api';
+import { navigate } from '../atoms/Link';
 import { chatsSlice, ChatState, fetchChats } from './chats';
 import { contactsSlice, ContactsState } from './contacts';
 import { messagesSlice, MessagesState } from './messages';
 import { fetchProfile, profileSlice, ProfileState } from './profile';
 import { PublicProfilesSlice, PublicProfilesState } from './publicProfiles';
 import { fetchUser, userSlice, UserState } from './user';
-import { createSlice, configureStore, combineReducers } from "@reduxjs/toolkit"
 
 const frontendSlice = createSlice({
     name: 'frontend',
