@@ -1,10 +1,19 @@
 import { forwardRef } from "react";
+import { navigate as vikeNavigateImport } from 'vike/client/router';
 import { ROUTE_PREFIX } from "../constants";
 
-function vikeNavigate(href, props = {}) {
+function vikeNavigateFallback(href, props = {}) {
     if (href.startsWith("/")) {
         href = ROUTE_PREFIX + href;
     }
+}
+
+let vikeNavigate = null;
+
+if (vikeNavigateImport) {
+    vikeNavigate = vikeNavigateImport;
+} else {
+    vikeNavigate = vikeNavigateFallback;
 }
 
 interface LinkProps {
