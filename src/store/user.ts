@@ -1,5 +1,6 @@
+import * as toolkitRaw from '@reduxjs/toolkit';
 import { UserSelf } from '../api/api';
-import { createSlice } from '@reduxjs/toolkit';
+const { createSlice } = toolkitRaw.default ?? toolkitRaw;
 
 export interface UserState {
     value: null | UserSelf;

@@ -1,6 +1,7 @@
+import * as toolkitRaw from '@reduxjs/toolkit';
 import { Message, PaginatedMessageList } from '../api/api';
-import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
+const { createSlice } = toolkitRaw.default ?? toolkitRaw;
 
 interface MessageCache {
     [key: string]: PaginatedMessageList;

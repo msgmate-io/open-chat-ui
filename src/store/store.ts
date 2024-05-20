@@ -1,4 +1,4 @@
-import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
+import * as toolkitRaw from '@reduxjs/toolkit';
 import Cookies from "js-cookie";
 import { Dispatch } from 'redux';
 import { toast } from 'sonner';
@@ -10,6 +10,7 @@ import { messagesSlice, MessagesState } from './messages';
 import { fetchProfile, profileSlice, ProfileState } from './profile';
 import { PublicProfilesSlice, PublicProfilesState } from './publicProfiles';
 import { fetchUser, userSlice, UserState } from './user';
+const { createSlice, configureStore, combineReducers } = toolkitRaw.default ?? toolkitRaw;
 
 const frontendSlice = createSlice({
     name: 'frontend',

@@ -1,5 +1,6 @@
+import * as toolkitRaw from '@reduxjs/toolkit';
 import { PaginatedUserProfileList } from '../api/api';
-import { createSlice } from '@reduxjs/toolkit';
+const { createSlice } = toolkitRaw.default ?? toolkitRaw;
 
 export interface PublicProfilesState {
     value: null | PaginatedUserProfileList;
