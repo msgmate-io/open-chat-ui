@@ -1,361 +1,273 @@
-import { Radar, TriangleAlert } from "lucide-react";
-import djangoLogo from "../assets/_external_logos/django.png";
-import k8sLogo from "../assets/_external_logos/kubernetes.svg";
-import vikeLogo from "../assets/_external_logos/vike.svg";
-import featureDemontrationImage from "../assets/feature-demonstration.svg";
-import { Link } from "../atoms/Link";
-import { About } from "../landing_page/About";
+import cubeLeg from "../assets/logo.png";
+import { BetaBanner } from "../landing_page/BetaBanner";
+import { FAQ } from "../landing_page/FAQ";
+import { Features } from "../landing_page/Features";
+import { Footer } from "../landing_page/Footer";
 import { Hero } from "../landing_page/Hero";
-import { HowItWorks } from "../landing_page/HowItWorks";
+import { ALanguageModels } from "../landing_page/LanguageModels";
 import { Navbar } from "../landing_page/Navbar";
 import { ScrollToTop } from "../landing_page/ScrollToTop";
-import { Services } from "../landing_page/Services";
-import { Team } from "../landing_page/Team";
 
-const HoverLink = ({ href, children }) => {
-  return (
-    // @ts-ignore
-    <Link
-      className="group bg-gradient-to-r from-[#F596D3]  to-[#D247BF] text-transparent bg-clip-text transition-all duration-300 ease-in-out"
-      href={href}
-    >
-      <span className="bg-left-bottom bg-gradient-to-r from-pink-500 to-pink-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-        {children}
-      </span>
-    </Link>
-  );
-};
+const logoTitle = "Msgmate.io";
+const githubLink = "https://github.com/tbscode/django-vike-chat";
+const heroImage = cubeLeg;
 
-const heroCardContents = {
-  comment: {
-    image: <TriangleAlert />,
-    className: "animate-pulse bg-orange-300",
-    userName: "WORK IN PROGRESS",
-    userTag: "still coding ...",
-    comment:
-      "Check out GitHub for progress information and complete feature list!",
-  },
-  infoCard: {
-    title: "Check out the creator of this landing page template",
-    description: (
-      <>
-        <HoverLink href="https://github.com/leoMirandaa">Leo Miranda</HoverLink>{" "}
-        created the open template used as basis for this landing page
-      </>
-    ),
-  },
-  pricingCard: {
-    title: "Open Source",
-    priceText: "MIT",
-    priceDescription: "",
-    description: "This is built to be built with!",
-    badge: null,
-    buttonText: "Build & Contribute Now!",
-    features: [
-      "Django Backend",
-      "Django Channels",
-      "React & TailwindCSS",
-      "Docker + Helm",
-      "Android, iOS and Web",
-      "Open Source",
-    ],
-  },
-  userCard: {
-    username: "Tim Schupp",
-    userDescription: "Full Stack Developer & Founder",
-    info: "I love building stuff, especially with others using open source - so I initiated this Project!",
-    image:
-      "https://pbs.twimg.com/profile_images/1479831065409867781/hZhS0L9m_400x400.jpg",
-  },
-};
+const sectionFeature = "features";
+const sectionBeta = "beta";
+const sectionModels = "models";
+const sectionFaq = "faq";
 
-const navbarRoutes = [
-  {
-    href: "#features",
-    label: "Features",
-  },
-  {
-    href: "#packages",
-    label: "Packages",
-  },
-  {
-    href: "/docs",
-    label: "Docs",
-  },
-  {
-    href: "/api/schema/redoc/",
-    label: "API",
-  },
-];
-const logoTitle = "Open Chat";
 const cinematicTitle = (
-  <div className="flex flex-col" >
-    <h1 className="inline mb-10 text-5xl">
-      Open Chat
-    </h1>
-    <h1 className="inline">
-      Modularized{" "}
-      <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] text-transparent bg-clip-text">
-        Chat-Interface and API
-      </span>{" "}
-    </h1>
+    <div className="flex flex-col" >
+        <h1 className="inline mb-10 text-5xl">
+            Msgmate.io
+        </h1>
+        <h1 className="inline">
+            Enhanced and customizable{" "}
+            <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] text-transparent bg-clip-text">
+                AI Chat
+            </span>,{" "}
+        </h1>
 
-    <h2 className="inline">
-      for{" "}
-      <span className="inline bg-gradient-to-r from-[#F596D3]  to-[#D247BF] text-transparent bg-clip-text">
-        (AI-)Chat
-      </span>{" "}
-      users and developers
-    </h2>
-  </div>
+        <h2 className="inline">
+            with{" "}
+            <span className="inline bg-gradient-to-r from-[#F596D3]  to-[#D247BF] text-transparent bg-clip-text">
+                integrations
+            </span>{" "}
+            for{" "}
+            <span className="inline bg-gradient-to-r from-[#D247BF]  to-[#FE9933] text-transparent bg-clip-text">
+                your favorite messangers and tools
+            </span>
+        </h2>
+    </div>
 );
 const heroSubtitle =
-  "Packaged open source full-stack application that can be deployed as a (AI-)Chat-Interface or its individual python packages can be used in any Django project. The REST and WebSocket APIs are built to be extensible and to be integratable with Bots and other apps.";
-const githubLink = "https://github.com/tbscode/django-vike-chat";
-const heroToAppButton = {
-  text: "Check out the Chat",
-  link: "/chat",
-};
-const sponsorsTitle = "Supported by";
-const sponsors = [
-  {
-    icon: <Radar size={34} />,
-    name: "Open Chat gbr",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Msgmate.io",
-  },
-  {
-    icon: <Radar size={34} />,
-    name: "Tim Benjamin Software UG",
-  },
-];
-const servicesTitle = (
-  <>
-    <h2 className="text-3xl md:text-4xl font-bold">
-      <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-        All in one{" "}
-      </span>
-      (AI-)Chat-App{" "}
-    </h2>
-    <h2 className="text-3xl md:text-4xl font-bold">
-      Backend + Frontend + Bot API
-    </h2>
-  </>
-);
-
-const magemateAboutImage = featureDemontrationImage;
-const msgmateAboutSubtitle =
-  "Uses open source tools & libraries and is built with development and build processes in mind";
-const msgmateAboutHeader = (
-  <h2 className="text-3xl md:text-4xl font-bold">
-    Used and Supported by <HoverLink href="https://msgmate.io">Msgmate.io</HoverLink>
-  </h2>
-);
-const servicesList = [
-  {
-    title: "Django + REST Framework + Channels",
-    description:
-      "Includes several other django / python related libraries and tools.",
-    icon: <img src={djangoLogo} alt="Django Logo" />,
-  },
-  {
-    title: "Vike.dev + React + Shadcn UI",
-    description:
-      "Reactive modern UI rendered server side and routed client side. Styled with tailwind and daisyui.",
-    icon: <img src={vikeLogo} alt="Vike Logo" />,
-  },
+    "Unleash the the power of AI to simplify communication and automate tasks.";
+const navbarRoutes = [
+    {
+        href: "/docs",
+        label: "Docs",
+    },
+    {
+        href: "/api/schema/redoc/",
+        label: "API",
+    },
 ];
 
-const msgmateStatistics = [
-  {
-    quantity: "5+",
-    description: "AI Models",
-  },
-  {
-    quantity: "300+",
-    description: "Users",
-  },
-  {
-    quantity: "5000+",
-    description: "Messages Sent",
-  },
-  {
-    quantity: "200+",
-    description: "Images Generated",
-  },
-];
-
-const showSponsorsBanner = false;
-
-export function LoginNavbar() {
-  return (
-    <Navbar
-      // @ts-ignore
-      logoIcon={"💬 "}
-      logoTitle={logoTitle}
-      githubLink={githubLink}
-      routes={[
-        {
-          href: "/",
-          label: "🔙 Back Home",
-        },
-      ]}
-    />
-  );
-}
-
-export function DocsNavbar({ children }) {
-  return (
-    <Navbar
-      // @ts-ignore
-      logoIcon={"💬 "}
-      logoTitle={logoTitle}
-      githubLink={null}
-      loginLink={null}
-      mobileFlexDir="row"
-      mobileChildren={children}
-      routes={[
-        {
-          href: "/",
-          label: "🔙",
-        },
-      ]}
-    />
-  );
-}
-
-const howItWorksCinematicTitle = (
-  <h2 className="text-3xl md:text-4xl font-bold ">
-    Modularized to be{" "}
-    <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-      Reusable
-    </span>
-  </h2>
-);
-
-const howItWorksSubtitle = <>
-  These are the{" "}
-  <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-    planned features and modules
-  </span>
-</>
-
-const defaultFeatures = [
-  {
-    icon: <img src={djangoLogo} className="w-14" alt="Django Logo" />,
-    title: <span>'Chat' Chat Module</span>,
-    description:
-      "A django app dedicated to chat only! Includes models, views, serializers, channels consumer and more.Independent of django user module, fully customizable and extendable.",
-  },
-  {
-    icon: <img src={djangoLogo} className="w-14" alt="Django Logo" />,
-    title: <span>'Core' User Management Module</span>,
-    description:
-      "Independent of chat offers authentication and user management if you don't want to use django's default user module or provide your own. Comes with Profile and Settings model REST APIs for any Django application e.g.: an (AI-)Chat-Application.",
-  },
-  {
-    icon: <>
-      <img src={djangoLogo} className="w-14" alt="Django Logo" />
-      +
-      <img src={k8sLogo} className="w-14" alt="Kubernetes Logo" />
-      +
-      <img src={vikeLogo} alt="Vike Logo" className="w-10" />
-    </>,
-    title: <span>Scalable Packaged AI-Chat-Interface</span>,
-    description:
-      "Combined with the Vike-React frontend, the two chat modules and the Docker or Kubernetes deployment the whole thing can be used as complete self-hostable AI chat interface"
-  },
-];
-
-const teamSubtitle = "The people behind the project";
-const teamList = [
-  {
-    imageUrl: null,
-    name: "Fabian Rücker",
-    position: "Data Scientist & Fullstack Developer",
-    socialNetworks: [
-      {
-        name: "Github",
-        url: "https://github.com/fruecker89",
-      },
-    ],
-  },
-  {
-    imageUrl: null,
-    name: "Jannis Tölle",
-    position: "Web-Developer & Computer Science Student",
-    socialNetworks: [
-      {
-        name: "Github",
-        url: "https://github.com/JannisToelle",
-      },
-    ],
-  },
-  {
-    imageUrl: null,
-    name: "Tim Schupp",
-    position: "CTO & Fullstack Developer",
-    socialNetworks: [
-      {
-        name: "Github",
-        url: "https://github.com/tbscode",
-      },
-    ],
-  },
+const navbarStartRoutes = [
+    {
+        href: sectionFeature,
+        label: "Features",
+        desc: "Current implemented features"
+    },
+    {
+        href: sectionBeta,
+        label: "Beta",
+        desc: "Bevome a Beta Tester"
+    },
+    {
+        href: sectionModels,
+        label: "Language Models",
+        desc: "Current supported models"
+    },
+    {
+        href: sectionFaq,
+        label: "FAQ",
+        desc: "Frequently asked questions"
+    },
 ]
 
-export const showSponsors = false;
+const featureTitle = "Features";
+const featureList = [
+    {
+        title: "Open Source",
+        description: "Built on a foundation of transparency and community-driven enhancements, we build tools for developers and users with developers!",
+        image: null
+    },
+    {
+        title: "Self-Hostable",
+        description: "Keep full control of your data by hosting on your own servers, run your bots at home or in the cloud.",
+        image: null
+    },
+    {
+        title: "Manage Hundreds of Bots and Chats",
+        description: "User management tools to allow for easy integration and management of multiple bots and chat interfaces.",
+        image: null
+    },
+    {
+        title: "Bots & Integrations",
+        description: "Easily integrate with existing systems and extend functionality with bots, everybot is just like a User, itegrated via http or websockets from anywhere.",
+        image: null
+    },
+]
 
+const betaTitle = "Beta";
+const betaSubtitle = "Msgmate.io is actively under development. This tool suite, developed as open-source, builds upon the Open-Chat framework — integrating packages, bots, and extensions seamlessly.";
+const becomeTesterBtnText = "Become a Beta Tester";
 
+const languageModelsTitle =
+    <h2 className="text-3xl lg:text-4xl font-bold md:text-center">
+        6{" "}
+        <span className="inline bg-gradient-to-r from-[#D247BF]  to-[#FE9933] text-transparent bg-clip-text">
+            Models
+        </span>
+        {" "}Currently supported
+    </h2>
+const languageModelSubtitle = "Msgmate.io supports the use of self-hosted and open-source large language models (LLMs)! While providing a platform to test these models through our services, we collaborate with shared GPU model hosting providers. Our mission is to create easily maintainable systems that can operate independently on your infrastructure."
+const languageModels = [
+    {
+        title: "meta-llama/Meta-Llama-3-70B-Instruct",
+        description: "From Meta's robust lineup, the Llama 3 series stands out by offering pre-trained, instruction-tuned text generation models in varying sizes."
+    },
+    {
+        title: "microsoft/WizardLM-2-8x22B",
+        description: "Microsoft AI's advanced Wizard model showcases outstanding performance, rivalling leading proprietary models with its 8x22B configuration."
+    },
+    {
+        title: "mistralai/Mistral-7B-Instruct-v0.2",
+        description: "An instruction fine-tuned version catering to diverse conversation datasets, providing robust dialogue management."
+    },
+    {
+        title: "Phind/Phind-CodeLlama-34B-v2",
+        description: "An open-source, multi-lingual language model excelling in code-related tasks, originally trained on high-quality data to ensure top-notch performance."
+    },
+    {
+        title: "openai/gpt-3.5-turbo",
+        description: "Famed for its natural language and coding capabilities, optimized for both conversational and non-conversational AI tasks."
+    },
+    {
+        title: "openai/gpt-4-turbo",
+        description: "Representing the latest in high-performance, multimodal models. It accepts both text and image inputs to solve complex problems with heightened accuracy."
+    },
+]
+
+const faqQuestionProps = [
+    {
+        question: "Why does msgmate.io have tokens?",
+        answer: "Token are just for users that use the hosted msgmate.io AI agents and have an account for beta.msgmate.io. In that case we pay infrastructure providers for LLM or other model completion costs, our tokens bearly cover the service running costs and are adjusted accoring to hoster pricing and model used.",
+        value: "item-1",
+    },
+    {
+        question: "How do I get a beta.msgmate.io account?",
+        answer: "At the moment we are in closed beta, while some users are still using the original msgmate.io alpha messenger integration service. The beta is under active development and acess can only the requested by contacting herrduenschnlate+msgateioprivatebeta@gmail.com with a short description of you and your usecase.",
+        value: "item-2",
+    },
+    {
+        question: "What is the difference between msgmate.io and msgmate.io beta?",
+        answer: "The original msgmate.io is a messenger integration service that allows you to chat with your favorite AI models in your favorite messengers. The new version of msgmate focuses more on the chat experience and model decentralization, the messenger integrations will be rebuild as a form of integration in the new msgmate.io",
+        value: "item-3",
+    },
+    {
+        question: "Where can I contribute / how can I help?",
+        answer: "You can contribute to the open-source project by submitting issues, pull requests, or by becoming a beta tester. We are always looking for feedback and suggestions to improve the platform. Feel free to open issues on any of our public repositories or contact us directly.",
+        value: "item-4",
+    },
+]
+
+const imprintLink = "#";
+const privacyLink = "#";
+const termsLink = "#";
+
+export function LoginNavbar() {
+    return (
+        <Navbar
+            // @ts-ignore
+            logoIcon={"💬 "}
+            logoTitle={logoTitle}
+            githubLink={githubLink}
+            routes={[
+                {
+                    href: "/",
+                    label: "🔙 Back Home",
+                },
+            ]}
+        />
+    );
+}
+export function DocsNavbar({ children }) {
+    return (
+        <Navbar
+            // @ts-ignore
+            logoIcon={"💬 "}
+            logoTitle={logoTitle}
+            githubLink={null}
+            loginLink={null}
+            mobileFlexDir="row"
+            mobileChildren={children}
+            routes={[
+                {
+                    href: "/",
+                    label: "🔙",
+                },
+            ]}
+        />
+    );
+}
 
 export function HomeNavbar() {
-  return (
-    <Navbar
-      // @ts-ignore
-      logoIcon={"💬 "}
-      logoTitle={logoTitle}
-      githubLink={githubLink}
-      routes={navbarRoutes}
-    />
-  );
+    return (
+        <Navbar
+            // @ts-ignore
+            logoIcon={
+                <img
+                    src={cubeLeg}
+                    className="w-[32px] object-contain"
+                    alt="Msgmate.io Logo"
+                />
+            }
+            logoTitle={logoTitle}
+            githubLink={githubLink}
+            routes={navbarRoutes}
+            listRoutes={navbarStartRoutes}
+        />
+    );
 }
 
+
+
 export function HomePage() {
-  return (
-    <>
-      <HomeNavbar />
-      <Hero
-        cinematicTitle={cinematicTitle}
-        subtitle={heroSubtitle}
-        githubLink={githubLink}
-        // @ts-ignore
-        cardContents={heroCardContents}
-        toAppButtonText={heroToAppButton.text}
-        toAppLink={heroToAppButton.link}
-      />
-      <Services
-        sectionId="features"
-        title={servicesTitle}
-        image={magemateAboutImage}
-        subtitle={msgmateAboutSubtitle}
-        services={servicesList}
-      />
-      <HowItWorks
-        cinematicTitle={howItWorksCinematicTitle}
-        // @ts-ignore
-        features={defaultFeatures}
-        subtitle={howItWorksSubtitle}
-      />
-      <Team subtitle={teamSubtitle} teamList={teamList} />
-      {showSponsors && <About
-        header={msgmateAboutHeader}
-        text="Msgmate.io is a LLM chat & Agent integration for messages and more! This repository is built and maintained by the founder of msgmate.io and is used in production. It is built with the same tools and libraries as msgmate.io."
-        stats={msgmateStatistics}
-        sectionId="msgmate"
-      />}
-      <ScrollToTop />
-    </>
-  );
+    return (
+        <>
+            <HomeNavbar />
+            <div className="flex justify-center">
+                <Hero
+                    cinematicTitle={cinematicTitle}
+                    subtitle={heroSubtitle}
+                    logoImage={heroImage}
+                />
+            </div>
+            <Features
+                id={sectionFeature}
+                title={featureTitle}
+                features={featureList}
+            />
+            <BetaBanner
+                id={sectionBeta}
+                title={betaTitle}
+                subtitle={betaSubtitle}
+                githubLink={githubLink}
+                becomeTesterBtnText={becomeTesterBtnText}
+            />
+            <ALanguageModels
+                id={sectionModels}
+                title={languageModelsTitle}
+                subtitle={languageModelSubtitle}
+                models={languageModels}
+            />
+            <FAQ
+                id={sectionFaq}
+                questions={faqQuestionProps}
+            />
+            <Footer
+                logoImage={cubeLeg}
+                githubLink={githubLink}
+                imprintLink={imprintLink}
+                privacyLink={privacyLink}
+                termsLink={termsLink}
+            />
+            <ScrollToTop />
+        </>
+    );
 }
+
+

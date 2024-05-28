@@ -1,51 +1,43 @@
-import { Button, buttonVariants } from "../ui/button";
-import { HeroCards } from "./HeroCards";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { defaultCardContents } from "./HeroCards";
-import { navigate } from "../atoms/Link";
+import cubeLeg from "../assets/logo.png";
+
 
 export const Hero = ({
-  cinematicTitle = (<></>),
-  subtitle = "subtitle",
-  githubLink = "",
-  toAppButtonText = "Get Started",
-  toAppLink = "/app",
-  cardContents = defaultCardContents,
+    cinematicTitle = (<></>),
+    subtitle = "subtitle",
+    logoImage = cubeLeg,
+    sectionId = "section_hero",
 }) => {
-  return (
-    <section className="container grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-4">
-      <div className="text-center lg:text-start space-y-6">
-        <main className="text-3xl w-full md:text-4xl lg:w-8/12 font-bold">
-          {cinematicTitle}
-        </main>
+    return (
+        <section className="container w-full mx-0 lg:ms-12 py-24 justify-center" id={sectionId}>
+            <div className="grid grid-cols-3 gap-1 place-items-center">
+                {/**mobile logo */}
+                <div className="flex lg:hidden col-span-3">
+                    <img
+                        src={logoImage}
+                        className="w-[300px] md:w-[500px] lg:w-[600px] object-contain"
+                        alt="About services"
+                    />
+                </div>
+                <div className="text-center lg:text-start space-y-6 col-span-3 lg:col-span-2">
+                    <main className="text-3xl w-full md:text-4xl font-bold">
+                        {cinematicTitle}
+                    </main>
 
-        <p className="text-xl text-muted-foreground md:w-8/12 mx-auto lg:mx-0">
-          {subtitle}
-        </p>
+                    <p className="text-xl text-muted-foreground mx-auto lg:mx-0">
+                        {subtitle}
+                    </p>
+                </div>
+                {/**desktop logo */}
+                <div className="hidden lg:flex md:col-span-1">
+                    <img
+                        src={logoImage}
+                        className="w-[300px] md:w-[500px] lg:w-[600px] object-contain"
+                        alt="About services"
+                    />
+                </div>
 
-        <div className="space-y-4 md:space-y-0 md:space-x-4">
-          <Button className="w-full md:w-1/3" onClick={() => navigate(toAppLink)}>{toAppButtonText}</Button>
+            </div>
 
-          <a
-            href={githubLink}
-            target="_blank"
-            className={`w-full md:w-1/3 ${buttonVariants({
-              variant: "outline",
-            })}`}
-          >
-            Github Repository
-            <GitHubLogoIcon className="ml-2 w-5 h-5" />
-          </a>
-        </div>
-      </div>
-
-      {/* Hero cards sections */}
-      <div className="z-10">
-        <HeroCards cardContents={cardContents} />
-      </div>
-
-      {/* Shadow effect */}
-      <div className="shadow"></div>
-    </section>
-  );
-};
+        </section>
+    );
+}

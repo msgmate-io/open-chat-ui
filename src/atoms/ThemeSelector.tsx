@@ -14,7 +14,9 @@ function ThemeSelector() {
 
   useEffect(() => {
     const initalHidratiedTheme = Cookies.get("theme") || THEMES.LIGHT;
+    if(!Cookies.get("theme")) Cookies.set("theme", THEMES.LIGHT);
     dispatch(changeTheme(initalHidratiedTheme));
+    handleSetDark(initalHidratiedTheme);
   }, []);
 
   useEffect(() => {
@@ -26,12 +28,23 @@ function ThemeSelector() {
     }
   }, [theme]);
 
+  const handleSetDark = (isDark: boolean) => {
+    // add dark class to the body tag, if not exist and isDark is true
+    if (isDark && !document.body.classList.contains("dark")) {
+      document.body.classList.add("dark");
+    } else if (!isDark) {
+      document.body.classList.remove("dark");
+    }
+  }
+
   return (
     !theme ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> :
       <select
         onChange={(e) => {
           dispatch(changeTheme(e.target.value));
           Cookies.set("theme", e.target.value);
+
+          handleSetDark(e.target.value === THEMES.DARK);
         }}
         value={theme}
         className="select select-sm w-full"
