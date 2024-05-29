@@ -18,6 +18,9 @@ export function MessagesView({ chatId }) {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (!chatId) {
+            return
+        }
         api.messagesReadCreate(chatId).then((res) => {
             dispatch(markChatMessagesAsRead({ chatId }))
             dispatch(markChatAsRead({ chatId }))
