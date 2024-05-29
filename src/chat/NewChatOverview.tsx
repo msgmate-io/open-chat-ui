@@ -98,7 +98,7 @@ function PublicProfilesList() {
 
 
 
-export function NewChatCard() {
+export function NewChatOverview() {
     return <div className="flex flex-col h-full w-full content-center items-center">
         <ContactsLoader />
         <PublicProfilesLoader />

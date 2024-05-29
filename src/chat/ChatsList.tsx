@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { ChatItem, PendingChatItem } from "./ChatItem";
 import { ProfileCard } from "./ChatsProfileCard";
 import { NewChatCard } from "./NewChatCard";
-import { ChatItem, PendingChatItem } from "./chat";
 
 export function ChatsList() {
     const chats = useSelector((state: RootState) => state.chats.value?.results)

@@ -1,10 +1,12 @@
 import { useSelector } from "react-redux";
 import WebsocketBridge from "../atoms/WebsocketBridge";
 import { ChatsList } from "../chat/ChatsList";
-import { CreateChatCard, MessagesView, NewChatCard } from "../chat/MessageView";
+import { MessagesView } from "../chat/MessageView";
 import { RootState } from "../store/store";
 import { Toaster } from "../ui/sonner";
+import { NewChatOverview } from "./NewChatOverview";
 import { ResizableChatLayout } from "./ResizableChatLayout";
+import { StartChatCard } from "./StartChatCard";
 
 const chatMessageViews = ["new", "create"]
 
@@ -18,8 +20,8 @@ function ChatBase() {
                 left={<ChatsList />}
                 right={<>
                     {!(chatMessageViews.indexOf(chatId) !== -1) && <MessagesView chatId={chatId} />}
-                    {chatId === "new" && <NewChatCard />}
-                    {chatId === "create" && <CreateChatCard userId={userId} />}
+                    {chatId === "new" && <NewChatOverview />}
+                    {chatId === "create" && <StartChatCard userId={userId} />}
                 </>}
             />
         </div>

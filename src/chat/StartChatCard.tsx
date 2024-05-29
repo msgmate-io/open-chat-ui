@@ -22,7 +22,7 @@ export function PassKeyRequiredIndicator({
     return <Badge variant="outline" className={`ml-1 border-${is_required ? "error" : "success"} text-accent h-4`}>{is_required ? "requires passkey" : "no passkey required"}</Badge>
 }
 
-export function CreateChatCard({ userId }) {
+export function StartChatCard({ userId }) {
     const api = useApi()
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(true)
