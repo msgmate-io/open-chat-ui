@@ -68,10 +68,26 @@ const useCustomEventHandler = (dispatch) => {
   }
 };
 
+export const buildMessage = (payload, action = "newMessage", type = "custom") => {
+  return JSON.stringify({
+    type: type,
+    data: {
+      action: action,
+      payload
+    }
+  })
+}
+
 // @ts-ignore
 const useWs = useWebSocket?.default || useWebSocket;
 
-const WebsocketBridge = () => {
+import { createContext } from "react";
+
+export const SocketContext = createContext({
+  sendMessage: () => { },
+})
+
+const WebsocketBridge = ({ children = null }) => {
   /**
    * Esablishes a websocket connection with the backend
    * This can be used to transmit any event from server to client
@@ -118,7 +134,7 @@ const WebsocketBridge = () => {
   }[readyState];
   console.debug("SOCKET UPDATED", connectionStatus);
 
-  return null;
+  return <SocketContext.Provider value={{ sendMessage }}>{children}</SocketContext.Provider>
 };
 
 export default WebsocketBridge;
