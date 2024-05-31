@@ -36,7 +36,15 @@ export const messagesSlice = createSlice({
         },
         updatePartialMessage: (state: MessagesState, action) => {
             const { chatId, message } = action.payload;
-            state.partialMessages[chatId] = message;
+            if (chatId in state.partialMessages && state.partialMessages[chatId] !== null) {
+                if (state.partialMessages[chatId].uuid === message.uuid) {
+                    state.partialMessages[chatId].text += message.text;
+                } else {
+                    state.partialMessages[chatId] = message;
+                }
+            } else {
+                state.partialMessages[chatId] = message;
+            }
         },
         markChatMessagesAsRead: (state: MessagesState, action) => {
             const { chatId } = action.payload;
