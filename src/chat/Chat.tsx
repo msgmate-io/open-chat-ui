@@ -30,11 +30,10 @@ function ChatBase() {
 }
 
 export function Chat() {
-    return <>
-        <WebsocketBridge />
+    return <WebsocketBridge>
         <ChatBase />
         <Toaster />
-    </>
+    </WebsocketBridge>
 }
 
 export function ChatPage() {
