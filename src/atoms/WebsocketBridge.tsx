@@ -7,7 +7,7 @@ import { updateContactsOnlineStatus } from "../store/contacts";
 import { insertMessage, updatePartialMessage } from "../store/messages";
 import { updatePublicProfilesOnlineStatus } from "../store/publicProfiles";
 
-const useCustomEventHandler = (dispatch) => {
+const useCustomEventHandler = (dispatch, onReceiveAudioSegment) => {
   return {
     userWentOnline: (payload) => {
       const { userId } = payload;
@@ -55,14 +55,21 @@ const useCustomEventHandler = (dispatch) => {
     },
     newPartialMessage: (payload) => {
       const { chat, message, senderId } = payload;
-      dispatch(
-        updatePartialMessage(
-          {
-            chatId: chat.uuid,
-            message: message
-          }
+      if (message.text.startsWith("audio:")) {
+        onReceiveAudioSegment({
+          uuid: message.uuid,
+          b64: message.text.split(":")[1]
+        });
+      } else {
+        dispatch(
+          updatePartialMessage(
+            {
+              chatId: chat.uuid,
+              message: message
+            }
+          )
         )
-      )
+      }
       console.debug("New partial message", { chat, message, senderId });
     },
   }
@@ -85,9 +92,13 @@ import { createContext } from "react";
 
 export const SocketContext = createContext({
   sendMessage: () => { },
+  audioSegmentsB64: [],
+  removeAudioSegegment: (uuid) => { }
 })
 
-const WebsocketBridge = ({ children = null }) => {
+const WebsocketBridge = ({
+  children = null
+}) => {
   /**
    * Esablishes a websocket connection with the backend
    * This can be used to transmit any event from server to client
@@ -98,8 +109,11 @@ const WebsocketBridge = ({ children = null }) => {
    */
 
   const dispatch = useDispatch();
-  const customEventHandler = useCustomEventHandler(dispatch);
   const [messageHistory, setMessageHistory] = useState([]);
+  const [audioSegmentsB64, setAudioSegmentsB64] = useState([]);
+  const customEventHandler = useCustomEventHandler(dispatch, (audioSegmentB64) => {
+    setAudioSegmentsB64((prev) => prev.concat(audioSegmentB64));
+  });
   const { sendMessage, lastMessage, readyState } = useWs(WEBSOCKET_URL);
 
   const handleIncomingMessage = (message) => {
@@ -134,7 +148,11 @@ const WebsocketBridge = ({ children = null }) => {
   }[readyState];
   console.debug("SOCKET UPDATED", connectionStatus);
 
-  return <SocketContext.Provider value={{ sendMessage }}>{children}</SocketContext.Provider>
+  const removeAudioSegegment = (uuid) => {
+    setAudioSegmentsB64((prev) => prev.filter((segment) => segment.uuid !== uuid));
+  }
+
+  return <SocketContext.Provider value={{ sendMessage, audioSegmentsB64, removeAudioSegegment }}>{children}</SocketContext.Provider>
 };
 
 export default WebsocketBridge;
