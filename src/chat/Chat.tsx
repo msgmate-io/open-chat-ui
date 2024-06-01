@@ -35,7 +35,3 @@ export function Chat() {
         <Toaster />
     </WebsocketBridge>
 }
-
-export function ChatPage() {
-
-}
