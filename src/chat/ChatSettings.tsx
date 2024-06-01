@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
+import { navigateSearch } from "../atoms/Link";
 import { deleteChat, updateChatSettings } from "../store/chats";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { ViewChatJsonModal } from "./ViewChatJsonModal";
@@ -72,6 +73,12 @@ export function ChatSettings({ chat, open, setOpen, children }) {
             </DropdownMenuLabel>}
             <DropdownMenuLabel>
                 <ViewChatJsonModal chat={chat} />
+            </DropdownMenuLabel>
+            <DropdownMenuLabel>
+                <Button variant="outline" className="h-6 w-full" onClick={() => navigateSearch({
+                    chatId: chat.uuid,
+                    botId: chat.partner.uuid
+                }, true, "/bots")}>Start Audio Chat</Button>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
         </DropdownMenuContent>
