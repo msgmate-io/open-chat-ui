@@ -76,9 +76,8 @@ export function ChatSettings({ chat, open, setOpen, children }) {
             </DropdownMenuLabel>
             <DropdownMenuLabel>
                 <Button variant="outline" className="h-6 w-full" onClick={() => navigateSearch({
-                    chatId: chat.uuid,
-                    botId: chat.partner.uuid
-                }, true, "/bots")}>Start Audio Chat</Button>
+                    chatId: chat.uuid
+                }, true, "/audioChat")}>Start Audio Chat</Button>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
         </DropdownMenuContent>
