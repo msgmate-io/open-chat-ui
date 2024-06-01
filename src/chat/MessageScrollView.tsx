@@ -8,7 +8,7 @@ import { RootState } from "../store/store";
 import { MessageInput } from "./MessageInput";
 import { MessageItem } from "./message";
 
-export function MessageScrollView({ chatId, chat }) {
+export function MessageScrollView({ chatId, chat, hideInput = false }) {
     const scrollRef = useRef<HTMLDivElement>(null)
     const messages = useSelector((state: RootState) => getMessagesByChatId(state, chatId))
     const partialMessage = useSelector((state: RootState) => getChatPartialMessage(state, chatId))
@@ -46,13 +46,13 @@ export function MessageScrollView({ chatId, chat }) {
         })
     }
 
-    return <div className="flex flex-col h-full w-full lg:max-w-[900px] relativ">
+    return <div className="flex flex-col h-full w-full lg:max-w-[900px] relative">
         <div ref={scrollRef} className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll">
             {chatId}
             {isLoading && <div>Loading...</div>}
             {messages && messages.results.map((message) => <MessageItem key={`msg_${message.uuid}`} message={message} chat={chat} selfIsSender={user?.uuid === message.sender} />).reverse()}
             {partialMessage && <MessageItem key={`msg_${partialMessage.uuid}`} message={partialMessage} chat={chat} selfIsSender={user?.uuid === partialMessage.sender} />}
         </div>
-        <MessageInput isLoading={sendIsLoading || isLoading} onSendMessage={onSendMessage} ref={inputRef} />
+        {!hideInput && <MessageInput isLoading={sendIsLoading || isLoading} onSendMessage={onSendMessage} ref={inputRef} />}
     </div>
 }
