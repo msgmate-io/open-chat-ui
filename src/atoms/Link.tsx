@@ -44,7 +44,7 @@ export function navigate(href, props = {}) {
     vikeNavigate(href, props);
 }
 
-export function navigateSearch(search, resetAll = true) {
+export function navigateSearch(search, resetAll = true, pathName = null) {
     let searchParams = new URLSearchParams(window.location.search);
     if (resetAll) {
         searchParams.forEach((_, key) => {
@@ -62,6 +62,6 @@ export function navigateSearch(search, resetAll = true) {
             searchParams.set(key, search[key])
         }
     });
-    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+    var newRelativePathQuery = (pathName ? pathName : window.location.pathname) + '?' + searchParams.toString();
     vikeNavigate(newRelativePathQuery);
 }
