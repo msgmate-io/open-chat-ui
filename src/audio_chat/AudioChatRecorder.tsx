@@ -9,8 +9,35 @@ import { AudioLevelMonitor } from './AudioLevelMonitor';
 import { ToggleRecordingButton } from './ToggleRecordingButton';
 import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
+const AudioStates = [
+    "ready",
+    "listening",
+    "thinking",
+    "speaking",
+]
+
+export function AudioChatStateMonitor({
+    audioState,
+    inputLevels,
+    currentAnalyserNode
+}) {
+
+    return <>
+        {audioState === "ready" && <div className='flex h-[150px] w-[150px] rounded-full bg-success content-center justify-center items-center'>
+            ready
+        </div>}
+        {audioState === "thinking" && <div className='flex h-[150px] w-[150px] rounded-full bg-warning animate-pulse content-center justify-center items-center'>
+            thinking
+        </div>}
+        {audioState === "listening" && <AudioLevelDisplay levels={inputLevels} />}
+        {audioState === "speaking" && <AudioLevelMonitor analyserNode={currentAnalyserNode} />}
+    </>
+}
+
 export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
+    const [audioState, setAudioState] = useState("ready");
+
     const [outDataMessages, setOutDataMessages] = useState([]);
     const audioContextRef = useRef(null);
     const mediaRecorderRef = useRef(null);
@@ -24,6 +51,12 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const recipientId = chat.partner.uuid;
     const [audioQueue, setAudioQueue] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const onPlaybackCompleted = () => {
+        setIsPlaying(false);
+        setAudioState('ready');
+        // TODO: should prob also send a websocket message to the bot
+    };
 
     const sendDataMessage = (text, dataMessage, isPartial = false, tmpId = null) => {
         const message = {
@@ -56,6 +89,36 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                     return newLevels;
                 });
             }
+
+            let audioReceiveReady = newSignals.filter(signal => signal.data_message.data.signal === 'ready-to-receive-audio');
+
+            if (audioReceiveReady.length > 0) {
+                audioReceiveReady = audioReceiveReady[0];
+                setAudioState("listening");
+            }
+
+            let stopRecordingAcknowledged = newSignals.filter(signal => signal.data_message.data.signal === 'stop-recording-acknowledged');
+
+            if (stopRecordingAcknowledged.length > 0) {
+                stopRecordingAcknowledged = stopRecordingAcknowledged[0];
+                setAudioState("thinking");
+            }
+
+            let startStreamingAudioResponse = newSignals.filter(signal => signal.data_message.data.signal === 'start-streaming-audio-response');
+
+            if (startStreamingAudioResponse.length > 0) {
+                startStreamingAudioResponse = startStreamingAudioResponse[0];
+                setAudioState("speaking");
+            }
+
+            // stop-streaming-audio-response
+            // 
+            let stopStreamingAudioResponse = newSignals.filter(signal => signal.data_message.data.signal === 'stop-streaming-audio-response');
+            if (stopStreamingAudioResponse.length > 0) {
+                stopStreamingAudioResponse = stopStreamingAudioResponse[0];
+                // TODO cannot set back to ready yet as it might still be playing back the audio
+            }
+
 
             const newlyProcessedDataMessages = newSignals.concat(newAudioSegments);
             for (const dataMsg of newlyProcessedDataMessages) {
@@ -141,6 +204,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         if (audioQueue.length === 0) return;
 
         setIsPlaying(true);
+        //setAudioState('speaking');
 
         const analyser = audioContextRef.current.createAnalyser();
         analyser.fftSize = 32;
@@ -148,6 +212,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
 
         while (audioQueue.length > 0) {
             const audioB64 = audioQueue.shift();
+            setAudioQueue((prev) => prev.slice(1));
             const audioBlob = base64ToBlob(audioB64.b64, 'audio/wav');
             const audioURL = URL.createObjectURL(audioBlob);
 
@@ -162,6 +227,8 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             });
         }
 
+        //onPlaybackCompleted();
+        //
         setIsPlaying(false);
     };
 
@@ -254,8 +321,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 </div>
             </div>
             <div className='flex w-full h-[200px] items-center justify-center'>
-                <AudioLevelDisplay levels={audioLevels} />
-                <AudioLevelMonitor analyserNode={analyser} />
+                <AudioChatStateMonitor audioState={audioState} inputLevels={audioLevels} currentAnalyserNode={analyser} />
             </div>
             <div className='flex flex-row w-full h-[150px] items-center justify-center p-4 gap-[300px]'>
                 <div className='h-[80px] w-[80px] rounded-full bg-info'>
