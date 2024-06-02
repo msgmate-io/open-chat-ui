@@ -1,15 +1,18 @@
-export function AudioLevelDisplay() {
-    const dbfsLevels = [-60, -50, -40, -30, -20]
+export function AudioLevelDisplay({
+    levels,
+}: {
+    levels: number[]
+}) {
 
     const dbfsToHeight = (dbfs: number) => {
-        return 100 - (dbfs + 60) * 2
+        return Math.max(10, dbfs + 100)
     }
 
     return (
         <div className='h-[150px] flex flex-row items-center content-center justify-center gap-2'>
-            {dbfsLevels.map((dbfs) => (
+            {levels.map((dbfs, index) => (
                 <div
-                    key={dbfs}
+                    key={index}
                     className='w-[30px] rounded-full bg-info'
                     style={{ height: dbfsToHeight(dbfs) + '%' }}
                 ></div>
