@@ -29,6 +29,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const recipientId = chat.partner.uuid;
     const [audioQueue, setAudioQueue] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
+    const currentAudioRef = useRef(null);
 
     const sendDataMessage = (text, dataMessage, isPartial = false, tmpId = null) => {
         const message = {
@@ -194,7 +195,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         analyser.fftSize = 32;
         setAnalyser(analyser); // Set the analyser node state
 
-        const audioToProcess = audioQueue
+        const audioToProcess = audioQueue;
         setAudioQueue([]);
 
         while (audioToProcess.length > 0) {
@@ -203,6 +204,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             const audioURL = URL.createObjectURL(audioBlob);
 
             const audio = new Audio(audioURL);
+            currentAudioRef.current = audio;  // Save reference to current audio
             const source = audioContextRef.current.createMediaElementSource(audio);
             source.connect(analyser);
             analyser.connect(audioContextRef.current.destination);
@@ -241,7 +243,14 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     };
 
     const onInterruptPlayback = () => {
-        //todo: implement
+        if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current.currentTime = 0;
+            currentAudioRef.current = null;
+        }
+        setAudioQueue([]);
+        setIsPlaying(false);
+        setAudioState('ready');
     }
 
     return (
@@ -315,8 +324,8 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 <AudioChatStateMonitor audioState={audioState} inputLevels={audioLevels} currentAnalyserNode={analyser} />
             </div>
             <div className='flex flex-row w-full h-[150px] items-center justify-center p-4 gap-[300px]'>
-                <div className='h-[80px] w-[80px] rounded-full bg-info'>
-                    Interrup playback TODO
+                <div className='h-[80px] w-[80px] rounded-full bg-info' onClick={onInterruptPlayback}>
+                    Interrupt playback
                 </div>
                 <ToggleRecordingButton isRecording={isRecording} setIsRecording={onToggleRecording} />
             </div>
