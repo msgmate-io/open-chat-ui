@@ -4,39 +4,17 @@ import { SocketContext, buildMessage } from '../atoms/WebsocketBridge';
 import { MessageScrollView } from '../chat/MessageScrollView';
 import { ChatMessagesLoader } from '../loaders/MessagesLoader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { AudioLevelDisplay } from './AudioLevelDisplay';
-import { AudioLevelMonitor } from './AudioLevelMonitor';
+import { AudioChatStateMonitor } from './AudioChatStateMonitor';
 import { ToggleRecordingButton } from './ToggleRecordingButton';
 import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
-const AudioStates = [
-    "ready",
-    "listening",
-    "thinking",
-    "speaking",
-]
-
-export function AudioChatStateMonitor({
-    audioState,
-    inputLevels,
-    currentAnalyserNode
-}) {
-
-    return <>
-        {audioState === "ready" && <div className='flex h-[150px] w-[150px] rounded-full bg-success content-center justify-center items-center'>
-            ready
-        </div>}
-        {audioState === "thinking" && <div className='flex h-[150px] w-[150px] rounded-full bg-warning animate-pulse content-center justify-center items-center'>
-            thinking
-        </div>}
-        {audioState === "listening" && <AudioLevelDisplay levels={inputLevels} />}
-        {audioState === "speaking" && <AudioLevelMonitor analyserNode={currentAnalyserNode} />}
-    </>
-}
+const AUTO_RECORD = true;
 
 export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
-    const [audioState, setAudioState] = useState("ready");
+    const [audioState, setAudioState] = useState("booted");
+
+    const [isReceivingResponseSteam, setIsReceivingResponseSteam] = useState(false);
 
     const [outDataMessages, setOutDataMessages] = useState([]);
     const audioContextRef = useRef(null);
@@ -51,12 +29,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const recipientId = chat.partner.uuid;
     const [audioQueue, setAudioQueue] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
-
-    const onPlaybackCompleted = () => {
-        setIsPlaying(false);
-        setAudioState('ready');
-        // TODO: should prob also send a websocket message to the bot
-    };
 
     const sendDataMessage = (text, dataMessage, isPartial = false, tmpId = null) => {
         const message = {
@@ -73,6 +45,14 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         setOutDataMessages((prev) => [...prev, message]);
         sendMessage(payloadMessage);
     }
+
+    useEffect(() => {
+        if (!isReceivingResponseSteam && !isPlaying && (audioState === "ready") && AUTO_RECORD) {
+            onToggleRecording(true);
+            setAudioState("listening");
+        }
+
+    }, [isReceivingResponseSteam, isPlaying, audioState]);
 
     useEffect(() => {
         if (dataMessages.length > 0) {
@@ -109,6 +89,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             if (startStreamingAudioResponse.length > 0) {
                 startStreamingAudioResponse = startStreamingAudioResponse[0];
                 setAudioState("speaking");
+                setIsReceivingResponseSteam(true);
             }
 
             // stop-streaming-audio-response
@@ -116,7 +97,10 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             let stopStreamingAudioResponse = newSignals.filter(signal => signal.data_message.data.signal === 'stop-streaming-audio-response');
             if (stopStreamingAudioResponse.length > 0) {
                 stopStreamingAudioResponse = stopStreamingAudioResponse[0];
-                // TODO cannot set back to ready yet as it might still be playing back the audio
+                setIsReceivingResponseSteam(false);
+                if (!isPlaying) {
+                    setAudioState("ready");
+                }
             }
 
 
@@ -204,15 +188,17 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         if (audioQueue.length === 0) return;
 
         setIsPlaying(true);
-        //setAudioState('speaking');
+        setAudioState('speaking');
 
         const analyser = audioContextRef.current.createAnalyser();
         analyser.fftSize = 32;
         setAnalyser(analyser); // Set the analyser node state
 
-        while (audioQueue.length > 0) {
-            const audioB64 = audioQueue.shift();
-            setAudioQueue((prev) => prev.slice(1));
+        const audioToProcess = audioQueue
+        setAudioQueue([]);
+
+        while (audioToProcess.length > 0) {
+            const audioB64 = audioToProcess.shift();
             const audioBlob = base64ToBlob(audioB64.b64, 'audio/wav');
             const audioURL = URL.createObjectURL(audioBlob);
 
@@ -227,8 +213,9 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             });
         }
 
-        //onPlaybackCompleted();
-        //
+        if (!isReceivingResponseSteam) {
+            setAudioState('ready');
+        }
         setIsPlaying(false);
     };
 
@@ -252,6 +239,10 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             });
         }
     };
+
+    const onInterruptPlayback = () => {
+        //todo: implement
+    }
 
     return (
         <div className="grid grid-rows-[1fr_auto_auto] h-full w-full">
@@ -325,7 +316,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             </div>
             <div className='flex flex-row w-full h-[150px] items-center justify-center p-4 gap-[300px]'>
                 <div className='h-[80px] w-[80px] rounded-full bg-info'>
-                    Y
+                    Interrup playback TODO
                 </div>
                 <ToggleRecordingButton isRecording={isRecording} setIsRecording={onToggleRecording} />
             </div>
