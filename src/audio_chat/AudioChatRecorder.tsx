@@ -23,24 +23,65 @@ export function AudioChatRecorder({
     const audioChunksRef = useRef([]);
     const intervalIdRef = useRef(null);
     const [isRecording, setIsRecording] = useState(false);
+    const [processedDataMessages, setProcessedDataMessages] = useState([]);
+
+    const [audioLevels, setAudioLevels] = useState([-100, -100, -100, -100, -100, -100, -100]);
 
     const recipientId = chat.partner.uuid;
 
     const [audioQueue, setAudioQueue] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const sendDataMessage = (text, dataMessage) => {
+    const sendDataMessage = (text, dataMessage, isPartial = false, tmpId = null) => {
         const message = {
             chat_id: chatId,
             recipient_id: chat.partner.uuid,
             text: text,
             data_message: dataMessage
         }
-        const payloadMessage = buildMessage(message, 'send_message')
+        if (isPartial && tmpId) {
+            message['tmp_id'] = tmpId
+        }
+        const payloadMessage = buildMessage(message, isPartial ? 'partial_message' : 'send_message')
 
         setOutDataMessages((prev) => [...prev, message]);
         sendMessage(payloadMessage)
     }
+
+    useEffect(() => {
+        if (dataMessages.length > 0) {
+            // segmensts are of the format {uuid, b64}
+            // 
+            const segegmentUUIDs = dataMessages.map(segment => segment.uuid);
+            const audiDataMessages = dataMessages.filter(segment => segment.data_message.data_type === 'audio_b64');
+            const newAudioSegments = audiDataMessages.filter(segment => !audioQueue.some(audio => segegmentUUIDs.includes(audio.uuid)));
+            const newSignals = dataMessages.filter(segment => segment.data_message.data_type === 'signal');
+            // need to filter out possible duplicates
+            // 
+            let dbfsUpdate = newSignals.filter(signal => signal.data_message.data.signal === 'dbfs-level-update')
+            if (dbfsUpdate.length > 0) {
+                dbfsUpdate = dbfsUpdate[0];
+                setAudioLevels((prev) => {
+                    const newLevels = dbfsUpdate.data_message.data.levels;
+                    return newLevels
+                })
+            }
+
+            const newlyProcessedDataMessages = newSignals.concat(newAudioSegments);
+            for (const dataMsg of newlyProcessedDataMessages) {
+                removeDataMessage(dataMsg.uuid);
+            }
+            setProcessedDataMessages((prev) => [...prev, ...newlyProcessedDataMessages]);
+
+            const b64AudioSegments = newAudioSegments.map(segment => {
+                return {
+                    b64: segment.data_message.data['audio'],
+                    uuid: segment.uuid
+                }
+            });
+            setAudioQueue((prevQueue) => [...prevQueue, ...b64AudioSegments]);
+        }
+    }, [dataMessages]);
 
     const startRecording = async () => {
         audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -58,9 +99,6 @@ export function AudioChatRecorder({
 
             audioChunksRef.current = [];
 
-            //const url = URL.createObjectURL(blob);
-            //setAudioURLs((prev) => [...prev, url]);
-
             const base64EncodedAudio = await blobToBase64(blob);
             const sizeInMB = blob.size / (1024 * 1024);
             const timestamp = new Date().toISOString();
@@ -71,7 +109,7 @@ export function AudioChatRecorder({
                 data: {
                     audio: base64EncodedAudio
                 }
-            })
+            }, true, `tmp-audio-segment-${timestamp}`)
         };
 
         mediaRecorder.start();
@@ -164,7 +202,8 @@ export function AudioChatRecorder({
                         <TabsList className='flex-shrink-0'>
                             <TabsTrigger value="preview">Preview</TabsTrigger>
                             <TabsTrigger value="messages">Messages</TabsTrigger>
-                            <TabsTrigger value="data_messages_in">Data Messages (in)</TabsTrigger>
+                            <TabsTrigger value="data_messages_in">Data Messages (in) [unprocessed]</TabsTrigger>
+                            <TabsTrigger value="data_messages_in_processed">Data Messages (in) [processed]</TabsTrigger>
                             <TabsTrigger value="data_messages_out">Data Messages (out)</TabsTrigger>
                         </TabsList>
                         <TabsContent value="preview" className="flex-grow relative overflow-hidden">
@@ -207,11 +246,23 @@ export function AudioChatRecorder({
                                 </div>
                             </div>
                         </TabsContent>
+                        <TabsContent value="data_messages_in_processed" className="flex-grow relative overflow-hidden">
+                            <div className="absolute inset-0 flex flex-col overflow-hidden items-center content-center justify-center">
+                                <div className='flex flex-col gap-2 f-full overflow-y-auto'>
+                                    {processedDataMessages.length === 0 && <div>No data messages</div>}
+                                    {processedDataMessages.map((dataMessage, index) => (
+                                        <div>
+                                            {dataMessage.text}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </TabsContent>
                     </Tabs>
                 </div>
             </div>
             <div className='flex w-full h-[200px] items-center justify-center'>
-                <AudioLevelDisplay />
+                <AudioLevelDisplay levels={audioLevels} />
             </div>
             <div className='flex flex-row w-full h-[150px] items-center justify-center p-4 gap-[300px]'>
                 <div className='h-[80px] w-[80px] rounded-full bg-info'>
