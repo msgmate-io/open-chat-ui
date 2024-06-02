@@ -11,6 +11,9 @@ export function AudioChatStateMonitor({
         {audioState === "booted" && <div className='flex h-[150px] w-[150px] rounded-full bg-info content-center justify-center items-center'>
             booted
         </div>}
+        {audioState === "interrupting" && <div className='flex h-[150px] w-[150px] rounded-full bg-error content-center justify-center items-center'>
+            interrupting
+        </div>}
         {audioState === "ready" && <div className='flex h-[150px] w-[150px] rounded-full bg-success content-center justify-center items-center'>
             ready
         </div>}

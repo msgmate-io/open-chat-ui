@@ -87,9 +87,11 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
 
             let startStreamingAudioResponse = newSignals.filter(signal => signal.data_message.data.signal === 'start-streaming-audio-response');
 
+            let isSpeaking = isPlaying || isReceivingResponseSteam;
             if (startStreamingAudioResponse.length > 0) {
                 startStreamingAudioResponse = startStreamingAudioResponse[0];
                 setAudioState("speaking");
+                isSpeaking = true;
                 setIsReceivingResponseSteam(true);
             }
 
@@ -111,11 +113,13 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             }
             setProcessedDataMessages((prev) => [...prev, ...newlyProcessedDataMessages]);
 
-            const b64AudioSegments = newAudioSegments.map(segment => ({
-                b64: segment.data_message.data['audio'],
-                uuid: segment.uuid
-            }));
-            setAudioQueue((prevQueue) => [...prevQueue, ...b64AudioSegments]);
+            if (isSpeaking) {
+                const b64AudioSegments = newAudioSegments.map(segment => ({
+                    b64: segment.data_message.data['audio'],
+                    uuid: segment.uuid
+                }));
+                setAudioQueue((prevQueue) => [...prevQueue, ...b64AudioSegments]);
+            }
         }
     }, [dataMessages]);
 
@@ -248,9 +252,19 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             currentAudioRef.current.currentTime = 0;
             currentAudioRef.current = null;
         }
+
+        sendDataMessage(`Signal: interrupt-playback`, {
+            hide_message: true,
+            data_type: 'signal',
+            data: {
+                signal: 'interrupt-playback'
+            }
+        });
+
         setAudioQueue([]);
         setIsPlaying(false);
         setAudioState('ready');
+
     }
 
     return (
