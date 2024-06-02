@@ -1,17 +1,19 @@
 import { SocketContext, buildMessage } from '../atoms/WebsocketBridge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { base64ToBlob } from './audioChatUtils';
+import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
 import { useContext, useEffect, useRef, useState } from 'react';
 import { MessageScrollView } from '../chat/MessageScrollView';
 import { ChatMessagesLoader } from '../loaders/MessagesLoader';
 
+import toWav from 'audiobuffer-to-wav';
 import { AudioLevelDisplay } from './AudioLevelDisplay';
 import { ToggleRecordingButton } from './ToggleRecordingButton';
 
 export function AudioChatRecorder({
     chat,
-    chatId
+    chatId,
+    intervalMs = 200
 }) {
 
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
@@ -20,9 +22,89 @@ export function AudioChatRecorder({
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const intervalIdRef = useRef(null);
+    const [isRecording, setIsRecording] = useState(false);
+
+    const recipientId = chat.partner.uuid;
 
     const [audioQueue, setAudioQueue] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const sendDataMessage = (text, dataMessage) => {
+        const message = {
+            chat_id: chatId,
+            recipient_id: chat.partner.uuid,
+            text: text,
+            data_message: dataMessage
+        }
+        const payloadMessage = buildMessage(message, 'send_message')
+
+        setOutDataMessages((prev) => [...prev, message]);
+        sendMessage(payloadMessage)
+    }
+
+    const startRecording = async () => {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunksRef.current.push(event.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+            const audioBuffer = await audioContextRef.current.decodeAudioData(await new Response(new Blob(audioChunksRef.current)).arrayBuffer());
+            const wavData = toWav(audioBuffer);
+            const blob = new Blob([wavData], { type: 'audio/wav' });
+
+            audioChunksRef.current = [];
+
+            //const url = URL.createObjectURL(blob);
+            //setAudioURLs((prev) => [...prev, url]);
+
+            const base64EncodedAudio = await blobToBase64(blob);
+            const sizeInMB = blob.size / (1024 * 1024);
+            const timestamp = new Date().toISOString();
+            console.log(`Audio segment size: ${sizeInMB.toFixed(2)} MB`);
+            sendDataMessage(`Audio segment send at: ${timestamp}`, {
+                hide_message: true,
+                data_type: 'audio_b64',
+                data: {
+                    audio: base64EncodedAudio
+                }
+            })
+        };
+
+        mediaRecorder.start();
+
+        intervalIdRef.current = setInterval(() => {
+            mediaRecorder.stop();
+            mediaRecorder.start();
+        }, intervalMs);
+
+        mediaRecorderRef.current = mediaRecorder;
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+        }
+        if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+        }
+    };
+
+    useEffect(() => {
+        if (isRecording) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+
+        return () => {
+            stopRecording();
+        };
+    }, [isRecording]);
+
 
     useEffect(() => {
         if (audioQueue.length > 0 && !isPlaying) {
@@ -50,18 +132,6 @@ export function AudioChatRecorder({
         setIsPlaying(false);
     };
 
-    const sendDataMessage = (text, dataMessage) => {
-        const message = buildMessage({
-            chat_id: chatId,
-            recipient_id: chat.partner.uuid,
-            text: text,
-            data_message: dataMessage
-        }, 'send_message')
-
-        setOutDataMessages([...outDataMessages, message])
-        sendMessage(message)
-    }
-    const [isRecording, setIsRecording] = useState(false);
 
     const onToggleRecording = (nowRecording) => {
         setIsRecording(nowRecording)
@@ -119,7 +189,7 @@ export function AudioChatRecorder({
                                     {dataMessages.length === 0 && <div>No data messages</div>}
                                     {dataMessages.map((dataMessage, index) => (
                                         <div>
-                                            {JSON.stringify(dataMessage)}
+                                            {dataMessage.text}
                                         </div>
                                     ))}
                                 </div>
@@ -131,7 +201,7 @@ export function AudioChatRecorder({
                                     {outDataMessages.length === 0 && <div>No data messages</div>}
                                     {outDataMessages.map((dataMessage, index) => (
                                         <div>
-                                            {JSON.stringify(dataMessage)}
+                                            {dataMessage.text}
                                         </div>
                                     ))}
                                 </div>
