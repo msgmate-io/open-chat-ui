@@ -9,6 +9,7 @@ import { ToggleRecordingButton } from './ToggleRecordingButton';
 import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
 const AUTO_RECORD = true;
+const DEBUG_TABS_VISIBLE = false;
 
 export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
@@ -50,7 +51,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     useEffect(() => {
         if (!isReceivingResponseSteam && !isPlaying && (audioState === "ready") && AUTO_RECORD) {
             onToggleRecording(true);
-            setAudioState("listening");
         }
 
     }, [isReceivingResponseSteam, isPlaying, audioState]);
@@ -228,6 +228,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const onToggleRecording = (nowRecording) => {
         setIsRecording(nowRecording);
         if (nowRecording) {
+            setAudioState("listening");
             sendDataMessage(`Signal: start-recording`, {
                 hide_message: true,
                 data_type: 'signal',
@@ -247,12 +248,24 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     };
 
     const onInterruptPlayback = () => {
+        // Pause and reset the current audio
         if (currentAudioRef.current) {
             currentAudioRef.current.pause();
             currentAudioRef.current.currentTime = 0;
             currentAudioRef.current = null;
         }
 
+        // Clear the audio queue
+        setAudioQueue([]);
+
+        // Stop any remaining audio sources
+        if (audioContextRef.current) {
+            audioContextRef.current.close().then(() => {
+                audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+            });
+        }
+
+        // Send interrupt signal
         sendDataMessage(`Signal: interrupt-playback`, {
             hide_message: true,
             data_type: 'signal',
@@ -261,24 +274,24 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             }
         });
 
-        setAudioQueue([]);
+        // Reset states
         setIsPlaying(false);
-        setAudioState('ready');
+        setAudioState('booted');
+    };
 
-    }
 
     return (
         <div className="grid grid-rows-[1fr_auto_auto] h-full w-full">
             <div className='relative overflow-hidden'>
                 <div className='flex flex-col h-full'>
                     <Tabs defaultValue="messages" className="flex flex-col h-full w-full">
-                        <TabsList className='flex-shrink-0'>
+                        {DEBUG_TABS_VISIBLE && <TabsList className='flex-shrink-0'>
                             <TabsTrigger value="preview">Preview</TabsTrigger>
                             <TabsTrigger value="messages">Messages</TabsTrigger>
                             <TabsTrigger value="data_messages_in">Data Messages (in) [unprocessed]</TabsTrigger>
                             <TabsTrigger value="data_messages_in_processed">Data Messages (in) [processed]</TabsTrigger>
                             <TabsTrigger value="data_messages_out">Data Messages (out)</TabsTrigger>
-                        </TabsList>
+                        </TabsList>}
                         <TabsContent value="preview" className="flex-grow relative overflow-hidden">
                             <div className="absolute inset-0 flex flex-col overflow-hidden items-center content-center justify-center">
                                 Preview
@@ -338,10 +351,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 <AudioChatStateMonitor audioState={audioState} inputLevels={audioLevels} currentAnalyserNode={analyser} />
             </div>
             <div className='flex flex-row w-full h-[150px] items-center justify-center p-4 gap-[300px]'>
-                <div className='h-[80px] w-[80px] rounded-full bg-info' onClick={onInterruptPlayback}>
-                    Interrupt playback
-                </div>
-                <ToggleRecordingButton isRecording={isRecording} setIsRecording={onToggleRecording} />
+                <ToggleRecordingButton isRecording={isRecording} setIsRecording={onToggleRecording} audioState={audioState} />
             </div>
         </div>
     );
