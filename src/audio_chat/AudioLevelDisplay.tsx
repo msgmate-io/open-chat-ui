@@ -1,7 +1,9 @@
 export function AudioLevelDisplay({
     levels,
+    className = "bg-info"
 }: {
-    levels: number[]
+    levels: number[],
+    className?: string
 }) {
 
     const dbfsToHeight = (dbfs: number) => {
@@ -13,7 +15,7 @@ export function AudioLevelDisplay({
             {levels.map((dbfs, index) => (
                 <div
                     key={index}
-                    className='w-[30px] rounded-full bg-info'
+                    className={`w-[30px] rounded-full ${className}`}
                     style={{ height: dbfsToHeight(dbfs) + '%' }}
                 ></div>
             ))}

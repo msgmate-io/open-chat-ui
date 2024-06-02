@@ -1,21 +1,15 @@
-import { SocketContext, buildMessage } from '../atoms/WebsocketBridge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { base64ToBlob, blobToBase64 } from './audioChatUtils';
-
+import toWav from 'audiobuffer-to-wav';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { SocketContext, buildMessage } from '../atoms/WebsocketBridge';
 import { MessageScrollView } from '../chat/MessageScrollView';
 import { ChatMessagesLoader } from '../loaders/MessagesLoader';
-
-import toWav from 'audiobuffer-to-wav';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { AudioLevelDisplay } from './AudioLevelDisplay';
+import { AudioLevelMonitor } from './AudioLevelMonitor';
 import { ToggleRecordingButton } from './ToggleRecordingButton';
+import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
-export function AudioChatRecorder({
-    chat,
-    chatId,
-    intervalMs = 200
-}) {
-
+export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
     const [outDataMessages, setOutDataMessages] = useState([]);
     const audioContextRef = useRef(null);
@@ -24,11 +18,10 @@ export function AudioChatRecorder({
     const intervalIdRef = useRef(null);
     const [isRecording, setIsRecording] = useState(false);
     const [processedDataMessages, setProcessedDataMessages] = useState([]);
-
     const [audioLevels, setAudioLevels] = useState([-100, -100, -100, -100, -100, -100, -100]);
+    const [analyser, setAnalyser] = useState(null);
 
     const recipientId = chat.partner.uuid;
-
     const [audioQueue, setAudioQueue] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -40,31 +33,28 @@ export function AudioChatRecorder({
             data_message: dataMessage
         }
         if (isPartial && tmpId) {
-            message['tmp_id'] = tmpId
+            message['tmp_id'] = tmpId;
         }
-        const payloadMessage = buildMessage(message, isPartial ? 'partial_message' : 'send_message')
+        const payloadMessage = buildMessage(message, isPartial ? 'partial_message' : 'send_message');
 
         setOutDataMessages((prev) => [...prev, message]);
-        sendMessage(payloadMessage)
+        sendMessage(payloadMessage);
     }
 
     useEffect(() => {
         if (dataMessages.length > 0) {
-            // segmensts are of the format {uuid, b64}
-            // 
             const segegmentUUIDs = dataMessages.map(segment => segment.uuid);
             const audiDataMessages = dataMessages.filter(segment => segment.data_message.data_type === 'audio_b64');
             const newAudioSegments = audiDataMessages.filter(segment => !audioQueue.some(audio => segegmentUUIDs.includes(audio.uuid)));
             const newSignals = dataMessages.filter(segment => segment.data_message.data_type === 'signal');
-            // need to filter out possible duplicates
-            // 
-            let dbfsUpdate = newSignals.filter(signal => signal.data_message.data.signal === 'dbfs-level-update')
+
+            let dbfsUpdate = newSignals.filter(signal => signal.data_message.data.signal === 'dbfs-level-update');
             if (dbfsUpdate.length > 0) {
                 dbfsUpdate = dbfsUpdate[0];
                 setAudioLevels((prev) => {
                     const newLevels = dbfsUpdate.data_message.data.levels;
-                    return newLevels
-                })
+                    return newLevels;
+                });
             }
 
             const newlyProcessedDataMessages = newSignals.concat(newAudioSegments);
@@ -73,12 +63,10 @@ export function AudioChatRecorder({
             }
             setProcessedDataMessages((prev) => [...prev, ...newlyProcessedDataMessages]);
 
-            const b64AudioSegments = newAudioSegments.map(segment => {
-                return {
-                    b64: segment.data_message.data['audio'],
-                    uuid: segment.uuid
-                }
-            });
+            const b64AudioSegments = newAudioSegments.map(segment => ({
+                b64: segment.data_message.data['audio'],
+                uuid: segment.uuid
+            }));
             setAudioQueue((prevQueue) => [...prevQueue, ...b64AudioSegments]);
         }
     }, [dataMessages]);
@@ -109,7 +97,7 @@ export function AudioChatRecorder({
                 data: {
                     audio: base64EncodedAudio
                 }
-            }, true, `tmp-audio-segment-${timestamp}`)
+            }, true, `tmp-audio-segment-${timestamp}`);
         };
 
         mediaRecorder.start();
@@ -143,7 +131,6 @@ export function AudioChatRecorder({
         };
     }, [isRecording]);
 
-
     useEffect(() => {
         if (audioQueue.length > 0 && !isPlaying) {
             playAudioQueue();
@@ -155,12 +142,20 @@ export function AudioChatRecorder({
 
         setIsPlaying(true);
 
+        const analyser = audioContextRef.current.createAnalyser();
+        analyser.fftSize = 32;
+        setAnalyser(analyser); // Set the analyser node state
+
         while (audioQueue.length > 0) {
             const audioB64 = audioQueue.shift();
             const audioBlob = base64ToBlob(audioB64.b64, 'audio/wav');
             const audioURL = URL.createObjectURL(audioBlob);
 
             const audio = new Audio(audioURL);
+            const source = audioContextRef.current.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContextRef.current.destination);
+
             await new Promise((resolve) => {
                 audio.onended = resolve;
                 audio.play();
@@ -170,9 +165,8 @@ export function AudioChatRecorder({
         setIsPlaying(false);
     };
 
-
     const onToggleRecording = (nowRecording) => {
-        setIsRecording(nowRecording)
+        setIsRecording(nowRecording);
         if (nowRecording) {
             sendDataMessage(`Signal: start-recording`, {
                 hide_message: true,
@@ -180,7 +174,7 @@ export function AudioChatRecorder({
                 data: {
                     signal: 'start-recording'
                 }
-            })
+            });
         } else {
             sendDataMessage(`Signal: stop-recording`, {
                 hide_message: true,
@@ -188,11 +182,9 @@ export function AudioChatRecorder({
                 data: {
                     signal: 'stop-recording'
                 }
-            })
+            });
         }
-    }
-
-    console.log('chat', chat)
+    };
 
     return (
         <div className="grid grid-rows-[1fr_auto_auto] h-full w-full">
@@ -227,7 +219,7 @@ export function AudioChatRecorder({
                                 <div className='flex flex-col gap-2 f-full overflow-y-auto'>
                                     {dataMessages.length === 0 && <div>No data messages</div>}
                                     {dataMessages.map((dataMessage, index) => (
-                                        <div>
+                                        <div key={index}>
                                             {dataMessage.text}
                                         </div>
                                     ))}
@@ -239,7 +231,7 @@ export function AudioChatRecorder({
                                 <div className='flex flex-col gap-2 f-full overflow-y-auto'>
                                     {outDataMessages.length === 0 && <div>No data messages</div>}
                                     {outDataMessages.map((dataMessage, index) => (
-                                        <div>
+                                        <div key={index}>
                                             {dataMessage.text}
                                         </div>
                                     ))}
@@ -251,7 +243,7 @@ export function AudioChatRecorder({
                                 <div className='flex flex-col gap-2 f-full overflow-y-auto'>
                                     {processedDataMessages.length === 0 && <div>No data messages</div>}
                                     {processedDataMessages.map((dataMessage, index) => (
-                                        <div>
+                                        <div key={index}>
                                             {dataMessage.text}
                                         </div>
                                     ))}
@@ -263,6 +255,7 @@ export function AudioChatRecorder({
             </div>
             <div className='flex w-full h-[200px] items-center justify-center'>
                 <AudioLevelDisplay levels={audioLevels} />
+                <AudioLevelMonitor analyserNode={analyser} />
             </div>
             <div className='flex flex-row w-full h-[150px] items-center justify-center p-4 gap-[300px]'>
                 <div className='h-[80px] w-[80px] rounded-full bg-info'>
@@ -270,6 +263,6 @@ export function AudioChatRecorder({
                 </div>
                 <ToggleRecordingButton isRecording={isRecording} setIsRecording={onToggleRecording} />
             </div>
-        </div >
-    )
+        </div>
+    );
 }
