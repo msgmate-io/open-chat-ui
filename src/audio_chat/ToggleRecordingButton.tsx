@@ -3,6 +3,7 @@ import { cn } from '../lib/utils';
 export function ToggleRecordingButton({
     audioState,
     isRecording,
+    onInterruptPlayback,
     setIsRecording
 }) {
     // Implementation here...
@@ -16,7 +17,7 @@ export function ToggleRecordingButton({
         </div>
     } else if (['thinking', 'speaking'].includes(audioState)) {
         return <div className={cn('flex h-[80px] hover:h-[70px] w-[80px] hover:w-[70px] hover:m-[5px] rounded-full bg-base-200 content-center justify-center items-center bg-error')}
-            onClick={() => { }}>
+            onClick={onInterruptPlayback}>
             Interrupt
         </ div>
     }
