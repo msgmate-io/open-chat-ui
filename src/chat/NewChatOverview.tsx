@@ -1,6 +1,5 @@
-import ContactsLoader from "../loaders/ContactsLoader";
+import { ContactsLoader, PublicProfilesLoader } from "../loaders";
 import React from 'react';
-import PublicProfilesLoader from "../loaders/PublicProfilesLoader";
 
 import { useSelector } from "react-redux";
 import { navigateSearch } from "../atoms/Link";

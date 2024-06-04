@@ -4,8 +4,10 @@
   "description": "UI package for Tim's 'Open-Chat'",
   "main": "index.ts",
   "scripts": {
-    "typescript": "tsc --jsx react",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "npm run build",
+    "build": "rm -rf dist && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --outDir dist/esm",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs"
   },
   "author": "Tim Schupp",
   "license": "ISC",

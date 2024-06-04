@@ -3,7 +3,7 @@ import React from 'react';
 import { useApi } from "../api/client2";
 import logo from "../assets/logo.png";
 import ThemeSelector from "../atoms/ThemeSelector";
-import ProfileLoader from "../loaders/ProfileLoader";
+import { ProfileLoader } from "../loaders";
 import { AppDispatch, RootState, logoutUser } from "../store/store";
 import {
     Card,
