@@ -1,4 +1,5 @@
 import logo from "../assets/logo.png";
+import React from 'react';
 import { navigateSearch } from "../atoms/Link";
 import {
     Card,

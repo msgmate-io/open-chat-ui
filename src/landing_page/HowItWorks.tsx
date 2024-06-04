@@ -1,3 +1,4 @@
+import React from 'react'; // don't remove!
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { GiftIcon, MapIcon, MedalIcon, PlaneIcon } from "./Icons";
 

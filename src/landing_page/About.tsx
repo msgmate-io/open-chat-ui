@@ -1,4 +1,5 @@
 import pilot from "../assets/logo.png";
+import React from 'react';
 import { Statistics, defaultStatistics } from "./Statistics";
 
 export const About = ({

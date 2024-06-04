@@ -1,4 +1,5 @@
 import ContactsLoader from "../loaders/ContactsLoader";
+import React from 'react';
 import PublicProfilesLoader from "../loaders/PublicProfilesLoader";
 
 import { useSelector } from "react-redux";

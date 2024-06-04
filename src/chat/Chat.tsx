@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import React from 'react';
 import WebsocketBridge from "../atoms/WebsocketBridge";
 import { ChatsList } from "../chat/ChatsList";
 import { MessagesView } from "../chat/MessageView";

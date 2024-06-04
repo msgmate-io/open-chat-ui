@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
+import React from 'react';
 import { Button, buttonVariants } from "../ui/button";
 import {
   Card,

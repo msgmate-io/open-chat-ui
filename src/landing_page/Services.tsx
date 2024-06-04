@@ -1,4 +1,5 @@
 import cubeLeg from "../assets/logo.png";
+import React from 'react';
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartIcon, MagnifierIcon, WalletIcon } from "./Icons";
 

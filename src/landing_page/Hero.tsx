@@ -1,4 +1,5 @@
 import cubeLeg from "../assets/logo.png";
+import React from 'react';
 
 
 export const Hero = ({

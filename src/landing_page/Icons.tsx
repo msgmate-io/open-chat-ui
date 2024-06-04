@@ -1,3 +1,5 @@
+import React from 'react'; // don't remove!
+
 export const LogoIcon = () => {
   return (
     <svg

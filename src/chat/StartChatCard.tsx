@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
+import React from 'react';
 import logo from "../assets/logo.png";
 import { navigateSearch } from "../atoms/Link";
 import { MobileBackButton } from "../atoms/MobileBackButton";

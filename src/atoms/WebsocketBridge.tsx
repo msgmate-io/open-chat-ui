@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from 'react';
 import { useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WEBSOCKET_URL } from "../constants";

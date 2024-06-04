@@ -1,4 +1,5 @@
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import React from 'react';
 import { Element } from 'react-scroll';
 import { Link } from "../atoms/Link";
 import { Button, buttonVariants } from "../ui/button";

@@ -1,4 +1,5 @@
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import React from 'react';
 import { Separator } from "../ui/separator";
 import { DynamicLoginButton } from "./Navbar";
 

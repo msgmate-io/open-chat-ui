@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import React from 'react';
 import { RootState } from "../store/store";
 import { ChatItem, PendingChatItem } from "./ChatItem";
 import { ProfileCard } from "./ChatsProfileCard";

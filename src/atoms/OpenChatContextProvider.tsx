@@ -1,5 +1,6 @@
 import { Provider } from "react-redux";
 import { getStore } from "../store/store";
+import React from 'react';
 
 interface ServerSideData {
     theme?: string

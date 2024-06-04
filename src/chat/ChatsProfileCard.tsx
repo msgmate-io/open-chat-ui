@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
 import { useApi } from "../api/client2";
 import logo from "../assets/logo.png";
 import ThemeSelector from "../atoms/ThemeSelector";

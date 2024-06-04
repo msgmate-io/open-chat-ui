@@ -1,4 +1,5 @@
 import toWav from 'audiobuffer-to-wav';
+import React from 'react';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { SocketContext, buildMessage } from '../atoms/WebsocketBridge';
 import { MessageScrollView } from '../chat/MessageScrollView';
@@ -10,6 +11,7 @@ import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
 const AUTO_RECORD = true;
 const DEBUG_TABS_VISIBLE = false;
+const STOP_ON_SILENCE_THRESHOLD_REACHED = true;
 
 export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
@@ -18,7 +20,8 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const [isReceivingResponseSteam, setIsReceivingResponseSteam] = useState(false);
 
     const [outDataMessages, setOutDataMessages] = useState([]);
-    const audioContextRef = useRef(null);
+    const recordingAudioContextRef = useRef(null); // Separate context for recording
+    const playbackAudioContextRef = useRef(null); // Separate context for playback
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const intervalIdRef = useRef(null);
@@ -66,6 +69,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             if (dbfsUpdate.length > 0) {
                 dbfsUpdate = dbfsUpdate[0];
                 setAudioLevels((prev) => {
+                    // @ts-ignore
                     const newLevels = dbfsUpdate.data_message.data.levels;
                     return newLevels;
                 });
@@ -76,6 +80,14 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             if (audioReceiveReady.length > 0) {
                 audioReceiveReady = audioReceiveReady[0];
                 setAudioState("listening");
+            }
+
+            let silenceThresholdReached = newSignals.filter(signal => signal.data_message.data.signal === 'silence-threshold-reached');
+            if (silenceThresholdReached.length > 0) {
+                silenceThresholdReached = silenceThresholdReached[0];
+                if (isRecording && STOP_ON_SILENCE_THRESHOLD_REACHED) {
+                    onToggleRecording(false);
+                }
             }
 
             let stopRecordingAcknowledged = newSignals.filter(signal => signal.data_message.data.signal === 'stop-recording-acknowledged');
@@ -95,8 +107,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 setIsReceivingResponseSteam(true);
             }
 
-            // stop-streaming-audio-response
-            // 
             let stopStreamingAudioResponse = newSignals.filter(signal => signal.data_message.data.signal === 'stop-streaming-audio-response');
             if (stopStreamingAudioResponse.length > 0) {
                 stopStreamingAudioResponse = stopStreamingAudioResponse[0];
@@ -105,7 +115,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                     setAudioState("ready");
                 }
             }
-
 
             const newlyProcessedDataMessages = newSignals.concat(newAudioSegments);
             for (const dataMsg of newlyProcessedDataMessages) {
@@ -124,7 +133,8 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     }, [dataMessages]);
 
     const startRecording = async () => {
-        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        // @ts-ignore
+        recordingAudioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorderRef.current = new MediaRecorder(stream);
 
@@ -133,23 +143,25 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         };
 
         mediaRecorderRef.current.onstop = async () => {
-            const audioBuffer = await audioContextRef.current.decodeAudioData(await new Response(new Blob(audioChunksRef.current)).arrayBuffer());
-            const wavData = toWav(audioBuffer);
-            const blob = new Blob([wavData], { type: 'audio/wav' });
+            if (recordingAudioContextRef.current) {
+                const audioBuffer = await recordingAudioContextRef.current.decodeAudioData(await new Response(new Blob(audioChunksRef.current)).arrayBuffer());
+                const wavData = toWav(audioBuffer);
+                const blob = new Blob([wavData], { type: 'audio/wav' });
 
-            audioChunksRef.current = [];
+                audioChunksRef.current = [];
 
-            const base64EncodedAudio = await blobToBase64(blob);
-            const sizeInMB = blob.size / (1024 * 1024);
-            const timestamp = new Date().toISOString();
-            console.log(`Audio segment size: ${sizeInMB.toFixed(2)} MB`);
-            sendDataMessage(`Audio segment send at: ${timestamp}`, {
-                hide_message: true,
-                data_type: 'audio_b64',
-                data: {
-                    audio: base64EncodedAudio
-                }
-            }, true, `tmp-audio-segment-${timestamp}`);
+                const base64EncodedAudio = await blobToBase64(blob);
+                const sizeInMB = blob.size / (1024 * 1024);
+                const timestamp = new Date().toISOString();
+                console.log(`Audio segment size: ${sizeInMB.toFixed(2)} MB`);
+                sendDataMessage(`Audio segment send at: ${timestamp}`, {
+                    hide_message: true,
+                    data_type: 'audio_b64',
+                    data: {
+                        audio: base64EncodedAudio
+                    }
+                }, true, `tmp-audio-segment-${timestamp}`);
+            }
         };
 
         mediaRecorderRef.current.start();
@@ -160,7 +172,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         }, intervalMs);
 
         // Store the stream reference
-        audioContextRef.current.stream = stream;
+        recordingAudioContextRef.current.stream = stream;
     };
 
     const stopRecording = () => {
@@ -172,14 +184,14 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
         }
-        if (audioContextRef.current && audioContextRef.current.stream) {
+        if (recordingAudioContextRef.current && recordingAudioContextRef.current.stream) {
             // Stop all tracks in the stream
-            const tracks = audioContextRef.current.stream.getTracks();
+            const tracks = recordingAudioContextRef.current.stream.getTracks();
             tracks.forEach(track => track.stop());
         }
-        if (audioContextRef.current) {
-            audioContextRef.current.close().then(() => {
-                audioContextRef.current = null;
+        if (recordingAudioContextRef.current) {
+            recordingAudioContextRef.current.close().then(() => {
+                recordingAudioContextRef.current = null;
             });
         }
     };
@@ -196,7 +208,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         };
     }, [isRecording]);
 
-
     useEffect(() => {
         if (audioQueue.length > 0 && !isPlaying) {
             playAudioQueue();
@@ -206,14 +217,15 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
     const playAudioQueue = async () => {
         if (audioQueue.length === 0) return;
 
-        if (!audioContextRef.current) {
-            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        if (!playbackAudioContextRef.current) {
+            // @ts-ignore
+            playbackAudioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
         }
 
         setIsPlaying(true);
         setAudioState('speaking');
 
-        const analyser = audioContextRef.current.createAnalyser();
+        const analyser = playbackAudioContextRef.current.createAnalyser();
         analyser.fftSize = 32;
         setAnalyser(analyser); // Set the analyser node state
 
@@ -227,9 +239,9 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
 
             const audio = new Audio(audioURL);
             currentAudioRef.current = audio;  // Save reference to current audio
-            const source = audioContextRef.current.createMediaElementSource(audio);
+            const source = playbackAudioContextRef.current.createMediaElementSource(audio);
             source.connect(analyser);
-            analyser.connect(audioContextRef.current.destination);
+            analyser.connect(playbackAudioContextRef.current.destination);
 
             await new Promise((resolve) => {
                 audio.onended = resolve;
@@ -263,9 +275,9 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 }
             });
             if (!isPlaying) {
-                if (audioContextRef.current) {
-                    audioContextRef.current.close().then(() => {
-                        audioContextRef.current = null;
+                if (recordingAudioContextRef.current) {
+                    recordingAudioContextRef.current.close().then(() => {
+                        recordingAudioContextRef.current = null;
                     });
                 }
             }
@@ -284,14 +296,9 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         setAudioQueue([]);
 
         // Stop any remaining audio sources
-        if (audioContextRef.current) {
-            // Only close and reset if no stream is active
-            if (audioContextRef.current.stream) {
-                const tracks = audioContextRef.current.stream.getTracks();
-                tracks.forEach(track => track.stop());
-            }
-            audioContextRef.current.close().then(() => {
-                audioContextRef.current = null;
+        if (playbackAudioContextRef.current) {
+            playbackAudioContextRef.current.close().then(() => {
+                playbackAudioContextRef.current = null;
             });
         }
 
@@ -308,7 +315,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
         setIsPlaying(false);
         setAudioState('booted');
     };
-
 
     return (
         <div className="grid grid-rows-[1fr_auto_auto] h-full w-full">

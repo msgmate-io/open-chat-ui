@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const defaultStatistics = [
   {
     quantity: "2.7K+",

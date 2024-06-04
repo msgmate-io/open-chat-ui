@@ -1,4 +1,5 @@
 import { navigateSearch } from "../atoms/Link";
+import React from 'react';
 import {
     Card
 } from "../ui/card";

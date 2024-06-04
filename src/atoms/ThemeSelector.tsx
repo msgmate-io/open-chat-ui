@@ -1,4 +1,5 @@
 export default ThemeSelector;
+import React from 'react';
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
@@ -14,7 +15,7 @@ function ThemeSelector() {
 
   useEffect(() => {
     const initalHidratiedTheme = Cookies.get("theme") || THEMES.LIGHT;
-    if(!Cookies.get("theme")) Cookies.set("theme", THEMES.LIGHT);
+    if (!Cookies.get("theme")) Cookies.set("theme", THEMES.LIGHT);
     dispatch(changeTheme(initalHidratiedTheme));
     handleSetDark(initalHidratiedTheme);
   }, []);

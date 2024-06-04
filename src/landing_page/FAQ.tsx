@@ -1,4 +1,5 @@
 import { Element } from 'react-scroll';
+import React from 'react';
 import {
   Accordion,
   AccordionContent,

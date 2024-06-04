@@ -1,7 +1,8 @@
 import * as toolkitRaw from '@reduxjs/toolkit';
 import { ChatResult, PaginatedChatResultList } from '../api/api';
 import { RootState } from './store';
-const { createSlice } = toolkitRaw.default ?? toolkitRaw;
+// @ts-ignore
+const { createSlice } = toolkitRaw?.default ?? toolkitRaw;
 
 export interface ChatState {
     value: null | PaginatedChatResultList;

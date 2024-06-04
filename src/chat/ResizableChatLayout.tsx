@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useBreakpoint } from "../lib/utils";

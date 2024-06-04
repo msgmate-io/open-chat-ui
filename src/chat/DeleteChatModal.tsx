@@ -1,4 +1,5 @@
 import Markdown from 'react-markdown';
+import React from 'react';
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
 import { Button } from "../ui/button";

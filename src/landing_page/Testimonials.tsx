@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import React from 'react';
 import {
   Card,
   CardContent,

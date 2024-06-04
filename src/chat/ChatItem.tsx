@@ -1,4 +1,5 @@
 import { ChatResult } from "../api/api";
+import React from 'react';
 import { navigateSearch } from "../atoms/Link";
 import { cn } from "../lib/utils";
 import { Button } from "../ui/button";

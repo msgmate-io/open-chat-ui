@@ -1,4 +1,5 @@
 import { ChatResult } from "../api/api"
+import React from 'react';
 import { Badge } from "../ui/badge"
 
 export function UnreadBadge({

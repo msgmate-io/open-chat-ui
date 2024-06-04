@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import React from 'react';
 import { AudioLevelDisplay } from './AudioLevelDisplay';
 
 export function AudioLevelMonitor({ analyserNode }) {

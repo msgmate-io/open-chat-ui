@@ -1,4 +1,5 @@
 import { Github, Linkedin } from "lucide-react";
+import React from 'react';
 import { buttonVariants } from "../ui/button";
 import {
   Card,

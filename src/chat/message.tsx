@@ -1,3 +1,4 @@
+import React from 'react';
 import Markdown from 'react-markdown';
 import { ChatResult, Message } from "../api/api";
 import logo from "../assets/logo.png";

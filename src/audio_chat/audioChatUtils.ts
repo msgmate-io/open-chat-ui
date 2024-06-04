@@ -18,6 +18,7 @@ export const base64ToBlob = (base64, mime) => {
 export const blobToBase64 = (blob) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
+        // @ts-ignore
         reader.onloadend = () => resolve(reader.result.split(',')[1]);
         reader.onerror = reject;
         reader.readAsDataURL(blob);

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Vike allows bundeling env params or dynamicly loading them
 // In order to assure this also works in the packages version we provide sensible defaults, that can be overwritten by the bundler
 

@@ -1,4 +1,5 @@
 import { AudioLevelDisplay } from './AudioLevelDisplay';
+import React from 'react';
 import { AudioLevelMonitor } from './AudioLevelMonitor';
 
 export function AudioChatStateMonitor({

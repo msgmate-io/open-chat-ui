@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useState } from "react";
 import logo from "../assets/logo.png";
+import React from 'react';
 import { Button } from "../ui/button";
 import {
     Card,
