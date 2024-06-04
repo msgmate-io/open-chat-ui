@@ -1,12 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from 'react';
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { EyeIcon, EyeOff } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { ErrorResult } from '../api/apiTypes';
-import { LOGIN_AS_GUEST } from '../constants';
 import { Button } from "../ui/button";
 import {
     Card,
@@ -130,16 +128,6 @@ export default function LoginHero({
                         {isFetching && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
                         Login
                     </Button>
-                    {(LOGIN_AS_GUEST?.allowed || false) && (
-                        <Button variant="outline" type="submit" className="w-full mt-4" form="login-form" onClick={() => {
-                            form.setValue('username', LOGIN_AS_GUEST.username)
-                            form.setValue('password', LOGIN_AS_GUEST.password)
-                            form.handleSubmit(onSubmit)()
-                        }} disabled={isFetching}>
-                            {isFetching && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-                            Login as Guest
-                        </Button>
-                    )}
                 </FormProvider>
             </CardContent>
             <CardFooter>

@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import React from 'react';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -7,7 +6,6 @@ import { LoginInfo } from "../api/api";
 import { ErrorResult } from "../api/apiTypes";
 import { useApi } from "../api/client2";
 import { navigate } from "../atoms/Link";
-import { LOGIN_AS_GUEST } from "../constants";
 import LoginHero from "../hero/login";
 import { fetchUser } from "../store/user";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -42,8 +40,6 @@ export function LoginSection({
             setIsFetching(false)
         }
     };
-
-    console.log("GUEST", LOGIN_AS_GUEST)
 
     return <section className="container py-24 sm:py-32 flex flex-col flex-grow items-center content-center justify-center" id={sectionId}>
         <div className="grid lg:grid-cols-[1fr,1fr] gap-8 place-items-center">

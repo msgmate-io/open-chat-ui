@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import React from 'react';
 import { useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { WEBSOCKET_URL } from "../constants";
 import { updateNewestMessage, updatePartnerOnlineStatus } from "../store/chats";
 import { updateContactsOnlineStatus } from "../store/contacts";
 import { insertMessage, updatePartialMessage } from "../store/messages";
@@ -90,10 +88,14 @@ const useWs = useWebSocket?.default || useWebSocket;
 
 import { createContext } from "react";
 
+
+const defaultSocketUrl = "wss://" + (typeof window !== "undefined" ? window.location.host : "localhost") + "/ws/core/ws";
+
 export const SocketContext = createContext({
   sendMessage: (data) => { },
   dataMessages: [],
-  removeDataMessage: (uuid) => { }
+  removeDataMessage: (uuid) => { },
+  websocketUrl: defaultSocketUrl
 })
 
 const WebsocketBridge = ({
@@ -114,7 +116,7 @@ const WebsocketBridge = ({
   const customEventHandler = useCustomEventHandler(dispatch, (dataMessage) => {
     setDataMessages((prev) => prev.concat(dataMessage));
   });
-  const { sendMessage, lastMessage, readyState } = useWs(WEBSOCKET_URL);
+  const { sendMessage, lastMessage, readyState } = useWs(defaultSocketUrl);
 
   const handleIncomingMessage = (message) => {
     if (message.type === "custom") {
