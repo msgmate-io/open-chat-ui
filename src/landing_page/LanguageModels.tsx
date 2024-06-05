@@ -19,7 +19,7 @@ const languageModelList: languageModelProps[] = [
     }
 ]
 
-const LanguageModelCard = ({ title, description }: languageModelProps) => {
+export const LanguageModelCard = ({ title, description }: languageModelProps) => {
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
@@ -51,7 +51,7 @@ const LanguageModelCard = ({ title, description }: languageModelProps) => {
     )
 }
 
-export const ALanguageModels = ({
+export const LanguageModelsSection = ({
     id = "section_language_models",
     title = (<></>),
     subtitle = "",

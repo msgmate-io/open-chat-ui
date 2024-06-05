@@ -1,4 +1,3 @@
-import cubeLeg from "../assets/logo.png";
 import React from 'react';
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartIcon, MagnifierIcon, WalletIcon } from "./Icons";
@@ -41,7 +40,7 @@ export const Services = ({
   ),
   services = serviceList,
   subtitle = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis dolor.",
-  image = cubeLeg,
+  imageUrl = "",
   sectionId = "features",
 }) => {
   return (
@@ -74,7 +73,7 @@ export const Services = ({
         </div>
 
         <img
-          src={image}
+          src={imageUrl}
           className="w-[300px] md:w-[500px] lg:w-[600px] object-contain"
           alt="About services"
         />

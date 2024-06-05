@@ -1,8 +1,7 @@
 import toWav from 'audiobuffer-to-wav';
-import React from 'react';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { SocketContext, buildMessage } from '../atoms/WebsocketBridge';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MessageScrollView } from '../chat/MessageScrollView';
+import { SocketContext, buildMessage } from '../context/WebsocketBridge';
 import { ChatMessagesLoader } from '../loaders/MessagesLoader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { AudioChatStateMonitor } from './AudioChatStateMonitor';

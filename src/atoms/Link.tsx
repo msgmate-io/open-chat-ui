@@ -1,20 +1,5 @@
-import { forwardRef } from "react";
-import { navigate as vikeNavigateImport } from 'vike/client/router';
+import React, { forwardRef } from "react";
 import { ROUTE_PREFIX } from "../constants";
-
-function vikeNavigateFallback(href, props = {}) {
-    if (href.startsWith("/")) {
-        href = ROUTE_PREFIX + href;
-    }
-}
-
-let vikeNavigate = null;
-
-if (vikeNavigateImport) {
-    vikeNavigate = vikeNavigateImport;
-} else {
-    vikeNavigate = vikeNavigateFallback;
-}
 
 interface LinkProps {
     href?: string;
@@ -37,13 +22,6 @@ export const Link = forwardRef(({ ...props }: LinkProps, innerRef) => {
     return <a ref={innerRef} href={href} {...props}>{children}</a>;
 });
 
-export function navigate(href, props = {}) {
-    if (href.startsWith("/")) {
-        href = ROUTE_PREFIX + href;
-    }
-    vikeNavigate(href, props);
-}
-
 export function navigateSearch(search, resetAll = true, pathName = null) {
     let searchParams = new URLSearchParams(window.location.search);
     if (resetAll) {
@@ -63,5 +41,10 @@ export function navigateSearch(search, resetAll = true, pathName = null) {
         }
     });
     var newRelativePathQuery = (pathName ? pathName : window.location.pathname) + '?' + searchParams.toString();
-    vikeNavigate(newRelativePathQuery);
+
+    window.history.pushState({}, '', newRelativePathQuery);
+}
+
+export function navigate(path, search = {}, resetAll = true) {
+    navigateSearch(search, resetAll, path);
 }

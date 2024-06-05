@@ -1,7 +1,6 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import { ChatResult, Message } from "../api/api";
-import logo from "../assets/logo.png";
 
 export function MessageItem({
     message,
@@ -15,7 +14,7 @@ export function MessageItem({
     return <div key={message.uuid} className="flex flex-row px-4 w-full relativ max-w-full">
         <div className="flex">
             <div className="w-8 m-2 hidden md:flex">
-                {selfIsSender ? <div>🙂</div> : <img src={logo} className="h-8 w-8" alt="logo" />}
+                {selfIsSender ? <div>🙂</div> : <div>👾</div>}{/** TODO: fill icon from api in future */}
             </div>
         </div>
         <div className="w-full flex flex-col flex-grow relative">

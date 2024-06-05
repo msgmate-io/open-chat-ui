@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
 import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { useApi } from "../api/client2";
-import logo from "../assets/logo.png";
 import ThemeSelector from "../atoms/ThemeSelector";
+import { GlobalContext } from "../context/GlobalContext";
 import { ProfileLoader } from "../loaders";
 import { AppDispatch, RootState, logoutUser } from "../store/store";
 import {
@@ -20,13 +20,14 @@ import {
 
 function ProfileCardButton() {
     const profile = useSelector((state: RootState) => state.profile.value)
+    const { logoUrl } = React.useContext(GlobalContext);
 
     return <>
         <ProfileLoader />
         <DropdownMenuTrigger asChild>
             <Card className="bg-base-200 hover:bg-base-300 p-0 flex" key={"chatListHeader"}>
                 <div className="flex">
-                    <img src={logo} className="h-12" alt="logo" />
+                    <img src={logoUrl} className="h-12" alt="logo" />
                 </div>
                 <div className="flex flex-grow items-center content-center justify-start pr-2">
                     <div className="p-2 flex flex-grow">{profile?.first_name} {profile?.second_name}</div>

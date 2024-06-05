@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
-import React from 'react';
-import logo from "../assets/logo.png";
 import { navigateSearch } from "../atoms/Link";
 import { MobileBackButton } from "../atoms/MobileBackButton";
 import { OnlineIndicator } from "../atoms/OnlineIndicator";
+import { GlobalContext } from "../context/GlobalContext";
 import { insertChat } from "../store/chats";
 import { insertMessage } from "../store/messages";
 import { RootState } from "../store/store";
@@ -24,6 +23,7 @@ export function PassKeyRequiredIndicator({
 }
 
 export function StartChatCard({ userId }) {
+    const { logoUrl } = useContext(GlobalContext);
     const api = useApi()
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(true)
@@ -121,7 +121,7 @@ export function StartChatCard({ userId }) {
                 </div>
                 <Card className="bg-base-200 hover:bg-base-300 p-0 flex" key={"chatListHeader"}>
                     <div className="flex">
-                        <img src={logo} className="h-12" alt="logo" />
+                        <img src={logoUrl} className="h-12" alt="logo" />
                     </div>
                     <div className="flex flex-grow items-center content-center justify-start pr-2">
                         <div className="p-2 flex flex-grow">

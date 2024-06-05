@@ -1,16 +1,36 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "es2016",
-    "module": "commonjs",
-    "allowJs": true,
-    "noEmitOnError": true,
+    "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "lib": [
+      "esnext",
+      "DOM"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "rootDir": "src",
+    "target": "ES2015",
     "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "strictFunctionTypes": false,
-    "skipLibCheck": true
-  }
+    "strictFunctionTypes": false
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.stories.tsx",
+    "**/testUtils.tsx"
+  ],
+  "types": [
+    "@testing-library/jest-dom"
+  ],
+  "typeRoots": [
+    "./node_modules/@types"
+  ]
 }

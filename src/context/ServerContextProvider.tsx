@@ -1,6 +1,6 @@
+import React from 'react';
 import { Provider } from "react-redux";
 import { getStore } from "../store/store";
-import React from 'react';
 
 interface ServerSideData {
     theme?: string
@@ -43,7 +43,7 @@ export function getInitalReduxState(props: ServerSideData) {
     }
 }
 
-export function OpenChatContextProvider(props: ServerSideData = defaultProps) {
+export function ServerContextProvider(props: ServerSideData = defaultProps) {
     if (props.location === 'server') {
         const initalReduxServerState = getInitalReduxState(props);
         const store = getStore(initalReduxServerState);

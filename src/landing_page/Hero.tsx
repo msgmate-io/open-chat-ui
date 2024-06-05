@@ -1,11 +1,10 @@
-import cubeLeg from "../assets/logo.png";
 import React from 'react';
 
 
 export const Hero = ({
+    logoUrl = "",
     cinematicTitle = (<></>),
     subtitle = "subtitle",
-    logoImage = cubeLeg,
     sectionId = "section_hero",
 }) => {
     return (
@@ -14,7 +13,7 @@ export const Hero = ({
                 {/**mobile logo */}
                 <div className="flex lg:hidden col-span-3">
                     <img
-                        src={logoImage}
+                        src={logoUrl}
                         className="w-[300px] md:w-[500px] lg:w-[600px] object-contain"
                         alt="About services"
                     />
@@ -31,7 +30,7 @@ export const Hero = ({
                 {/**desktop logo */}
                 <div className="hidden lg:flex md:col-span-1">
                     <img
-                        src={logoImage}
+                        src={logoUrl}
                         className="w-[300px] md:w-[500px] lg:w-[600px] object-contain"
                         alt="About services"
                     />

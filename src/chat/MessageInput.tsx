@@ -1,6 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
-import logo from "../assets/logo.png";
-import React from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Button } from "../ui/button";
 import {
     Card,
@@ -37,7 +35,7 @@ export const MessageInput = forwardRef<
     return (
         <Card className="bg-base-200 hover:bg-base-300 p-0 flex" key={"chatListHeader"}>
             <div className="flex">
-                <img src={logo} className="h-12" alt="logo" />
+                {/** TODO: some user related logo or else in the future? */}
             </div>
             <div className="flex flex-grow items-center content-center justify-start pr-2 relative py-2">
                 <Textarea

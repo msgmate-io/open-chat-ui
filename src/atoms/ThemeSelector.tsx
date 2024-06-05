@@ -1,24 +1,27 @@
 export default ThemeSelector;
-import React from 'react';
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { THEMES } from "../store/frontendTypes";
 import { changeTheme } from "../store/store";
 
-
 function ThemeSelector() {
   const dispatch = useDispatch();
   const frontend = useSelector((state: any) => state.frontend);
-  const theme = frontend.theme;
+  const theme = frontend.theme
+
+  console.log("ThemeSelector", theme);
 
   useEffect(() => {
-    const initalHidratiedTheme = Cookies.get("theme") || THEMES.LIGHT;
-    if (!Cookies.get("theme")) Cookies.set("theme", THEMES.LIGHT);
-    dispatch(changeTheme(initalHidratiedTheme));
-    handleSetDark(initalHidratiedTheme);
-  }, []);
+    if (theme in THEMES) {
+      if (Cookies.get("theme") !== theme) Cookies.set("theme", theme);
+    } else {
+      console.warn("UNKNOWN THEME", theme);
+      dispatch(changeTheme(THEMES.LIGHT));
+      Cookies.set("theme", THEMES.LIGHT);
+    }
+  }, [theme]);
 
   useEffect(() => {
     const currentDocumentTheme =

@@ -1,16 +1,17 @@
-import logo from "../assets/logo.png";
 import React from 'react';
 import { navigateSearch } from "../atoms/Link";
+import { GlobalContext } from "../context/GlobalContext";
 import {
     Card,
 } from "../ui/card";
 
 
 export function NewChatCard() {
+    const { logoUrl } = React.useContext(GlobalContext);
 
     return <Card className="bg-base-200 hover:bg-base-300 p-0 flex drop-shadow-xl z-10" key={"chatListHeader"}>
         <div className="flex">
-            <img src={logo} className="h-12" alt="logo" />
+            <img src={logoUrl} className="h-12" alt="logo" />
         </div>
         <div className="flex flex-grow items-center content-center justify-start pr-2" onClick={() => {
             navigateSearch({ chat: "new" })

@@ -1,6 +1,6 @@
-import { useSelector } from 'react-redux';
 import React from 'react';
-import WebsocketBridge from '../atoms/WebsocketBridge';
+import { useSelector } from 'react-redux';
+import { WebsocketBridge } from '../context/WebsocketBridge';
 import { ChatLoader, ChatsLoader } from '../loaders/ChatsLoader';
 import { getChatByChatId } from '../store/chats';
 import { RootState } from '../store/store';
