@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie';
-import React from 'react';
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from "react-redux";
 import { useBreakpoint } from "../lib/utils";
 import { RootState } from "../store/store";
@@ -133,11 +132,6 @@ export function ResizableChatLayout({
         console.log("onLayout", sizes)
         Cookies.set('react-resizable-panels-layout', JSON.stringify(sizes))
     }
-
-
-    const desktopLayoutLogic = false //defaultLayout && biggerThanSm
-    console.log("USING DESKTOP LAYOUT LOGIC", desktopLayoutLogic)
-
 
     return (
         <ResizablePanelGroup

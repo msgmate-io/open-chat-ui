@@ -3,7 +3,6 @@ import Cookies from "js-cookie";
 import { Dispatch } from 'redux';
 import { toast } from 'sonner';
 import { Api } from '../api/api';
-import { navigate } from '../atoms/Link';
 import { chatsSlice, ChatState, fetchChats } from './chats';
 import { contactsSlice, ContactsState } from './contacts';
 import { messagesSlice, MessagesState } from './messages';
@@ -67,13 +66,11 @@ export const logoutUser = (
             dispatch(fetchUser(null));
             dispatch(fetchChats(null));
             dispatch(fetchProfile(null));
+            dispatch(fetchFrontend(null));
             // remove helper 'clientAuthorized' flag so +guard.js may be executed client side
             Cookies.remove("clientAuthorized");
             // Just be be sure - Is normally auto removed by the 'Set-Cookie' header
             Cookies.remove("sessionid");
-            setTimeout(() => {
-                navigate("/");
-            }, 100);
         } catch (e) {
             toast.error("Error: " + JSON.stringify(e.error)); // Assuming e has an error property
         }

@@ -13,7 +13,7 @@ export function NewChatCard() {
             <img src={logoUrl} className="h-12" alt="logo" />
         </div>
         <div className="flex flex-grow items-center content-center justify-start pr-2" onClick={() => {
-            navigate({ chat: "new" })
+            navigate(null, { chat: "new" })
         }}>
             <div className="p-2 flex flex-grow">New Chat</div>
             <div>✍️</div>

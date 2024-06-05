@@ -15,7 +15,7 @@ export const buildMessage = (payload, action = "newMessage", type = "custom") =>
 
 // @ts-ignore
 const useWs = useWebSocket?.default || useWebSocket;
-const defaultSocketUrl = "wss://" + (typeof window !== "undefined" ? window.location.host : "localhost") + "/ws/core/ws";
+const defaultSocketUrl = "wss://" + (typeof window !== "undefined" ? window.location.host : "localhost") + "/api/core/ws";
 
 export const SocketContext = createContext({
   sendMessage: (data) => { },
@@ -35,6 +35,7 @@ export const WebsocketBridge = ({
   const customEventHandler = useCustomEventHandler(dispatch, (dataMessage) => {
     setDataMessages((prev) => prev.concat(dataMessage));
   });
+  console.log("WsURL", websocketUrl)
   const { sendMessage, lastMessage, readyState } = useWs(websocketUrl);
 
   const handleIncomingMessage = (message) => {

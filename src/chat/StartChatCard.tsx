@@ -68,7 +68,7 @@ export function StartChatCard({ userId }) {
             }))
 
             setTimeout(() => {
-                navigate({ chat: res.chat.uuid })
+                navigate(null, { chat: res.chat.uuid })
             }, 50)
         }).catch((err) => {
             toast.error(`Failed to create chat: ${JSON.stringify(err)}`)

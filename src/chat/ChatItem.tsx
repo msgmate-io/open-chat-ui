@@ -44,7 +44,7 @@ export function ChatItem({ chat, isSelected = false }: {
                     isSelected && "bg-accent bg-opacity-10 hover:bg-opacity-10"
                 )} key={chat.uuid} onClick={() => {
                     if (!settingsOpen) {
-                        navigate({ chat: chat.uuid })
+                        navigate(null, { chat: chat.uuid })
                     }
                 }}>
                     <CardHeader className="p-2">

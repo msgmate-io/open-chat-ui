@@ -24,7 +24,7 @@ function ContactsList() {
     const { navigate } = useContext(GlobalContext);
 
     const onClickProfile = (profile) => {
-        navigate({ chat: "create", userId: profile.uuid })
+        navigate(null, { chat: "create", userId: profile.uuid })
     }
 
     return <div className="flex flex-col h-full w-full content-center items-center">
@@ -43,7 +43,7 @@ function PublicProfilesList() {
     const { navigate } = useContext(GlobalContext);
 
     const onClickProfile = (profile) => {
-        navigate({ chat: "create", userId: profile.uuid })
+        navigate(null, { chat: "create", userId: profile.uuid })
     }
 
     return <div className="flex flex-col h-full w-full content-center items-center">

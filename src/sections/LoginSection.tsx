@@ -1,11 +1,11 @@
 import Cookies from "js-cookie";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { LoginInfo } from "../api/api";
 import { ErrorResult } from "../api/apiTypes";
 import { useApi } from "../api/client2";
-import { navigate } from "../atoms/Link";
+import { GlobalContext } from "../context";
 import LoginHero from "../hero/login";
 import { fetchUser } from "../store/user";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -19,6 +19,7 @@ export function LoginSection({
     const [error, setError] = useState<ErrorResult>(null)
     const [isFetching, setIsFetching] = useState(false)
     const dispatch = useDispatch()
+    const { navigate } = useContext(GlobalContext);
 
     const onSubmit = async (data: any) => {
         setIsFetching(true)

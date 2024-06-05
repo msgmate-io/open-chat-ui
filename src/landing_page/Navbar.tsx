@@ -130,7 +130,7 @@ export const DynamicLoginButton = ({
   authenticatedLink = "/chat",
   className = ""
 }) => {
-  const user = useSelector<RootState>((state) => state.user.value);
+  const user = useSelector<RootState>((state) => state.frontend.sessionId);
   const isAuthenticated = Boolean(user)
 
   return !isAuthenticated ? <AtomLink

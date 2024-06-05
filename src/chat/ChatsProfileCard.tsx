@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useApi } from "../api/client2";
 import ThemeSelector from "../atoms/ThemeSelector";
@@ -40,9 +40,13 @@ function ProfileCardButton() {
 
 export function ProfileCard() {
     const api = useApi();
+    const { navigate } = useContext(GlobalContext);
     const dispatch: AppDispatch = useDispatch()
     const onLogout = () => {
         dispatch(logoutUser(api))
+        setTimeout(() => {
+            navigate("/");
+        }, 100);
     }
     return <div className="shadow-xl">
         <DropdownMenu>
@@ -50,7 +54,9 @@ export function ProfileCard() {
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Home Page</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                    navigate('/')
+                }}>Home Page</DropdownMenuItem>
                 <DropdownMenuItem>Docs</DropdownMenuItem>
                 <DropdownMenuLabel><ThemeSelector /></DropdownMenuLabel>
                 <DropdownMenuItem disabled>API</DropdownMenuItem>
