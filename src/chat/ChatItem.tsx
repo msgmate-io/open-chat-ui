@@ -1,6 +1,5 @@
+import React, { useContext } from 'react';
 import { ChatResult } from "../api/api";
-import React from 'react';
-import { navigateSearch } from "../atoms/Link";
 import { cn } from "../lib/utils";
 import { Button } from "../ui/button";
 import {
@@ -16,6 +15,7 @@ import { ChatSettings } from "./ChatSettings";
 
 import { OnlineIndicator } from "../atoms/OnlineIndicator";
 import { UnreadBadge } from "../atoms/UnreadBadge";
+import { GlobalContext } from "../context";
 
 
 export function PendingChatItem() {
@@ -32,6 +32,7 @@ export function ChatItem({ chat, isSelected = false }: {
     isSelected?: boolean
 }) {
     const [settingsOpen, setSettingsOpen] = useState(false)
+    const { navigate } = useContext(GlobalContext);
 
 
     return (
@@ -43,7 +44,7 @@ export function ChatItem({ chat, isSelected = false }: {
                     isSelected && "bg-accent bg-opacity-10 hover:bg-opacity-10"
                 )} key={chat.uuid} onClick={() => {
                     if (!settingsOpen) {
-                        navigateSearch({ chat: chat.uuid })
+                        navigate({ chat: chat.uuid })
                     }
                 }}>
                     <CardHeader className="p-2">

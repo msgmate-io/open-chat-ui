@@ -1,10 +1,10 @@
+import React, { useContext } from 'react';
 import { ContactsLoader, PublicProfilesLoader } from "../loaders";
-import React from 'react';
 
 import { useSelector } from "react-redux";
-import { navigateSearch } from "../atoms/Link";
 import { MobileBackButton } from "../atoms/MobileBackButton";
 import { OnlineIndicator } from "../atoms/OnlineIndicator";
+import { GlobalContext } from "../context";
 import { RootState } from "../store/store";
 import {
     Card,
@@ -21,9 +21,10 @@ import {
 
 function ContactsList() {
     const contacts = useSelector((state: RootState) => state.contacts.value)
+    const { navigate } = useContext(GlobalContext);
 
     const onClickProfile = (profile) => {
-        navigateSearch({ chat: "create", userId: profile.uuid })
+        navigate({ chat: "create", userId: profile.uuid })
     }
 
     return <div className="flex flex-col h-full w-full content-center items-center">
@@ -39,9 +40,10 @@ function ContactsList() {
 
 function PublicProfilesList() {
     const publicProfiles = useSelector((state: RootState) => state.publicProfiles.value)
+    const { navigate } = useContext(GlobalContext);
 
     const onClickProfile = (profile) => {
-        navigateSearch({ chat: "create", userId: profile.uuid })
+        navigate({ chat: "create", userId: profile.uuid })
     }
 
     return <div className="flex flex-col h-full w-full content-center items-center">

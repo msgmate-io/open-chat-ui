@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { GlobalContext } from "../context/GlobalContext";
 import { useCustomEventHandler } from "./websocketEventHandler";
 
 export const buildMessage = (payload, action = "newMessage", type = "custom") => {
@@ -28,10 +27,7 @@ export const SocketContext = createContext({
 
 export const WebsocketBridge = ({
   children = null,
-  websocketUrl = defaultSocketUrl,
-  globalContext = {
-    logoUrl: "https://avatars.githubusercontent.com/u/163599389"
-  }
+  websocketUrl = defaultSocketUrl
 }) => {
   const dispatch = useDispatch();
   const [messageHistory, setMessageHistory] = useState([]);
@@ -77,7 +73,5 @@ export const WebsocketBridge = ({
     setDataMessages((prev) => prev.filter((segment) => segment.uuid !== uuid));
   }
 
-  return <GlobalContext.Provider value={globalContext}>
-    <SocketContext.Provider value={{ sendMessage, dataMessages, removeDataMessage, websocketUrl }}>{children}</SocketContext.Provider>
-  </GlobalContext.Provider>
+  return <SocketContext.Provider value={{ sendMessage, dataMessages, removeDataMessage, websocketUrl }}>{children}</SocketContext.Provider>
 };

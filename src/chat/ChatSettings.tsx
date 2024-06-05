@@ -1,5 +1,5 @@
+import React, { useContext } from 'react';
 import { Button } from "../ui/button";
-import React from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,12 +12,14 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
-import { navigateSearch } from "../atoms/Link";
+import { GlobalContext } from "../context";
 import { deleteChat, updateChatSettings } from "../store/chats";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { ViewChatJsonModal } from "./ViewChatJsonModal";
 
 export function ChatSettings({ chat, open, setOpen, children }) {
+
+    const { navigate } = useContext(GlobalContext);
 
     const api = useApi()
     const dispatch = useDispatch()
@@ -76,7 +78,7 @@ export function ChatSettings({ chat, open, setOpen, children }) {
                 <ViewChatJsonModal chat={chat} />
             </DropdownMenuLabel>
             <DropdownMenuLabel>
-                <Button variant="outline" className="h-6 w-full" onClick={() => navigateSearch({
+                <Button variant="outline" className="h-6 w-full" onClick={() => navigate({
                     chatId: chat.uuid
                 }, true, "/audioChat")}>Start Audio Chat</Button>
             </DropdownMenuLabel>

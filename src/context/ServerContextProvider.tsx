@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from "react-redux";
 import { getStore } from "../store/store";
+import { GlobalContext, defaultGlobalContext } from './GlobalContext';
 
 interface ServerSideData {
     theme?: string
@@ -11,6 +12,7 @@ interface ServerSideData {
     location: string // 'client' | 'server'
     routeParams: any
     searchParams: any
+    globalContext: any
 }
 
 let globalStore: null | any = null;
@@ -24,7 +26,8 @@ const defaultProps = {
     resizableLayout: {},
     location: 'client',
     routeParams: {},
-    searchParams: {}
+    searchParams: {},
+    globalContext: defaultGlobalContext
 }
 
 export function getInitalReduxState(props: ServerSideData) {
@@ -43,16 +46,24 @@ export function getInitalReduxState(props: ServerSideData) {
     }
 }
 
+export function ContextBase({ store, children, globalContext }) {
+    return <GlobalContext.Provider value={globalContext}>
+        <Provider store={store}>
+            {children}
+        </Provider>
+    </GlobalContext.Provider>
+
+}
+
 export function ServerContextProvider(props: ServerSideData = defaultProps) {
     if (props.location === 'server') {
         const initalReduxServerState = getInitalReduxState(props);
         const store = getStore(initalReduxServerState);
-        return <Provider store={store}>
+        return <ContextBase store={store} globalContext={props.globalContext}>
             {props.children}
-        </Provider>
+        </ContextBase>
     } else if (props.location === 'client') {
         if (!globalStore) {
-            // TODO: possibly need to add some 'initalReduxStoreOverwrite'
             globalStore = getStore({
                 ...getInitalReduxState(props)
             });
@@ -68,9 +79,9 @@ export function ServerContextProvider(props: ServerSideData = defaultProps) {
                 });
             }
         }
-        return <Provider store={globalStore}>
+        return <ContextBase store={globalStore} globalContext={props.globalContext}>
             {props.children}
-        </Provider>
+        </ContextBase>
     } else {
         return <>Unkown render location {props.location}</>
     }

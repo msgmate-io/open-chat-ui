@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
-import { navigateSearch } from "../atoms/Link";
 import { MobileBackButton } from "../atoms/MobileBackButton";
 import { OnlineIndicator } from "../atoms/OnlineIndicator";
 import { GlobalContext } from "../context/GlobalContext";
@@ -30,6 +29,7 @@ export function StartChatCard({ userId }) {
     const [profile, setProfile] = useState(null)
     const revealSecret = useSelector((state: RootState) => state.pageProps.search?.reveal)
     const key = useSelector((state: RootState) => state.pageProps.search?.key)
+    const { navigate } = useContext(GlobalContext);
 
 
     const inputRef = useRef<HTMLInputElement>(null)
@@ -68,7 +68,7 @@ export function StartChatCard({ userId }) {
             }))
 
             setTimeout(() => {
-                navigateSearch({ chat: res.chat.uuid })
+                navigate({ chat: res.chat.uuid })
             }, 50)
         }).catch((err) => {
             toast.error(`Failed to create chat: ${JSON.stringify(err)}`)
