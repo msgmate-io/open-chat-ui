@@ -78,9 +78,9 @@ export function ChatSettings({ chat, open, setOpen, children }) {
                 <ViewChatJsonModal chat={chat} />
             </DropdownMenuLabel>
             <DropdownMenuLabel>
-                <Button variant="outline" className="h-6 w-full" onClick={() => navigate({
+                <Button variant="outline" className="h-6 w-full" onClick={() => navigate("/audioChat", {
                     chatId: chat.uuid
-                }, true, "/audioChat")}>Start Audio Chat</Button>
+                })}>Start Audio Chat</Button>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
         </DropdownMenuContent>

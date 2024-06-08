@@ -25,7 +25,7 @@ function ProfileCardButton() {
     return <>
         <ProfileLoader />
         <DropdownMenuTrigger asChild>
-            <Card className="bg-base-200 hover:bg-base-300 p-0 flex" key={"chatListHeader"}>
+            <Card className="border-0 bg-base-200 hover:bg-base-300 p-0 flex" key={"chatListHeader"}>
                 <div className="flex">
                     <img src={logoUrl} className="h-12" alt="logo" />
                 </div>
@@ -51,7 +51,7 @@ export function ProfileCard() {
     return <div className="shadow-xl">
         <DropdownMenu>
             <ProfileCardButton />
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="bg-base-100 w-56 border-0">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => {

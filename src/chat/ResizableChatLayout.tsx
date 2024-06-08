@@ -6,7 +6,7 @@ import { RootState } from "../store/store";
 import {
     ResizableHandle,
     ResizablePanel,
-    ResizablePanelGroup,
+    ResizablePanelGroup
 } from "../ui/resizable";
 
 function CollapseIndicator({
@@ -148,12 +148,12 @@ export function ResizableChatLayout({
                 {...(biggerThanSm ? desktopConfig.left : mobileConfig.left)}
                 order={1}
             >
-                <div className="flex flex-col h-full p-2 relative">
+                <div className="flex flex-col h-full bg-base-200 relative">
                     {left}
                 </div>
             </ResizablePanel>
             {biggerThanSm && <ResizableHandle id="resize-handle" withHandle />}
-            {biggerThanSm && <CollapseIndicator isCollapsed={leftPannelRef.current?.isCollapsed()} onToggle={onToggleCollapse} />}
+            {/*biggerThanSm && <CollapseIndicator isCollapsed={leftPannelRef.current?.isCollapsed()} onToggle={onToggleCollapse} />*/}
             <ResizablePanel
                 ref={rightPannelRef}
                 id="right-panel"

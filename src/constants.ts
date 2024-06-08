@@ -1,6 +1,7 @@
 // @ts-nocheck
 // Vike allows bundeling env params or dynamicly loading them
-// In order to assure this also works in the packages version we provide sensible defaults, that can be overwritten by the bundler
+// In order to assure this also works in the packages version we provide sensible defaults, 
+// that can be overwritten by the bundler
 
 function metaOrDefault(meta: any, defaultValue: any) {
   try {
@@ -16,3 +17,4 @@ function metaOrDefault(meta: any, defaultValue: any) {
 
 export const LOGIN_ROUTE = metaOrDefault(() => { return import.meta.env.PUBLIC_ENV__LOGIN_ROUTE }, "/login");
 export const ROUTE_PREFIX = metaOrDefault(() => { return import.meta.env.PUBLIC_ENV__ROUTE_PREFIX }, "");
+export const DEBUG = metaOrDefault(() => { return import.meta.env.PUBLIC_ENV__DEBUG }, false);

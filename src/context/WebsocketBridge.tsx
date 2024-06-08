@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { DEBUG } from "../constants";
 import { useCustomEventHandler } from "./websocketEventHandler";
 
 export const buildMessage = (payload, action = "newMessage", type = "custom") => {
@@ -15,7 +16,7 @@ export const buildMessage = (payload, action = "newMessage", type = "custom") =>
 
 // @ts-ignore
 const useWs = useWebSocket?.default || useWebSocket;
-const defaultSocketUrl = "wss://" + (typeof window !== "undefined" ? window.location.host : "localhost") + "/api/core/ws";
+const defaultSocketUrl = (DEBUG ? "ws://" : "wss://") + (typeof window !== "undefined" ? window.location.host : "localhost") + "/api/core/ws";
 
 export const SocketContext = createContext({
   sendMessage: (data) => { },
