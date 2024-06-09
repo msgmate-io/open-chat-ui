@@ -27,6 +27,22 @@ export function PendingChatItem() {
     </Card>
 }
 
+export function CompactPendingChatItem() {
+    return (
+        <Card className="bg-base-100 animate-pulse hover:bg-base-300 p-0 flex border-0" key={"compactChatListHeader"}>
+            <CardHeader className="p-1 px-2">
+                <div className="">
+                    <div className='flex text-nowrap text-lg whitespace-nowrap overflow-x-hidden'>
+                        <span className="shadow opacity-100">{"...."}</span>
+                        <div className="absolute right-4 flex flex-row">
+                        </div>
+                    </div>
+                </div>
+            </CardHeader>
+        </Card>
+    );
+}
+
 function DotsHorizontal({ colorClass = "text-black-200" }) {
     return (
         <svg className={colorClass} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

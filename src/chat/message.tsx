@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Markdown from 'react-markdown';
 import { ChatResult, Message } from "../api/api";
+import { GlobalContext } from '../context';
 
-export function MessageItem({
+export function UserMessageItem({
     message,
     chat,
     selfIsSender = false
@@ -11,10 +12,12 @@ export function MessageItem({
     chat: ChatResult,
     selfIsSender?: boolean
 }) {
+
+    const isBotChat = chat?.partner?.is_bot
     return <div key={message.uuid} className="flex flex-row px-4 w-full relativ max-w-full">
         <div className="flex">
             <div className="w-8 m-2 hidden md:flex">
-                {selfIsSender ? <div>🙂</div> : <div>👾</div>}{/** TODO: fill icon from api in future */}
+                {selfIsSender ? <div>🙂</div> : <div>👾</div>}
             </div>
         </div>
         <div className="w-full flex flex-col flex-grow relative">
@@ -26,4 +29,68 @@ export function MessageItem({
             </div>
         </div>
     </div>
+}
+
+export function BotMessageItem({
+    message,
+    chat,
+    selfIsSender = false
+}: {
+    message: Message,
+    chat: ChatResult,
+    selfIsSender?: boolean
+}) {
+
+    const { logoUrl } = useContext(GlobalContext)
+
+    const isBotChat = chat?.partner?.is_bot
+    return <div key={message.uuid} className="flex flex-row px-4 w-full relativ max-w-full">
+        <div className="flex">
+            <img src={logoUrl} className="h-9 m-2" alt="logo" />
+        </div>
+        <div className="w-full flex flex-col flex-grow relative">
+            <div className="article prose w-95 pt-3 overflow-x-scroll">
+                <Markdown>{message.text}</Markdown>
+            </div>
+        </div>
+    </div>
+}
+
+function BotChatSelfMessageItem({
+    message,
+    chat,
+    selfIsSender = false
+}: {
+    message: Message,
+    chat: ChatResult,
+    selfIsSender?: boolean
+}) {
+    return <div key={message.uuid} className="flex flex-row px-4 w-full relativ max-w-full">
+        <div className="flex grow content-center items-end justify-end">
+            <div className="article prose w-95 overflow-x-scroll p-2 px-4 rounded-2xl bg-base-200">
+                <Markdown>{message.text}</Markdown>
+            </div>
+        </div>
+    </div>
+}
+
+export function MessageItem({
+    message,
+    chat,
+    selfIsSender = false
+}: {
+    message: Message,
+    chat: ChatResult,
+    selfIsSender?: boolean
+}) {
+    const isBotChat = chat?.partner?.is_bot
+    if (!isBotChat) {
+        return <UserMessageItem message={message} chat={chat} selfIsSender={selfIsSender} />
+    }
+
+    if (selfIsSender) {
+        return <BotChatSelfMessageItem message={message} chat={chat} selfIsSender={selfIsSender} />
+    } else {
+        return <BotMessageItem message={message} chat={chat} selfIsSender={selfIsSender} />
+    }
 }
