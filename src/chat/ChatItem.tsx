@@ -112,11 +112,12 @@ export function ChatItemCompact({ chat, isSelected = false }: {
                     "bg-base-200 hover:bg-base-100 p-0 border-0",
                     settingsOpen && "pointer-events-none hover:bg-base-300",
                     isSelected && "bg-base-100"
-                )} key={chat.uuid} onClick={() => {
-                    if (!settingsOpen) {
-                        navigate(null, { chat: chat.uuid })
-                    }
-                }}>
+                )}
+                    key={chat.uuid} onClick={() => {
+                        if (!settingsOpen) {
+                            navigate(null, { chat: chat.uuid })
+                        }
+                    }}>
                     <CardHeader className="p-1 px-2">
                         <div className="">
                             <div className='flex text-nowrap text-lg whitespace-nowrap overflow-x-hidden'>

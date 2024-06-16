@@ -15,7 +15,7 @@ import {
 export function ViewChatJsonModal({ chat }) {
     return <Dialog>
         <DialogTrigger asChild>
-            <Button variant="outline" className="h-6 w-full" onClick={(e) => { }}>View Json</Button>
+            <Button variant="ghost" className="h-6 w-full" onClick={(e) => { }}>View Json</Button>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>

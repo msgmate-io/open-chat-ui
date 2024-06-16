@@ -69,6 +69,19 @@ export const messagesSlice = createSlice({
             if (chatId in state.partialMessages) {
                 state.partialMessages[chatId] = null;
             }
+        },
+        replaceMessage: (state: MessagesState, action) => {
+            const { chatId, messageId, message } = action.payload;
+            if (chatId in (state.chatMessages ?? {})) {
+                state.chatMessages[chatId].results = state.chatMessages[chatId].results.map((msg) => {
+                    if (msg.uuid === messageId) {
+                        return message;
+                    }
+                    return msg;
+                });
+            } else {
+                console.warn('Chat not found', chatId, 'cannot replace message');
+            }
         }
     },
 });
@@ -85,6 +98,7 @@ export const getChatPartialMessage = (state: RootState, chatId: string) => {
 export const {
     fetchMessages,
     insertMessage,
+    replaceMessage,
     markChatMessagesAsRead,
     updatePartialMessage,
 } = messagesSlice.actions;

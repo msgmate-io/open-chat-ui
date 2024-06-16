@@ -1,5 +1,5 @@
-import Markdown from 'react-markdown';
 import React from 'react';
+import Markdown from 'react-markdown';
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
 import { Button } from "../ui/button";
@@ -15,7 +15,7 @@ import {
 export function DeleteChatModal({ dialogOpen, setDialogOpen, chat, setMarkedForDeletion }) {
     const api = useApi();
     return <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <Button variant="outline" className="h-6 w-full" onClick={(e) => {
+        <Button variant="ghost" className="h-6 w-full" onClick={(e) => {
             setDialogOpen(true);
         }}>Delete Chat</Button>
         <DialogContent>

@@ -50,11 +50,11 @@ export function ChatSettings({ chat, open, setOpen, children }) {
 
     return <DropdownMenu open={open} onOpenChange={setOpen}>
         {children}
-        <DropdownMenuContent className="w-56 pointer-events-none">
+        <DropdownMenuContent className="w-56 pointer-events-none border-0 shadow-xl">
             <DropdownMenuLabel className="h-6">Chat Settings</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuLabel className="flex flex-row gap-1">
-                <Input type="text" value={extraName} onChange={(e) => setExtraName(e.target.value)} placeholder="Extra name" className="h-6" />
+                <Input type="text" value={extraName} onChange={(e) => setExtraName(e.target.value)} placeholder="Extra name" className="h-6 border-0" />
                 {(!extraName || !extraNameChanged) && <Button className="h-6 px-1 bg-base-200 hover:bg-accent">
                     ✍️
                 </Button>}
@@ -71,17 +71,18 @@ export function ChatSettings({ chat, open, setOpen, children }) {
                     ↩
                 </Button>}
             </DropdownMenuLabel>
-            {chat?.partner?.is_bot && <DropdownMenuLabel>
-                <DeleteChatModal chat={chat} dialogOpen={deleteDialogOpen} setDialogOpen={setDeleteDialogOpen} setMarkedForDeletion={setMarkedForDeletion} />
-            </DropdownMenuLabel>}
             <DropdownMenuLabel>
                 <ViewChatJsonModal chat={chat} />
             </DropdownMenuLabel>
             <DropdownMenuLabel>
-                <Button variant="outline" className="h-6 w-full" onClick={() => navigate("/audioChat", {
+                <Button variant="ghost" className="h-6 w-full" onClick={() => navigate("/audioChat", {
                     chatId: chat.uuid
                 })}>Start Audio Chat</Button>
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {chat?.partner?.is_bot && <DropdownMenuLabel>
+                <DeleteChatModal chat={chat} dialogOpen={deleteDialogOpen} setDialogOpen={setDeleteDialogOpen} setMarkedForDeletion={setMarkedForDeletion} />
+            </DropdownMenuLabel>}
             <DropdownMenuSeparator />
         </DropdownMenuContent>
     </DropdownMenu>
