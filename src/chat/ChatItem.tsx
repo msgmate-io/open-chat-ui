@@ -118,7 +118,7 @@ export function ChatItemCompact({ chat, isSelected = false }: {
                             navigate(null, { chat: chat.uuid })
                         }
                     }}>
-                    <CardHeader className="p-1 px-2">
+                    <CardHeader className="p-[3px] px-2">
                         <div className="">
                             <div className='flex text-nowrap text-lg whitespace-nowrap overflow-x-hidden'>
                                 {chat.newest_message.text}

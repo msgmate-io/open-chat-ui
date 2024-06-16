@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useSelector } from "react-redux";
 import { useBreakpoint } from "../lib/utils";
 import { RootState } from "../store/store";
@@ -9,129 +9,105 @@ import {
     ResizablePanelGroup
 } from "../ui/resizable";
 
-function CollapseIndicator({
-    isCollapsed,
-    onToggle,
-}) {
-    return <div className="h-full flex content-center items-center bg-opacity-100">
-        <div className="absolute z-10" onClick={onToggle}>{isCollapsed ? "➡️" : "⬅️"}</div>
-    </div>
+function CollapseIndicator({ isCollapsed, onToggle }) {
+    return (
+        <div className="h-full flex content-center items-center bg-opacity-100">
+            <div className="absolute z-10" onClick={onToggle}>
+                {isCollapsed ? "➡️" : "⬅️"}
+            </div>
+        </div>
+    );
 }
 
-function useMobileConfig(
-    chatId,
-    defaultLeftSize = null,
-    defaultRightSize = null
-) {
+function useMobileConfig(chatId, defaultLeftSize = null, defaultRightSize = null) {
     return {
         left: {
             minSize: chatId ? 0 : 100,
             defaultSize: defaultLeftSize || (chatId ? 0 : 100),
             collapsedSize: 0,
-            collapsible: true
+            collapsible: true,
         },
         right: {
             minSize: !chatId ? 0 : 100,
             defaultSize: defaultRightSize || (!chatId ? 0 : 100),
             collapsedSize: 0,
-            collapsible: true
-        }
-    }
+            collapsible: true,
+        },
+    };
 }
 
-function useDesktopConfig(
-    defaultLeftSize = null,
-    defaultRightSize = null
-) {
+function useDesktopConfig(defaultLeftSize = null, defaultRightSize = null) {
     return {
         left: {
             minSize: 18,
             defaultSize: defaultLeftSize || 25,
             collapsedSize: 0,
-            collapsible: true
+            collapsible: true,
         },
         right: {
             minSize: 60,
             defaultSize: defaultRightSize || 75,
             collapsible: true,
             collapsedSize: 60,
-        }
-    }
+        },
+    };
 }
 
+export const ResizableChatLayout = forwardRef(({
+    left,
+    right,
+    leftPannelRef,
+    rightPannelRef
+}, ref) => {
+    const frontend = useSelector((state: RootState) => state.frontend);
+    const chatId = useSelector((state: RootState) => state.pageProps.search?.chat);
+    const { isSm: biggerThanSm } = useBreakpoint('sm');
+    const [, setLeftCollapsed] = useState(false);
+    const [, setRightCollapsed] = useState(false);
 
-export function ResizableChatLayout({
-    left, right
-}) {
-
-    const leftPannelRef = useRef(null)
-    const rightPannelRef = useRef(null)
-
-    const frontend = useSelector((state: RootState) => state.frontend)
-    const chatId = useSelector((state: RootState) => state.pageProps.search?.chat)
-    const { isSm: biggerThanSm } = useBreakpoint('sm')
-    const [, setLeftCollapsed] = useState(false)
-    const [, setRightCollapsed] = useState(false)
-
-
-
-
-    const layout = frontend?.resizableLayout
+    const layout = frontend?.resizableLayout;
 
     let defaultLayout;
     if (layout) {
-        console.log("DEF layout", layout)
+        console.log("DEF layout", layout);
         defaultLayout = JSON.parse(layout);
     }
     const defaultLayoutLeft = defaultLayout ? defaultLayout[0] : null;
     const defaultLayoutRight = defaultLayout ? defaultLayout[1] : null;
-    const mobileConfig = useMobileConfig(
-        chatId,
-        defaultLayoutLeft,
-        defaultLayoutRight
-    )
-    const desktopConfig = useDesktopConfig(
-        defaultLayoutLeft,
-        defaultLayoutRight
-    )
+    const mobileConfig = useMobileConfig(chatId, defaultLayoutLeft, defaultLayoutRight);
+    const desktopConfig = useDesktopConfig(defaultLayoutLeft, defaultLayoutRight);
 
-    console.log("chatId", chatId)
-    console.log("FRONTEND", frontend)
+    console.log("chatId", chatId);
+    console.log("FRONTEND", frontend);
 
     useEffect(() => {
         if (!biggerThanSm) {
             // layout changed to mobile
             if (chatId) {
                 // chat selected -> hide left panel
-                leftPannelRef.current.collapse()
-                setLeftCollapsed(true)
+                leftPannelRef.current.collapse();
+                setLeftCollapsed(true);
             } else if (!chatId) {
                 // chat not selected -> hide right panel
-                rightPannelRef.current.collapse()
-                setRightCollapsed(true)
+                rightPannelRef.current.collapse();
+                setRightCollapsed(true);
             }
         }
-    }, [biggerThanSm, chatId]);
-
-
-    const onToggleCollapse = () => {
-        const isCollapsed = leftPannelRef.current.isCollapsed()
-        if (isCollapsed) {
-            leftPannelRef.current.expand()
-        } else {
-            leftPannelRef.current.collapse()
-        }
-        setLeftCollapsed(!isCollapsed)
-    }
+    }, [biggerThanSm, chatId, leftPannelRef, rightPannelRef]);
 
     const onLeftPannelCollapseChanged = () => {
-        setLeftCollapsed(leftPannelRef.current.isCollapsed())
-    }
+        setLeftCollapsed(leftPannelRef.current.isCollapsed());
+    };
 
     const onLayout = (sizes) => {
-        console.log("onLayout", sizes)
-        Cookies.set('react-resizable-panels-layout', JSON.stringify(sizes))
-    }
+        console.log("onLayout", sizes);
+        Cookies.set('react-resizable-panels-layout', JSON.stringify(sizes));
+    };
+
+    useImperativeHandle(ref, () => ({
+        leftPannelRef: leftPannelRef.current,
+        rightPannelRef: rightPannelRef.current,
+    }));
 
     return (
         <ResizablePanelGroup
@@ -165,5 +141,5 @@ export function ResizableChatLayout({
                 </div>
             </ResizablePanel>
         </ResizablePanelGroup>
-    )
-}
+    );
+});

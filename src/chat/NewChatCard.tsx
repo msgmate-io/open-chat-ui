@@ -23,11 +23,13 @@ const IconXLHeavy = () => (
     </svg>
 );
 
-export function NewChatCard() {
+export function NewChatCard({
+    onToggleCollapse
+}) {
     const { logoUrl, navigate } = useContext(GlobalContext);
 
     return <Card className="border-0 bg-base-200 p-2 flex shadow-none z-10" key={"chatListHeader"}>
-        <div className="flex p-2 hover:bg-base-100 rounded-xl">
+        <div className="flex p-2 hover:bg-base-100 rounded-xl" onClick={onToggleCollapse}>
             <IconXLHeavy />
         </div>
         <div className="flex flex-grow items-center content-center justify-start pr-2" onClick={() => {

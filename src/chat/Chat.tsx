@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector } from "react-redux";
 import { ChatsList } from "../chat/ChatsList";
 import { MessagesView } from "../chat/MessageView";
@@ -15,10 +15,27 @@ function ChatBase() {
     const chatId = useSelector((state: RootState) => state.pageProps.search?.chat)
     const userId = useSelector((state: RootState) => state.pageProps.search?.userId)
 
+    const leftPannelRef = useRef();
+    const rightPannelRef = useRef();
+
+    const onToggleCollapse = () => {
+        const isCollapsed = leftPannelRef.current.isCollapsed();
+        if (isCollapsed) {
+            leftPannelRef.current.expand();
+        } else {
+            leftPannelRef.current.collapse();
+        }
+        //setLeftCollapsed(!isCollapsed);
+    };
+
+
+
     return <>
         <div className="flex h-screen">
             <ResizableChatLayout
-                left={<ChatsList />}
+                leftPannelRef={leftPannelRef}
+                rightPannelRef={rightPannelRef}
+                left={<ChatsList onToggleCollapse={onToggleCollapse} />}
                 right={<>
                     {!(chatMessageViews.indexOf(chatId) !== -1) && <MessagesView chatId={chatId} />}
                     {chatId === "new" && <NewChatOverview />}
