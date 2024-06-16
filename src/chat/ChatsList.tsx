@@ -97,7 +97,9 @@ export function ChatsList({
 
     const renderChatItems = () => {
         if (!chats) {
-            return Array.from({ length: 30 }).map((_, i) => <PendingItm key={`chat_${i}`} />);
+            return <div>
+                loading
+            </div>
         }
 
         let lastDivider = null;

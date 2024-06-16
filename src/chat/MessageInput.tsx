@@ -1,15 +1,18 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef, useContext, useEffect } from 'react';
+import { GlobalContext } from '../context/GlobalContext';
 import { Button } from "../ui/button";
-import {
-    Card,
-} from "../ui/card";
+import { Card } from "../ui/card";
 import { Textarea } from "../ui/textarea";
 
 interface MessageViewInputProps {
     isLoading?: boolean,
     onSendMessage?: () => void,
     isBotResponding?: boolean,
-    stopBotResponse?: () => void
+    stopBotResponse?: () => void,
+    text: string,
+    setText: (text: string) => void,
+    maxHeight?: number,
+    minHeight?: number
 }
 
 export const SendMessageButton = ({ onClick, isLoading }) => {
@@ -39,35 +42,66 @@ export const MessageInput = forwardRef<
     isLoading = false,
     onSendMessage = () => { },
     isBotResponding = false,
-    stopBotResponse = () => { }
+    stopBotResponse = () => { },
+    maxHeight = 300,
+    minHeight = 30
 }, ref) => {
+
+    const { logoUrl } = useContext(GlobalContext);
 
     useEffect(() => {
         if (ref.current) {
-            ref.current.style.height = 'inherit';
             const scrollHeight = ref.current.scrollHeight;
-            ref.current.style.height = `${scrollHeight}px`;
+            let updatedHeight = Math.max(minHeight, Math.min(scrollHeight, maxHeight));
+            if (text != "") {
+                ref.current.style.height = 'inherit';
+                ref.current.style.height = `${updatedHeight}px`;
+                ref.current.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+            }
         }
-    }, [ref, text]);
+    }, [ref, text, maxHeight, minHeight]);
 
     const handleTextChange = (e) => {
         setText(e.target.value);
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    };
+
+    const handleSendMessage = () => {
+        onSendMessage();
+        setText(''); // Clear the input text
+        if (ref.current) {
+            ref.current.style.height = 'auto';
+            ref.current.style.height = `${minHeight}px`;
+            ref.current.style.overflowY = 'hidden';
+        }
+    };
+
     return <div className='flex flex-col'>
-        <Card className="bg-base-200 p-4 flex items-center rounded-3xl border-0" key={"chatListHeader"}>
+        <Card className="bg-base-200 px-4 flex items-center rounded-3xl border-0" key={"chatListHeader"}>
+            <div className="flex pr-4">
+                <img className="h-9 m-3 rounded-full ring-2 ring-base-300 dark:ring-gray-500" src={logoUrl} alt="Bordered avatar" />
+            </div>
             <Textarea
                 value={text}
                 placeholder="Send message to Msgmate.io"
                 onChange={handleTextChange}
-                className="flex-grow bg-base-200 p-2 rounded-2xl resize-none border-0 focus:border-0 outline-none focus:outline-none shadow-none focus:shadow-none"
+                onKeyPress={handleKeyPress}
+                className={`bg-base-200 rounded-2xl text-lg resize-none border-0 focus:border-0 outline-none focus:outline-none shadow-none focus:shadow-none h-[${minHeight}px]`}
                 style={{
-                    height: "auto",
-                    overflow: "hidden"
+                    overflowY: 'hidden',
+                    height: `${minHeight}px`,
+                    maxHeight: `${maxHeight}px`,
+                    minHeight: `${minHeight}px`
                 }}
                 ref={ref}
             />
-            {!isBotResponding ? <SendMessageButton onClick={onSendMessage} isLoading={isLoading} /> : <CancelResponseButton onClick={stopBotResponse} />}
+            {!isBotResponding ? <SendMessageButton onClick={handleSendMessage} isLoading={isLoading} /> : <CancelResponseButton onClick={stopBotResponse} />}
         </Card>
         <div className='flex grow items-center content-center justify-center text-sm'>
             msgmate.io uses magic, be sceptical and verify information!
