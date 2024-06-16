@@ -84,6 +84,21 @@ export const LoadingSpinner = ({
     );
 };
 
+const CHAT_INTROS = [
+    {
+        title: "Welcome to Msgmate.io",
+        description: "Start chatting with other users or bots. You can also create your own bot and share it with others."
+    },
+    {
+        title: "Chat with Bots",
+        description: "Explore and chat with bots. You can also create your own bot and share it with others."
+    },
+    {
+        title: "Chat with Users",
+        description: "Start chatting with other users. You can also create your own bot and share it with others."
+    }
+]
+
 function NewBotChatCard() {
     const { logoUrl } = useContext(GlobalContext);
     return <>
@@ -93,8 +108,15 @@ function NewBotChatCard() {
                 className="w-[100px] md:w-[200px] lg:w-[300px] object-contain"
                 alt="About services"
             />
-            <div className="flex content-center items-center justify-center w-full">
-                hello
+            <div className="flex content-center items-center justify-center w-full gap-2">
+                {CHAT_INTROS.map((intro, i) => <div key={i} className="flex flex-col w-full p-2 h-[150px] border-content border-[1px] rounded-2xl">
+                    <h2 className="text-sm font-bold py-2">
+                        {intro.title}
+                    </h2>
+                    <p className="text-sm">
+                        {intro.description}
+                    </p>
+                </div>)}
             </div>
         </div>
     </>
@@ -105,12 +127,14 @@ export function StartChatCard({
     leftPannelCollapsed,
     onToggleCollapse
 }) {
+    const userName = useSelector((state: RootState) => state.pageProps.search?.userName)
     const api = useApi()
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(true)
     const [profile, setProfile] = useState(null)
     const revealSecret = useSelector((state: RootState) => state.pageProps.search?.reveal)
     const key = useSelector((state: RootState) => state.pageProps.search?.key)
+
     const { navigate } = useContext(GlobalContext);
 
 

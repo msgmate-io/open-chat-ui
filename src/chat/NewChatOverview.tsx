@@ -3,22 +3,13 @@ import { ContactsLoader, PublicProfilesLoader } from "../loaders";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 import { useSelector } from "react-redux";
-import { OnlineIndicator } from "../atoms/OnlineIndicator";
 import { GlobalContext } from "../context";
 import { cn } from '../lib/utils';
 import { RootState } from "../store/store";
 import { Button } from '../ui/button';
 import {
-    Card,
-    CardContent,
+    Card
 } from "../ui/card";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "../ui/carousel";
 import { CollapseIndicator } from './NewChatCard';
 
 
@@ -41,84 +32,34 @@ function ContactsList() {
     </div>
 }
 
-function PublicProfilesList() {
+export function PublicChatsOverview() {
+
     const publicProfiles = useSelector((state: RootState) => state.publicProfiles.value)
     const { navigate } = useContext(GlobalContext);
 
     const onClickProfile = (profile) => {
         navigate(null, { chat: "create", userId: profile.uuid })
     }
-
-    return <div className="flex flex-col h-full w-full content-center items-center">
-        {!publicProfiles && <Carousel
-            opts={{
-                align: "start",
-            }}
-            className="w-full max-w-[800px]"
-        >
-            <CarouselContent>
-                {Array.from({ length: 5 }).map((_, index) => (
-                    <CarouselItem key={index} className="lg:basis-1/3">
-                        <div className="p-1">
-                            <Card className="pulse bg-base-200">
-                                <CardContent className="pulse flex aspect-square items-center justify-center p-6">
-                                    loading
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-        </Carousel>}
-        {publicProfiles && <Carousel
-            opts={{
-                align: "start",
-            }}
-            className="w-full max-w-[800px]"
-        >
-            <CarouselContent>
-                {publicProfiles.results?.map((profile, index) => (
-                    <CarouselItem key={index} className="lg:basis-1/3" onClick={() => onClickProfile(profile)}>
-                        <div className="p-1">
-                            <Card className="hover:bg-base-200">
-                                <CardContent className="flex flex-col aspect-square items-center justify-center p-6 gap-2">
-                                    <OnlineIndicator is_online={profile.is_online} />
-                                    <span className="text-3xl font-semibold">{profile.first_name}</span>
-                                    <span className="font-semibold">{profile.description_title}</span>
-                                    <span className="w-full text-center">{profile.description}</span>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-        </Carousel>
-        }
-    </div>
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-full w-full content-center items-center bg-base-200">
+            {!publicProfiles && <div>Loading...</div>}
+            {publicProfiles && publicProfiles.results?.map(
+                (profile, i) => <PublicProfilesItem key={`profile_${i}`} profile={profile} onClick={() => {
+                    onClickProfile(profile)
+                }} />)}
+        </div>
+    );
 }
 
-export function PublicChatsOverview() {
-    return <div className="flex flex-col h-full w-full content-center items-center bg-base-200">
-        hello
-    </div>
-}
+export function PublicProfilesItem({ profile, onClick }) {
+    const { logoUrl } = useContext(GlobalContext);
 
-export function ProfileCardItem({ profile }) {
-    return <Card className="w-60 p-4 hover:bg-base-200">
-        <CardContent>
-            <div className="flex flex-row gap-2 items-center content-center">
-                <OnlineIndicator is_online={profile.is_online} />
-                <div className="flex flex-col">
-                    <span className="text-xl font-semibold">{profile.first_name}</span>
-                    <span className="font-semibold">{profile.description_title}</span>
-                    <span className="w-full text-center">{profile.description}</span>
-                </div>
-            </div>
-        </CardContent>
+    return <Card className="w-60 p-4 hover:bg-base-200" onClick={onClick}>
+        <div className="flex flex-col items-center content-center justify-center">
+            {profile?.is_bot && <img src={logoUrl} className="h-20 w-20 rounded-full" alt="avatar" />}
+            <div className="text-lg font-bold">{profile.first_name}</div>
+            <div className="text-sm">{profile.description}</div>
+        </div>
     </Card>
 }
 
