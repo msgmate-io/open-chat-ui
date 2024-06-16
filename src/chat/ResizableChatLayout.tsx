@@ -57,12 +57,12 @@ export const ResizableChatLayout = forwardRef(({
     left,
     right,
     leftPannelRef,
-    rightPannelRef
+    rightPannelRef,
+    setLeftCollapsed
 }, ref) => {
     const frontend = useSelector((state: RootState) => state.frontend);
     const chatId = useSelector((state: RootState) => state.pageProps.search?.chat);
     const { isSm: biggerThanSm } = useBreakpoint('sm');
-    const [, setLeftCollapsed] = useState(false);
     const [, setRightCollapsed] = useState(false);
 
     const layout = frontend?.resizableLayout;
