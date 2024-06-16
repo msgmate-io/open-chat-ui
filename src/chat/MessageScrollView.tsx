@@ -12,6 +12,9 @@ import { MessageItem } from "./message";
 export function MessageScrollView({ chatId, chat, hideInput = false }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext)
 
+    const [text, setText] = useState("");
+
+
     const [isBotResponding, setIsBotResponding] = useState(false)
 
     const scrollRef = useRef<HTMLDivElement>(null)
@@ -123,6 +126,6 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
             {messages && messages.results.map((message) => <MessageItem key={`msg_${message.uuid}`} message={message} chat={chat} selfIsSender={user?.uuid === message.sender} />).reverse()}
             {partialMessage && <MessageItem key={`msg_${partialMessage.uuid}`} message={partialMessage} chat={chat} selfIsSender={user?.uuid === partialMessage.sender} />}
         </div>
-        {!hideInput && <MessageInput isLoading={sendIsLoading || isLoading} isBotResponding={isBotResponding} stopBotResponse={onStopBotResponse} onSendMessage={onSendMessage} ref={inputRef} />}
+        {!hideInput && <MessageInput text={text} setText={setText} isLoading={sendIsLoading || isLoading} isBotResponding={isBotResponding} stopBotResponse={onStopBotResponse} onSendMessage={onSendMessage} ref={inputRef} />}
     </div>
 }

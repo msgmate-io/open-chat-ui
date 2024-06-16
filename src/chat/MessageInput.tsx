@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import { Button } from "../ui/button";
 import {
     Card,
@@ -35,12 +35,12 @@ export const MessageInput = forwardRef<
     HTMLTextAreaElement,
     MessageViewInputProps
 >(({
+    text, setText,
     isLoading = false,
     onSendMessage = () => { },
     isBotResponding = false,
     stopBotResponse = () => { }
 }, ref) => {
-    const [text, setText] = useState("");
 
     useEffect(() => {
         if (ref.current) {

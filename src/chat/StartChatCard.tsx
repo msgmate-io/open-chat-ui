@@ -130,6 +130,9 @@ export function StartChatCard({
     const userName = useSelector((state: RootState) => state.pageProps.search?.userName)
     const useUserIdLookup = userName ? false : true
 
+    const [text, setText] = useState("");
+
+
     const api = useApi()
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(true)
@@ -176,7 +179,7 @@ export function StartChatCard({
 
     const onCreateChat = (text) => {
         api.profileCreateChatCreate({
-            userUuid: userId,
+            userUuid: profile?.uuid,
             contact_secret: password,
             reveal_secret: revealSecret
         }, { text }).then((res) => {
@@ -215,7 +218,9 @@ export function StartChatCard({
                         {profile?.is_bot && <NewBotChatCard />}
                     </>}
                 </div>
-                <MessageInput ref={inputRef} />
+                <MessageInput ref={inputRef} onSendMessage={() => {
+                    onCreateChat(text)
+                }} text={text} setText={setText} />
             </div>
         </div>
     </>

@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 
 import { cn } from "../lib/utils"
@@ -14,28 +12,52 @@ import {
 
 const models = [
     {
+        title: "llama3-70b-8192",
+        href: "/docs/models/llama3-70b-8192",
+        description:
+            "Llama 3rd generation model with 70 billion parameters, supporting extensive context and tools.",
+    },
+    {
+        title: "meta-llama/Meta-Llama-3-70B-Instruct",
+        href: "/docs/models/meta-llama-3-70B-Instruct",
+        description:
+            "Meta's Llama 3, 70 billion parameter instruct model, optimized for instruction-following tasks.",
+    },
+    {
+        title: "meta-llama/Meta-Llama-3-8B-Instruct",
+        href: "/docs/models/meta-llama-3-8B-Instruct",
+        description:
+            "Meta's Llama 3, 8 billion parameter instruct model, tailored for lightweight instruction tasks.",
+    },
+    {
+        title: "databricks/dbrx-instruct",
+        href: "/docs/models/databricks-dbrx-instruct",
+        description:
+            "Databricks' DBRX Instruct model, designed for interactive and instructional applications.",
+    },
+    {
+        title: "cognitivecomputations/dolphin-2.6-mixtral-8x7b",
+        href: "/docs/models/cognitivecomputations-dolphin-2.6-mixtral-8x7b",
+        description:
+            "Cognitive Computations' Dolphin 2.6 Mixtral model, an advanced AI with a blend of 8x7B parameters.",
+    },
+    {
+        title: "gpt-3.5-turbo",
+        href: "/docs/models/gpt-3.5-turbo",
+        description:
+            "OpenAI's GPT-3.5 Turbo, an enhanced version of GPT-3, offering improved performance and efficiency.",
+    },
+    {
+        title: "gpt-4-turbo",
+        href: "/docs/models/gpt-4-turbo",
+        description:
+            "OpenAI's GPT-4 Turbo, the latest iteration in the GPT series, providing state-of-the-art capabilities.",
+    },
+    {
         title: "gpt-4o",
         href: "/docs/models/gpt-4o",
         description:
-            "The 4th generation of the OpenAI GPT model, trained on the OpenWebText dataset.",
-    },
-    {
-        title: "gpt-3o",
-        href: "/docs/models/gpt-3o",
-        description:
-            "The 3rd generation of the OpenAI GPT model, trained on the OpenWebText dataset.",
-    },
-    {
-        title: "gpt-2o",
-        href: "/docs/models/gpt-2o",
-        description:
-            "The 2nd generation of the OpenAI GPT model, trained on the OpenWebText dataset.",
-    },
-    {
-        title: "gpt-1o",
-        href: "/docs/models/gpt-1o",
-        description:
-            "The 1st generation of the OpenAI GPT model, trained on the OpenWebText dataset.",
+            "OpenAI's GPT-4o, optimized for specific applications with advanced tool and function support.",
     },
 ]
 
