@@ -66,7 +66,7 @@ export function NewChatCard({
         <div className="flex flex-grow items-center content-center justify-start">
             <div className="p-2 flex flex-grow"></div>
             <NewMessageButton onClick={() => {
-                navigate(null, { chat: "new" })
+                navigate(null, { chat: "create", userName: "hal" })
             }} />
         </div>
     </Card>

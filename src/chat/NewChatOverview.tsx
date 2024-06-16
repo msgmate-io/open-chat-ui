@@ -20,16 +20,16 @@ function ContactsList() {
     const onClickProfile = (profile) => {
         navigate(null, { chat: "create", userId: profile.uuid })
     }
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-full w-full content-center items-center bg-base-200">
+            {!contacts && <div>Loading...</div>}
+            {contacts && contacts.results?.map(
+                (profile, i) => <PublicProfilesItem key={`profile_${i}`} profile={profile} onClick={() => {
+                    onClickProfile(profile)
+                }} />)}
+        </div>
+    );
 
-    return <div className="flex flex-col h-full w-full content-center items-center">
-        {!contacts && <div>Loading...</div>}
-        {contacts && <div className="flex flex-wrap gap-2 w-full items-center content-center justify-center">{
-            contacts.results?.map(
-                (contact, i) => <Card onClick={() => {
-                    onClickProfile(contact)
-                }} className="w-60 p-4 hover:bg-base-200" key={`contact_${i}`}>{contact.first_name}</Card>)
-        }</div>}
-    </div>
 }
 
 export function PublicChatsOverview() {
@@ -38,7 +38,7 @@ export function PublicChatsOverview() {
     const { navigate } = useContext(GlobalContext);
 
     const onClickProfile = (profile) => {
-        navigate(null, { chat: "create", userId: profile.uuid })
+        navigate(null, { chat: "create", userName: "hal" })
     }
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-full w-full content-center items-center bg-base-200">

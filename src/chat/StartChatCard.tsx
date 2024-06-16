@@ -128,6 +128,8 @@ export function StartChatCard({
     onToggleCollapse
 }) {
     const userName = useSelector((state: RootState) => state.pageProps.search?.userName)
+    const useUserIdLookup = userName ? false : true
+
     const api = useApi()
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(true)
@@ -142,16 +144,29 @@ export function StartChatCard({
 
     useEffect(() => {
         setIsLoading(true)
-        api.profileRetrieve({
-            userUuid: userId,
-            reveal_secret: revealSecret
-        }).then((res) => {
-            console.log("PROFILE", res)
-            setProfile(res)
-            setIsLoading(false)
-        }).catch((err) => {
-            toast.error(`Failed to fetch profile: ${JSON.stringify(err)}`)
-        });
+        if (useUserIdLookup) {
+            api.profileRetrieve({
+                userUuid: userId,
+                reveal_secret: revealSecret
+            }).then((res) => {
+                console.log("PROFILE", res)
+                setProfile(res)
+                setIsLoading(false)
+            }).catch((err) => {
+                toast.error(`Failed to fetch profile: ${JSON.stringify(err)}`)
+            });
+        } else {
+            api.profileNameRetrieve({
+                username: userName,
+                reveal_secret: revealSecret
+            }).then((res) => {
+                console.log("PROFILE", res)
+                setProfile(res)
+                setIsLoading(false)
+            }).catch((err) => {
+                toast.error(`Failed to fetch profile: ${JSON.stringify(err)}`)
+            })
+        }
     }, []);
 
     const [password, setPassword] = useState("")

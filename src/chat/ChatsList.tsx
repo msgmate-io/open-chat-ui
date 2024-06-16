@@ -45,11 +45,15 @@ const ExploreChatsIcon = () => (
 );
 
 export function DefaultChatButtons() {
-    const { logoUrl } = useContext(GlobalContext);
+    const { logoUrl, navigate } = useContext(GlobalContext);
 
     return <>
         <Card className={cn(
-            "bg-base-200 hover:bg-base-300 p-2 border-0")}>
+            "bg-base-200 hover:bg-base-300 p-2 border-0")}
+            onClick={() => {
+                navigate(null, { chat: "create", userName: "hal" })
+            }}
+        >
             <div className="p-0">
                 <div className="flex flex-row text-nowrap text-lg whitespace-nowrap overflow-x-hidden">
                     <div className='flex items-center content-center justify-start'>
@@ -60,7 +64,11 @@ export function DefaultChatButtons() {
             </div>
         </Card>
         <Card className={cn(
-            "bg-base-200 hover:bg-base-300 p-2 border-0")}>
+            "bg-base-200 hover:bg-base-300 p-2 border-0")}
+            onClick={() => {
+                navigate(null, { chat: "new" })
+            }}
+        >
             <div className="p-0">
                 <div className="flex text-nowrap text-lg whitespace-nowrap overflow-x-hidden items-center content-center justify-start">
                     <div className='flex items-center content-center justify-start'>
