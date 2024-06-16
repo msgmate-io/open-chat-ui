@@ -118,7 +118,7 @@ export function ChatItemCompact({ chat, isSelected = false }: {
                             navigate(null, { chat: chat.uuid })
                         }
                     }}>
-                    <CardHeader className="p-[5px] px-2">
+                    <div className="p-[5px] px-2">
                         <div className="">
                             <div className='flex text-nowrap text-lg whitespace-nowrap overflow-x-hidden'>
                                 {chat.newest_message.text}
@@ -132,7 +132,7 @@ export function ChatItemCompact({ chat, isSelected = false }: {
                                 </div>
                             </div>
                         </div>
-                    </CardHeader>
+                    </div>
                 </Card>
                 <DropdownMenuTrigger className="h-0 bg-error z-10 display-none"></DropdownMenuTrigger>
             </ChatSettings>

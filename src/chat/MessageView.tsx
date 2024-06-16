@@ -32,7 +32,7 @@ export function MessagesView({ chatId, leftPannelCollapsed, onToggleCollapse }) 
         <div className="flex flex-col h-full w-full content-center items-center">
             {leftPannelCollapsed && <div className="w-full flex items-center content-center justify-left">
                 <div className="absolute top-0 mt-2 ml-2">
-                    <CollapseIndicator onToggleCollapse={onToggleCollapse} />
+                    <CollapseIndicator leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />
                 </div>
                 <MobileBackButton />
             </div>}

@@ -1,11 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ContactsLoader, PublicProfilesLoader } from "../loaders";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 import { useSelector } from "react-redux";
-import { MobileBackButton } from "../atoms/MobileBackButton";
 import { OnlineIndicator } from "../atoms/OnlineIndicator";
 import { GlobalContext } from "../context";
+import { cn } from '../lib/utils';
 import { RootState } from "../store/store";
+import { Button } from '../ui/button';
 import {
     Card,
     CardContent,
@@ -17,6 +19,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "../ui/carousel";
+import { CollapseIndicator } from './NewChatCard';
 
 
 function ContactsList() {
@@ -98,26 +101,80 @@ function PublicProfilesList() {
     </div>
 }
 
+export function PublicChatsOverview() {
+    return <div className="flex flex-col h-full w-full content-center items-center bg-base-200">
+        hello
+    </div>
+}
+
+export function ProfileCardItem({ profile }) {
+    return <Card className="w-60 p-4 hover:bg-base-200">
+        <CardContent>
+            <div className="flex flex-row gap-2 items-center content-center">
+                <OnlineIndicator is_online={profile.is_online} />
+                <div className="flex flex-col">
+                    <span className="text-xl font-semibold">{profile.first_name}</span>
+                    <span className="font-semibold">{profile.description_title}</span>
+                    <span className="w-full text-center">{profile.description}</span>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+}
 
 
-export function NewChatOverview() {
-    return <div className="flex flex-col h-full w-full content-center items-center">
+const TABS = [
+    {
+        value: "public_profiles",
+        label: "Public Profiles",
+        component: PublicChatsOverview
+    },
+    {
+        value: "contacts",
+        label: "Contacts",
+        component: ContactsList
+    }
+]
+
+export function NewChatOverview({
+    leftPannelCollapsed,
+    onToggleCollapse
+}) {
+    const [tab, setTab] = useState("contacts");
+
+    const onTabChange = (value) => {
+        setTab(value);
+    }
+
+    return <div className="flex flex-col h-full w-full content-center items-center bg-base-200">
         <ContactsLoader />
         <PublicProfilesLoader />
-        <div className="w-full flex items-center content-center justify-left">
-            <MobileBackButton />
+        <div className='flex flex-row w-full p-2 content-center items-center justify-center'>
+            {leftPannelCollapsed && <CollapseIndicator leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
+            <div className='flex-grow'></div>
+            <Button variant='outline' className='hover:bg-base-300 hover:text-base-content rounded-3xl' onClick={() => { }}>Account</Button>
         </div>
-        <main className="flex w-full text-3xl md:text-4xl lg:w-8/12 font-bold content-center justify-center items-center p-6">
+        <div className="flex w-full text-3xl font-bold content-center justify-center items-center p-2">
             <h1 className="inline">
-                Start a new{" "}
+                Explore{" "}
                 <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] text-transparent bg-clip-text">
-                    (AI-)Chat ?
-                </span>{" "}
+                    Msgmate.io
+                </span>,{" "}
+                Bots & Users
             </h1>
-        </main>
-        <h1 className="text-2xl font-bold py-2">Public Profiles</h1>
-        <PublicProfilesList />
-        <h1 className="text-2xl font-bold py-2">Past Contacts</h1>
-        <ContactsList />
+        </div>
+        <div className='flex w-full items-center content-center justify-center text-sm'>
+            Discover custom Msgmate.io Bots or Chat with other users
+        </div>
+        <div className='flex w-full relative items-center content-center justify-center pt-4'>
+            <Tabs value={tab} onValueChange={onTabChange} defaultValue="account" className="w-full flex flex-col relative">
+                <TabsList className='bg-base-200'>
+                    {TABS.map((tab, i) => <TabsTrigger key={i} value={tab.value} className={cn('bg-base-200')}>{tab.label}</TabsTrigger>)}
+                </TabsList>
+                {TABS.map((tab, i) => <TabsContent key={i} value={tab.value}>
+                    <tab.component />
+                </TabsContent>)}
+            </Tabs>
+        </div>
     </div>
 }
