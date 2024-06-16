@@ -120,8 +120,7 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
     }
 
     return <div className="flex flex-col h-full w-full lg:max-w-[900px] relative">
-        <div ref={scrollRef} className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll relative">
-            {chatId}
+        <div ref={scrollRef} className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll relative pb-4 pt-2">
             {isLoading && <div>Loading...</div>}
             {messages && messages.results.map((message) => <MessageItem key={`msg_${message.uuid}`} message={message} chat={chat} selfIsSender={user?.uuid === message.sender} />).reverse()}
             {partialMessage && <MessageItem key={`msg_${partialMessage.uuid}`} message={partialMessage} chat={chat} selfIsSender={user?.uuid === partialMessage.sender} />}

@@ -121,7 +121,7 @@ export function ChatItemCompact({ chat, isSelected = false }: {
                     <div className="p-[5px] px-2">
                         <div className="">
                             <div className='flex text-nowrap text-lg whitespace-nowrap overflow-x-hidden'>
-                                {chat.newest_message.text}
+                                {content}
                                 <div className="absolute right-4 flex flex-row">
                                     <UnreadBadge chat={chat} />
                                     {!chat?.partner?.is_bot && <OnlineIndicator is_online={chat?.partner?.is_online} />}

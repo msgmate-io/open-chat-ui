@@ -61,8 +61,10 @@ const models = [
     },
 ]
 
-export function HalBotSelector() {
-    const [selectedModel, setSelectedModel] = React.useState("gpt-4o")
+export function HalBotSelector({
+    selectedModel,
+    setSelectedModel,
+}) {
     return (
         <NavigationMenu>
             <NavigationMenuList>

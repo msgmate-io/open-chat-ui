@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from "react-redux";
+import { LoadingSpinner } from '../atoms/LoadingSpinnter';
 import { GlobalContext } from '../context/GlobalContext';
 import { cn } from '../lib/utils';
 import { RootState } from "../store/store";
@@ -97,8 +98,8 @@ export function ChatsList({
 
     const renderChatItems = () => {
         if (!chats) {
-            return <div>
-                loading
+            return <div className='flex flex-grow w-full h-full items-center content-center justify-center'>
+                <LoadingSpinner />
             </div>
         }
 

@@ -72,18 +72,28 @@ export const MessageInput = forwardRef<
         }
     };
 
-    const handleSendMessage = () => {
-        onSendMessage();
-        setText(''); // Clear the input text
+    const resetInput = () => {
         if (ref.current) {
             ref.current.style.height = 'auto';
             ref.current.style.height = `${minHeight}px`;
             ref.current.style.overflowY = 'hidden';
         }
+    }
+
+    useEffect(() => {
+        // if ther is no newline character in the text, reset the input
+        if (!text.includes('\n'))
+            resetInput();
+    }, [text]);
+
+    const handleSendMessage = () => {
+        onSendMessage();
+        setText(''); // Clear the input text
+        resetInput();
     };
 
-    return <div className='flex flex-col'>
-        <Card className="bg-base-200 px-4 flex items-center rounded-3xl border-0" key={"chatListHeader"}>
+    return <div className='flex flex-col content-center items-center justify-center'>
+        <Card className="bg-base-200 px-4 flex items-center rounded-3xl border-0 max-w-[900px] min-w-[800px]" key={"chatListHeader"}>
             <div className="flex pr-4">
                 <img className="h-9 m-3 rounded-full ring-2 ring-base-300 dark:ring-gray-500" src={logoUrl} alt="Bordered avatar" />
             </div>

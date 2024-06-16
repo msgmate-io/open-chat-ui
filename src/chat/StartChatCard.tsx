@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useApi } from "../api/client2";
+import { LoadingSpinner } from '../atoms/LoadingSpinnter';
 import { MobileBackButton } from "../atoms/MobileBackButton";
 import { OnlineIndicator } from "../atoms/OnlineIndicator";
 import { GlobalContext } from "../context/GlobalContext";
@@ -10,9 +11,12 @@ import { insertChat } from "../store/chats";
 import { insertMessage } from "../store/messages";
 import { RootState } from "../store/store";
 import { Badge } from "../ui/badge";
+import { Button } from '../ui/button';
 import { Input } from "../ui/input";
+import { Textarea } from '../ui/textarea';
 import { HalBotSelector } from './HalBotSelector';
 import { MessageInput } from './MessageInput';
+import { NewBotChatCard } from './NewBotChatCard';
 import { CollapseIndicator } from './NewChatCard';
 
 export function PassKeyRequiredIndicator({
@@ -55,72 +59,52 @@ function UserChatCard({
     </>
 }
 
-export interface ISVGProps extends React.SVGProps<SVGSVGElement> {
-    size?: number;
-    className?: string;
+const DEFAULT_BOT_CONFIG = {
+    "model": "",
+    "context": 5,
+    "systemPrompt": "Your are the advanced AI Agent, Hal. Her to fulfill any of the users requests."
 }
 
-export const LoadingSpinner = ({
-    size = 24,
-    className,
-    ...props
-}: ISVGProps) => {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            {...props}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={cn("animate-spin", className)}
-        >
-            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-        </svg>
-    );
-};
+export function AdvancedChatSettings({
+    model,
+    context, setContext,
+    systemPrompt, setSystemPrompt
+}) {
 
-const CHAT_INTROS = [
-    {
-        title: "Welcome to Msgmate.io",
-        description: "Start chatting with other users or bots. You can also create your own bot and share it with others."
-    },
-    {
-        title: "Chat with Bots",
-        description: "Explore and chat with bots. You can also create your own bot and share it with others."
-    },
-    {
-        title: "Chat with Users",
-        description: "Start chatting with other users. You can also create your own bot and share it with others."
-    }
-]
+    const handleTextChange = (e) => {
+        setSystemPrompt(e.target.value);
+    };
 
-function NewBotChatCard() {
-    const { logoUrl } = useContext(GlobalContext);
-    return <>
-        <div className='flex flex-col relative w-full h-full content-center items-center justify-center'>
-            <img
-                src={logoUrl}
-                className="w-[100px] md:w-[200px] lg:w-[300px] object-contain"
-                alt="About services"
-            />
-            <div className="flex content-center items-center justify-center w-full gap-2">
-                {CHAT_INTROS.map((intro, i) => <div key={i} className="flex flex-col w-full p-2 h-[150px] border-content border-[1px] rounded-2xl">
-                    <h2 className="text-sm font-bold py-2">
-                        {intro.title}
-                    </h2>
-                    <p className="text-sm">
-                        {intro.description}
-                    </p>
-                </div>)}
-            </div>
+    return <div className="flex flex-col gap-2 w-full p-2">
+        <div className="flex w-full text-3xl font-bold content-center justify-center items-center p-2">
+            <h1 className="inline">
+                Configure your{" "}
+                <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] text-transparent bg-clip-text">
+                    Hal Bot
+                </span>
+            </h1>
         </div>
-    </>
+        <div className="flex flex-col w-full">
+            Hals Chat Message Context Size
+        </div>
+        <div className="flex flex-col gap-2 w-full">
+            <Input placeholder="Context size" className="w-full" value={context} onChange={(e) => setContext(e.target.value)} />
+        </div>
+        <div className="flex flex-col w-full">
+            Hals System Prompt
+        </div>
+        <div className='w-full'>
+            <Textarea placeholder="System Promprt for the Bot" className="w-full h-[80px] bg-base-200 p-2" value={systemPrompt} onChange={handleTextChange} />
+        </div>
+        <div className="flex flex-col w-full">
+            Hals AI Model / Backend
+        </div>
+        <div className="flex flex-col w-full">
+            {model}
+        </div>
+    </div>
 }
+
 
 export function StartChatCard({
     userId,
@@ -128,9 +112,15 @@ export function StartChatCard({
     onToggleCollapse
 }) {
     const userName = useSelector((state: RootState) => state.pageProps.search?.userName)
+    const [advancedOpen, setAdvancedOpen] = useState(false)
     const useUserIdLookup = userName ? false : true
 
     const [text, setText] = useState("");
+
+    // Bot config
+    const [selectedModel, setSelectedModel] = useState("llama3-70b-8192")
+    const [systemPrompt, setSystemPrompt] = useState(DEFAULT_BOT_CONFIG.systemPrompt)
+    const [context, setContext] = useState(DEFAULT_BOT_CONFIG.context)
 
 
     const api = useApi()
@@ -139,6 +129,8 @@ export function StartChatCard({
     const [profile, setProfile] = useState(null)
     const revealSecret = useSelector((state: RootState) => state.pageProps.search?.reveal)
     const key = useSelector((state: RootState) => state.pageProps.search?.key)
+
+
 
     const { navigate } = useContext(GlobalContext);
 
@@ -178,11 +170,23 @@ export function StartChatCard({
     }
 
     const onCreateChat = (text) => {
+        let createChatPost: any = { text }
+
+        if (profile?.is_bot) {
+            createChatPost = {
+                ...createChatPost,
+                chat_settings: {
+                    model: selectedModel,
+                    systemPrompt,
+                    context
+                }
+            }
+        }
         api.profileCreateChatCreate({
             userUuid: profile?.uuid,
             contact_secret: password,
             reveal_secret: revealSecret
-        }, { text }).then((res) => {
+        }, createChatPost).then((res) => {
             dispatch(insertChat({
                 chat: res.chat,
             }))
@@ -204,18 +208,31 @@ export function StartChatCard({
             <div className="absolute left-0 p-2 flex items-center content-center justify-left">
                 {leftPannelCollapsed && <>
                     <CollapseIndicator leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />
-                    <HalBotSelector />
+                    <HalBotSelector selectedModel={selectedModel} setSelectedModel={setSelectedModel} />
                 </>}
                 {!leftPannelCollapsed && <>
-                    <HalBotSelector />
+                    <HalBotSelector selectedModel={selectedModel} setSelectedModel={setSelectedModel} />
                 </>}
+            </div>
+            <div className="absolute right-0 p-2 flex items-center content-center justify-left z-10">
+                <div>
+                    <Button variant='outline' className={cn('hover:bg-base-100 hover:text-base-content rounded-3xl', {
+                        'bg-base-200': advancedOpen,
+                    })} onClick={() => {
+                        console.log('clicked')
+                        setAdvancedOpen(!advancedOpen)
+                    }}>Advanced</Button>
+                </div>
             </div>
             <div className="flex flex-col h-full w-full lg:max-w-[900px] relativ">
                 <div className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll justify-center">
                     {isLoading && <LoadingSpinner size={48} className="text-content" />}
                     {!isLoading && <>
                         {!profile?.is_bot && <UserChatCard onChangePassword={onChangePassword} userId={userId} isLoading={isLoading} profile={profile} />}
-                        {profile?.is_bot && <NewBotChatCard />}
+                        {profile?.is_bot && <>
+                            {!advancedOpen && <NewBotChatCard />}
+                            {advancedOpen && <AdvancedChatSettings model={selectedModel} systemPrompt={systemPrompt} setSystemPrompt={setSystemPrompt} context={context} setContext={setContext} />}
+                        </>}
                     </>}
                 </div>
                 <MessageInput ref={inputRef} onSendMessage={() => {

@@ -113,6 +113,11 @@ export interface ChatsWithListParams {
   userUuid: string;
 }
 
+export interface CreateChat {
+  chat_settings?: any;
+  text: string;
+}
+
 /**
  * * `custom` - Custom
  * * `audio_b64` - Audio B64
@@ -989,7 +994,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     profileCreateChatCreate: (
       { userUuid, ...query }: ProfileCreateChatCreateParams,
-      data: SendMessage,
+      data: CreateChat,
       params: RequestParams = {},
     ) =>
       this.request<ChatCreationResponse, any>({
