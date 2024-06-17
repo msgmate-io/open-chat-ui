@@ -1,5 +1,5 @@
-import { AudioLevelDisplay } from './AudioLevelDisplay';
 import React from 'react';
+import { AudioLevelDisplay } from './AudioLevelDisplay';
 import { AudioLevelMonitor } from './AudioLevelMonitor';
 
 export function AudioChatStateMonitor({
@@ -9,7 +9,7 @@ export function AudioChatStateMonitor({
 }) {
 
     return <>
-        {audioState === "booted" && <div className='flex h-[150px] w-[150px] rounded-full bg-info content-center justify-center items-center'>
+        {audioState === "booted" && <div className='flex h-[150px] w-[150px] rounded-full bg-info content-center justify-center items-center hover:bg-error'>
             booted
         </div>}
         {audioState === "interrupting" && <div className='flex h-[150px] w-[150px] rounded-full bg-error content-center justify-center items-center'>

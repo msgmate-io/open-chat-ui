@@ -22,7 +22,8 @@ export function AudioChatPreloader({ chatId }) {
 }
 
 export function AudioChatBase() {
-    const chatId = useSelector((state: RootState) => state.pageProps.search?.chatId)
+    const chatId = useSelector((state: RootState) => state.pageProps.search?.chat)
+
 
     return <AudioChatPreloader chatId={chatId} />
 }

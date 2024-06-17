@@ -9,7 +9,7 @@ import { ToggleRecordingButton } from './ToggleRecordingButton';
 import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
 const AUTO_RECORD = true;
-const DEBUG_TABS_VISIBLE = false;
+const DEBUG_TABS_VISIBLE = true;
 const STOP_ON_SILENCE_THRESHOLD_REACHED = true;
 
 export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
@@ -194,6 +194,21 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
             });
         }
     };
+
+    const sendStartSignal = () => {
+        sendDataMessage(`Signal: start-audio-chat`, {
+            hide_message: false,
+            data_type: 'signal',
+            data: {
+                signal: 'start-audio-chat'
+            }
+        });
+    };
+
+    useEffect(() => {
+        sendStartSignal();
+    }, []);
+
 
     useEffect(() => {
         if (isRecording) {

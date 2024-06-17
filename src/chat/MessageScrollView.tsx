@@ -116,7 +116,7 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
             data: {
                 signal: 'stop-generating-response'
             }
-        }, true);
+        }, false);
     }
 
     return <div className="flex flex-col h-full w-full lg:max-w-[900px] relative">

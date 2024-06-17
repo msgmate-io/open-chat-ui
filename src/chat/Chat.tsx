@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useSelector } from "react-redux";
+import { AudioChatBase } from "../audio_chat/AudioChat";
 import { ChatsList } from "../chat/ChatsList";
 import { MessagesView } from "../chat/MessageView";
 import { WebsocketBridge } from "../context/WebsocketBridge";
@@ -14,6 +15,9 @@ const chatMessageViews = ["new", "create"]
 function ChatBase() {
     const chatId = useSelector((state: RootState) => state.pageProps.search?.chat)
     const userId = useSelector((state: RootState) => state.pageProps.search?.userId)
+    const _chatType = useSelector((state: RootState) => state.pageProps.search?.chatType)
+    const chatType = _chatType === "audio" ? "audio" : "text";
+
     const [leftPannelCollapsed, setLeftCollapsed] = useState(false);
 
     const leftPannelRef = useRef();
@@ -38,7 +42,8 @@ function ChatBase() {
                 setLeftCollapsed={setLeftCollapsed}
                 left={<ChatsList leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
                 right={<>
-                    {!(chatMessageViews.indexOf(chatId) !== -1) && <MessagesView
+                    {chatType === "audio" && <AudioChatBase />}
+                    {((chatType === "text") && !(chatMessageViews.indexOf(chatId) !== -1)) && <MessagesView
                         chatId={chatId}
                         leftPannelCollapsed={leftPannelCollapsed}
                         onToggleCollapse={onToggleCollapse} />}

@@ -1,7 +1,14 @@
-import React, { forwardRef, useContext, useEffect } from 'react';
+import React, { forwardRef, useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../context/GlobalContext';
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "../ui/dropdown-menu";
 import { Textarea } from "../ui/textarea";
 
 interface MessageViewInputProps {
@@ -34,6 +41,27 @@ export const CancelResponseButton = ({ onClick }) => {
     </Button>
 }
 
+export const ToggleInputModeButton = () => {
+    const [open, setOpen] = useState(false);
+    const { logoUrl } = useContext(GlobalContext);
+
+    return <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger className=""></DropdownMenuTrigger>
+        <img className="h-9 m-3 hover:ring-base-100 rounded-full ring-2 ring-base-300 dark:ring-gray-500" src={logoUrl} alt="Bordered avatar" onClick={() => {
+            setOpen(!open);
+        }} />
+        <DropdownMenuContent className="w-56 pointer-events-none border-0 shadow-xl">
+            <DropdownMenuLabel className="h-6">Chat Settings</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>
+                hello
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+        </DropdownMenuContent>
+    </DropdownMenu>
+
+}
+
 export const MessageInput = forwardRef<
     HTMLTextAreaElement,
     MessageViewInputProps
@@ -47,7 +75,6 @@ export const MessageInput = forwardRef<
     minHeight = 30
 }, ref) => {
 
-    const { logoUrl } = useContext(GlobalContext);
 
     useEffect(() => {
         if (ref.current) {
@@ -95,7 +122,7 @@ export const MessageInput = forwardRef<
     return <div className='flex flex-col content-center items-center justify-center'>
         <Card className="bg-base-200 px-4 flex items-center rounded-3xl border-0 max-w-[900px] min-w-[800px]" key={"chatListHeader"}>
             <div className="flex pr-4">
-                <img className="h-9 m-3 rounded-full ring-2 ring-base-300 dark:ring-gray-500" src={logoUrl} alt="Bordered avatar" />
+                <ToggleInputModeButton />
             </div>
             <Textarea
                 value={text}
