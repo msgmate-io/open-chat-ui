@@ -215,7 +215,7 @@ export function StartChatCard({
 
     return <>
         <div className="flex flex-col h-full w-full content-center items-center">
-            <div className="absolute left-0 p-2 flex items-center content-center justify-left">
+            <div className="absolute left-0 p-2 flex items-center content-center justify-left z-30">
                 {leftPannelCollapsed && <>
                     <CollapseIndicator leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />
                     <HalBotSelector selectedModel={selectedModel} setSelectedModel={setSelectedModel} />

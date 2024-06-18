@@ -5,14 +5,29 @@ import {
     Card,
 } from "../ui/card";
 
+import { useMediaQuery } from 'react-responsive';
+
+
 export const CollapseIndicator = ({
     leftPannelCollapsed,
     onToggleCollapse
 }) => {
-    return <div className={cn("flex p-2 rounded-xl", {
+    const { navigate } = useContext(GlobalContext);
+    const isSm = useMediaQuery({ query: '(max-width: 640px)' })
+
+    const onClick = () => {
+        console.log("onToggleCollapse")
+        if (!isSm) {
+            onToggleCollapse()
+        } else {
+            navigate(null, { chat: null })
+        }
+    }
+
+    return <div className={cn("flex p-2 rounded-xl hover:bg-accent", {
         "hover:bg-base-100": !leftPannelCollapsed,
         "hover:bg-base-300": leftPannelCollapsed
-    })} onClick={onToggleCollapse}>
+    })} onClick={onClick}>
         <CollapseSvgIcon />
     </div>
 }

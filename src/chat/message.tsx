@@ -45,7 +45,7 @@ export function BotMessageItem({
 
     const isBotChat = chat?.partner?.is_bot
     return <div key={message.uuid} className="flex flex-row px-4 w-full relativ max-w-full">
-        <div className="flex p-2">
+        <div className="flex p-2 hidden md:visible">
             <img className="h-9 m-3 rounded-full ring-2 ring-base-300 dark:ring-gray-500" src={logoUrl} alt="Bordered avatar" />
         </div>
         <div className="w-full flex flex-col flex-grow relative">
