@@ -170,11 +170,20 @@ export function StartChatCard({
     }
 
     const onCreateChat = (text) => {
-        let createChatPost: any = { text }
+        let createChatPost: any = {
+            text
+        }
 
         if (profile?.is_bot) {
             createChatPost = {
                 ...createChatPost,
+                data_message: {
+                    hide_message: false,
+                    data_type: "signal",
+                    data: {
+                        signal: "start-text-chat"
+                    }
+                },
                 chat_settings: {
                     model: selectedModel,
                     systemPrompt,
@@ -182,11 +191,12 @@ export function StartChatCard({
                 }
             }
         }
-        api.profileCreateChatCreate({
+        const createChatQuery = {
             userUuid: profile?.uuid,
             contact_secret: password,
             reveal_secret: revealSecret
-        }, createChatPost).then((res) => {
+        }
+        api.profileCreateChatCreate(createChatQuery, createChatPost).then((res) => {
             dispatch(insertChat({
                 chat: res.chat,
             }))

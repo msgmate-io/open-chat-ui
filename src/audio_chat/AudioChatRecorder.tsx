@@ -8,8 +8,8 @@ import { AudioChatStateMonitor } from './AudioChatStateMonitor';
 import { ToggleRecordingButton } from './ToggleRecordingButton';
 import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
-const AUTO_RECORD = true;
-const DEBUG_TABS_VISIBLE = true;
+const AUTO_RECORD = false;
+const DEBUG_TABS_VISIBLE = false;
 const STOP_ON_SILENCE_THRESHOLD_REACHED = true;
 
 export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
@@ -74,12 +74,19 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 });
             }
 
+            let audioBotConnected = newSignals.filter(signal => signal.data_message.data.signal === 'audio-bot-connected');
+            if (audioBotConnected.length > 0) {
+                audioBotConnected = audioBotConnected[0];
+                setAudioState("ready");
+            }
+
             let audioReceiveReady = newSignals.filter(signal => signal.data_message.data.signal === 'ready-to-receive-audio');
 
             if (audioReceiveReady.length > 0) {
                 audioReceiveReady = audioReceiveReady[0];
                 setAudioState("listening");
             }
+
 
             let silenceThresholdReached = newSignals.filter(signal => signal.data_message.data.signal === 'silence-threshold-reached');
             if (silenceThresholdReached.length > 0) {

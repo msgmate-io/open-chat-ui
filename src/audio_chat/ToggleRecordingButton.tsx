@@ -1,5 +1,5 @@
-import { cn } from '../lib/utils';
 import React from 'react';
+import { cn } from '../lib/utils';
 
 export function ToggleRecordingButton({
     audioState,
@@ -9,7 +9,7 @@ export function ToggleRecordingButton({
 }) {
     // Implementation here...
     console.log("audioState", audioState)
-    if (['booted', 'listening'].includes(audioState)) {
+    if (['booted', 'ready', 'listening'].includes(audioState)) {
         return <div className={cn('flex h-[80px] hover:h-[70px] w-[80px] hover:w-[70px] hover:m-[5px] rounded-full bg-base-200 content-center justify-center items-center', {
             'bg-warning': isRecording
         })}

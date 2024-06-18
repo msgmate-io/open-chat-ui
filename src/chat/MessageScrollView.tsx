@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import { DataTypeEnum } from '../api/api';
 import { useApi } from "../api/client2";
 import { SocketContext, buildMessage } from '../context/WebsocketBridge';
 import { updateNewestMessage } from "../store/chats";
@@ -92,20 +93,41 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
                 uuid: tmp_msg_id,
             }
         }))
-        api.messagesSendCreate(chat.uuid, { text: inputRef.current?.value }).then((res) => {
-            dispatch(updateNewestMessage({ chatId: chat.uuid, message: res }))
+        const insertNewMessage = (message) => {
+            dispatch(updateNewestMessage({ chatId: chat.uuid, message: message }))
             dispatch(replaceMessage({
                 chatId: chat.uuid,
-                message: res
+                message: message
             }))
             setTimeout(() => {
                 scrollToBottom()
                 setSendIsLoading(false)
             }, 50)
-        }).catch((err) => {
-            setSendIsLoading(false)
-            toast.error(`Failed to send message: ${err}`)
-        })
+        }
+
+        if (chat.partner.is_bot) {
+            api.messagesSendDataCreate(chat.uuid, {
+                text: inputRef.current?.value,
+                hide_message: false,
+                data_type: DataTypeEnum.Signal,
+                data: {
+                    signal: "start-text-chat"
+                }
+            }).then((res) => {
+                insertNewMessage(res)
+            }).catch((err) => {
+                setSendIsLoading(false)
+                toast.error(`Failed to send message: ${err}`)
+            })
+        } else {
+            api.messagesSendCreate(chat.uuid, { text: inputRef.current?.value }).then((res) => {
+                insertMessage(res)
+            }).catch((err) => {
+                setSendIsLoading(false)
+                toast.error(`Failed to send message: ${err}`)
+            })
+        }
+
     }
 
     const onStopBotResponse = () => {
