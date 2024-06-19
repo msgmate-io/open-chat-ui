@@ -93,7 +93,7 @@ export const MessageInput = forwardRef<
     };
 
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && e.shiftKey) {
+        if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSendMessage();
         }
@@ -120,7 +120,7 @@ export const MessageInput = forwardRef<
     };
 
     return <div className='flex flex-col content-center items-center justify-center'>
-        <Card className="bg-base-200 px-4 flex items-center rounded-3xl border-0 max-w-[900px] min-w-[800px]" key={"chatListHeader"}>
+        <Card className="bg-base-200 pr-4 md:px-4 flex items-center rounded-3xl border-0 max-w-[900px] md:min-w-[800px] mb-2" key={"chatListHeader"}>
             <div className="flex pr-4">
                 <ToggleInputModeButton />
             </div>
@@ -140,7 +140,7 @@ export const MessageInput = forwardRef<
             />
             {!isBotResponding ? <SendMessageButton onClick={handleSendMessage} isLoading={isLoading} /> : <CancelResponseButton onClick={stopBotResponse} />}
         </Card>
-        <div className='flex grow items-center content-center justify-center text-sm'>
+        <div className='flex grow items-center content-center justify-center text-sm hidden md:flex'>
             msgmate.io uses magic, be sceptical and verify information!
         </div>
     </div>

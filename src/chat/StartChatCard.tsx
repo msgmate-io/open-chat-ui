@@ -108,10 +108,12 @@ export function AdvancedChatSettings({
 
 export function StartChatCard({
     userId,
+    initUserName,
     leftPannelCollapsed,
     onToggleCollapse
 }) {
-    const userName = useSelector((state: RootState) => state.pageProps.search?.userName)
+    const _userName = useSelector((state: RootState) => state.pageProps.search?.userName)
+    const userName = _userName ? _userName : initUserName
     const [advancedOpen, setAdvancedOpen] = useState(false)
     const useUserIdLookup = userName ? false : true
 

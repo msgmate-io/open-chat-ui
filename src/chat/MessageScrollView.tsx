@@ -8,7 +8,7 @@ import { updateNewestMessage } from "../store/chats";
 import { getChatPartialMessage, getMessagesByChatId, insertMessage, replaceMessage } from "../store/messages";
 import { RootState } from "../store/store";
 import { MessageInput } from "./MessageInput";
-import { MessageItem } from "./message";
+import { MessageItem, PendingMessageItem } from "./message";
 
 export function MessageScrollView({ chatId, chat, hideInput = false }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext)
@@ -63,6 +63,7 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
                 let doneResponding = newSignals.some(signal => signal.data_message.data.signal === 'finished-generating-response');
 
                 if (isResponding) {
+                    scrollToBottom();
                     setIsBotResponding(true);
                 }
 
@@ -79,6 +80,7 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
 
     useEffect(() => {
         scrollToBottom()
+        setIsBotResponding(false)
     }, [messages, partialMessage])
 
     const onSendMessage = () => {
@@ -145,6 +147,12 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
         <div ref={scrollRef} className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll relative pb-4 pt-2">
             {isLoading && <div>Loading...</div>}
             {messages && messages.results.map((message) => <MessageItem key={`msg_${message.uuid}`} message={message} chat={chat} selfIsSender={user?.uuid === message.sender} />).reverse()}
+            {(isBotResponding && !partialMessage) && <PendingMessageItem />}
+            {/**(isBotResponding && !partialMessage) && <div className="flex flex-row px-4 w-full relativ max-w-full">
+                <div className="">
+                    <CinematicLogo className="animate-pulse" size={40} />
+                </div>
+            </div>**/}
             {partialMessage && <MessageItem key={`msg_${partialMessage.uuid}`} message={partialMessage} chat={chat} selfIsSender={user?.uuid === partialMessage.sender} />}
         </div>
         {!hideInput && <MessageInput text={text} setText={setText} isLoading={sendIsLoading || isLoading} isBotResponding={isBotResponding} stopBotResponse={onStopBotResponse} onSendMessage={onSendMessage} ref={inputRef} />}

@@ -43,7 +43,8 @@ function ChatBase() {
                 left={<ChatsList leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
                 right={<>
                     {chatType === "audio" && <AudioChatBase />}
-                    {((chatType === "text") && !(chatMessageViews.indexOf(chatId) !== -1)) && <MessagesView
+                    {!chatId && <StartChatCard userId={userId} initUserName={"hal"} leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
+                    {(chatId && (chatType === "text") && !(chatMessageViews.indexOf(chatId) !== -1)) && <MessagesView
                         chatId={chatId}
                         leftPannelCollapsed={leftPannelCollapsed}
                         onToggleCollapse={onToggleCollapse} />}
