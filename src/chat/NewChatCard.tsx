@@ -31,7 +31,7 @@ export const CollapseIndicator = ({
         <CollapseSvgIcon />
     </div>
 }
-const CollapseSvgIcon = () => (
+export const CollapseSvgIcon = () => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

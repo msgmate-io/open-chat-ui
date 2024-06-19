@@ -1,5 +1,9 @@
-import { useState } from "react";
-import React from 'react';
+import Cookies from "js-cookie";
+import { Moon, Sun } from "lucide-react";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { THEMES } from "../store/frontendTypes";
+import { changeTheme } from "../store/store";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -7,10 +11,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Moon, Sun } from "lucide-react";
 
 export function ModeToggle() {
-  const [theme, setTheme] = useState("system")
+  const frontend = useSelector((state: any) => state.frontend);
+  const theme = frontend.theme
+  const dispatch = useDispatch();
+
+  const setTheme = (theme: string) => {
+    dispatch(changeTheme(theme));
+    Cookies.set("theme", theme);
+  }
+
+  useEffect(() => {
+    const currentDocumentTheme =
+      document.documentElement.getAttribute("data-theme");
+
+    if (currentDocumentTheme !== theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+  }, [theme]);
+
 
   return (
     <DropdownMenu>
@@ -26,15 +46,11 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
+        {Object.values(THEMES).map((_theme) => (
+          <DropdownMenuItem key={_theme} onClick={() => setTheme(_theme)}>
+            {_theme}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

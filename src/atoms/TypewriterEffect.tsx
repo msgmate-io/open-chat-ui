@@ -55,7 +55,7 @@ export const Typewriter = ({ texts = TEXTS, typingSpeed = 100, delay = 2000 }) =
             clearInterval(typingInterval);
             clearTimeout(timeout);
         };
-    }, [texts, currentTextIndex, isTyping, isSliding, typingSpeed, delay]);
+    }, [texts, currentTextIndex, isTyping, isSliding, typingSpeed, delay, model, prompt]);
 
     return (
         <div className="typewriter-container w-[800px]">

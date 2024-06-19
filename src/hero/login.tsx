@@ -7,19 +7,10 @@ import { z } from "zod";
 import { ErrorResult } from '../api/apiTypes';
 import { Button } from "../ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "../ui/card";
-import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
-    FormMessage,
+    FormMessage
 } from "../ui/form";
 import { Input } from "../ui/input";
 
@@ -81,57 +72,59 @@ export default function LoginHero({
         }
     }, [error])
 
+    const {
+        formState: { errors }
+    } = form;
+    console.log(error, errors)
+
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <FormProvider {...form}>
-                    <FormField
-                        control={form.control}
-                        name="username"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>username</FormLabel>
-                                <FormControl>
-                                    <Input type="username" placeholder="Email" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <div className="relative">
-                                        <Input type={showPassword ? 'text' : 'password'} placeholder="Password" {...field} />
-                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer">
-                                            {showPassword ? (
-                                                <EyeOff className="h-6 w-6" onClick={togglePasswordVisibility} />
-                                            ) : (
-                                                <EyeIcon className="h-6 w-6" onClick={togglePasswordVisibility} />
-                                            )}
-                                        </div>
+        <div className="flex flex-col relative w-full gap-0">
+            <FormProvider {...form}>
+                <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                        <FormItem
+                            className="w-full space-y-0"
+                        >
+                            <FormControl className="">
+                                <Input type="username" placeholder="Email" {...field} className="rounded-full py-6 text-lg text-center border-2" />
+                            </FormControl>
+                            <FormMessage className="text-center text-sm" />
+                            {!errors?.username && <div className="text-red-500 text-sm text-center">&#8203;</div>}
+                        </FormItem>
+                    )} />
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem
+                            className="w-full space-y-0"
+                        >
+                            <FormControl>
+                                <div className="relative">
+                                    <Input type={showPassword ? 'text' : 'password'} placeholder="Password" {...field} className="rounded-full py-6 text-lg text-center border-2" />
+                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer">
+                                        {showPassword ? (
+                                            <EyeOff className="h-6 w-6" onClick={togglePasswordVisibility} />
+                                        ) : (
+                                            <EyeIcon className="h-6 w-6" onClick={togglePasswordVisibility} />
+                                        )}
                                     </div>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {error?.root && <span className="text-red-500">{error?.root}</span>}
-                    <Button type="submit" className="w-full mt-4" form="login-form" onClick={form.handleSubmit(onSubmit)} disabled={isFetching}>
-                        {isFetching && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-                        Login
-                    </Button>
-                </FormProvider>
-            </CardContent>
-            <CardFooter>
-            </CardFooter>
-        </Card>
+                                </div>
+                            </FormControl>
+                            <FormMessage className="text-center text-sm" />
+                            {!errors?.password && <div className="text-red-500 text-sm text-center">&#8203;</div>}
+                        </FormItem>
+                    )}
+                />
+                <Button variant="outline" type="submit" className="rounded-full border-2" form="login-form" onClick={form.handleSubmit(onSubmit)} disabled={isFetching}>
+                    {isFetching && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+                    Login
+                </Button>
+                {errors?.non_field_errors && <span className="text-red-500 text-sm text-center">{error?.non_field_errors}</span>}
+                {!errors?.non_field_errors && <div className="text-red-500 text-sm text-center">&#8203;</div>}
+            </FormProvider>
+        </div>
     );
 }

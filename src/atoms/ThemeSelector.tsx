@@ -5,12 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { THEMES } from "../store/frontendTypes";
 import { changeTheme } from "../store/store";
 
-function ThemeSelector() {
+export function ThemeSelector() {
   const dispatch = useDispatch();
   const frontend = useSelector((state: any) => state.frontend);
   const theme = frontend.theme
 
   console.log("ThemeSelector", theme, frontend.theme);
+
+  const onSetTheme = (theme: string) => {
+    dispatch(changeTheme(theme));
+    Cookies.set("theme", theme);
+  }
 
   useEffect(() => {
     const currentDocumentTheme =
