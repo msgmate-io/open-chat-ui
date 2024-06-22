@@ -49,7 +49,7 @@ function ChatBase() {
                         leftPannelCollapsed={leftPannelCollapsed}
                         onToggleCollapse={onToggleCollapse} />}
                     {chatId === "new" && <NewChatOverview leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
-                    {chatId === "create" && <StartChatCard userId={userId} leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
+                    {chatId === "create" && <StartChatCard initUserName={null} userId={userId} leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
                 </>}
             />
         </div>
