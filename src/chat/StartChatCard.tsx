@@ -59,12 +59,6 @@ function UserChatCard({
     </>
 }
 
-const DEFAULT_BOT_CONFIG = {
-    "model": "",
-    "context": 5,
-    "systemPrompt": "Your are the advanced AI Agent, Hal. Her to fulfill any of the users requests."
-}
-
 export function AdvancedChatSettings({
     botConfig,
     setBotConfig
@@ -197,7 +191,7 @@ export function StartChatCard({
 
     // Bot config
     const [botConfig, setBotConfig] = useState({
-        model: "",
+        model: "llama3-70b-8192",
         context: 5,
         systemPrompt: "Your are the advanced AI Agent, Hal. Here to fulfill any of the users requests.",
         audioVoice: "openai:nova",
