@@ -204,7 +204,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
 
     const sendStartSignal = () => {
         sendDataMessage(`Signal: start-audio-chat`, {
-            hide_message: false,
+            hide_message: true,
             data_type: 'signal',
             data: {
                 signal: 'start-audio-chat'

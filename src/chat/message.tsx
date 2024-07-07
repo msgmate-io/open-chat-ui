@@ -69,6 +69,7 @@ const ShinyText = ({ children }) => {
 };
 
 export function PendingMessageItem({
+    text = "Thinking..."
 }) {
 
     const { logoUrl } = useContext(GlobalContext)
@@ -78,8 +79,8 @@ export function PendingMessageItem({
             <CinematicLogo className="h-9 m-3 rounded-full ring-2 ring-base-300 dark:ring-gray-500" size={30} />
         </div>
         <div className="w-full flex flex-col flex-grow relative">
-            <div className="article prose w-95 pt-3 overflow-x-scroll">
-                <ShinyText>Thinking...</ShinyText>
+            <div className="article prose w-full pt-3 overflow-x-hidden text-bold font-bold">
+                <ShinyText>{text}</ShinyText>
             </div>
         </div>
     </div>

@@ -22,6 +22,7 @@ const defaultSocketUrl = socketProtocol + (typeof window !== "undefined" ? windo
 export const SocketContext = createContext({
   sendMessage: (data) => { },
   dataMessages: [],
+  processedDataMessages: [],
   removeDataMessage: (uuid) => { },
   websocketUrl: defaultSocketUrl
 })
@@ -34,6 +35,7 @@ export const WebsocketBridge = ({
   const dispatch = useDispatch();
   const [messageHistory, setMessageHistory] = useState([]);
   const [dataMessages, setDataMessages] = useState([]);
+  const [processedDataMessages, setProcessedDataMessages] = useState([]);
   const customEventHandler = useCustomEventHandler(dispatch, (dataMessage) => {
     setDataMessages((prev) => prev.concat(dataMessage));
   });
@@ -73,8 +75,10 @@ export const WebsocketBridge = ({
   console.debug("SOCKET UPDATED", connectionStatus);
 
   const removeDataMessage = (uuid) => {
+    const dataMessage = dataMessages.find((segment) => segment.uuid === uuid);
     setDataMessages((prev) => prev.filter((segment) => segment.uuid !== uuid));
+    setProcessedDataMessages((prev) => prev.concat(dataMessage));
   }
 
-  return <SocketContext.Provider value={{ sendMessage, dataMessages, removeDataMessage, websocketUrl }}>{children}</SocketContext.Provider>
+  return <SocketContext.Provider value={{ sendMessage, dataMessages, removeDataMessage, processedDataMessages, websocketUrl }}>{children}</SocketContext.Provider>
 };
