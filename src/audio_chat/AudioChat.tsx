@@ -1,16 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { WebsocketBridge } from '../context/WebsocketBridge';
-import { ChatLoader, ChatsLoader } from '../loaders/ChatsLoader';
-import { getChatByChatId } from '../store/chats';
+import { useChat, useChats } from '../loaders/ChatsLoader';
 import { RootState } from '../store/store';
 import { AudioChatRecorder } from './AudioChatRecorder';
 
 export function AudioChatPreloader({ chatId }) {
-    const chat = useSelector((state: RootState) => getChatByChatId(state, chatId))
+    const { chat } = useChat({ chatId })
     return (
         <div className="flex h-screen w-screen items-center justify-center">
-            <ChatLoader chatId={chatId} />
             {!chatId && <div>No 'chatId' search params specified</div>}
             {!chat && <div>'chat' not yet loaded, fetching ...</div>}
             {(chatId && chat) && <AudioChatRecorder
@@ -29,9 +27,9 @@ export function AudioChatBase() {
 }
 
 export function AudioChat() {
+    const { } = useChats();
     return (
         <WebsocketBridge>
-            <ChatsLoader />
             <AudioChatBase />
         </WebsocketBridge>
     )

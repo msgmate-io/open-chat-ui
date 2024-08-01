@@ -3,11 +3,12 @@ import { useSelector } from "react-redux";
 import { LoadingSpinner } from '../atoms/LoadingSpinnter';
 import { GlobalContext } from '../context/GlobalContext';
 import { cn } from '../lib/utils';
+import { useChats } from '../loaders/ChatsLoader';
 import { RootState } from "../store/store";
 import {
     Card
 } from "../ui/card";
-import { ChatItem, ChatItemCompact, CompactPendingChatItem, PendingChatItem } from "./ChatItem";
+import { ChatItem, ChatItemCompact } from "./ChatItem";
 import { ProfileCard } from "./ChatsProfileCard";
 import { NewChatCard } from "./NewChatCard";
 
@@ -86,11 +87,10 @@ export function ChatsList({
     leftPannelCollapsed,
     onToggleCollapse
 }) {
-    const chats = useSelector((state: RootState) => state.chats.value?.results);
+    const { chats } = useChats()
     const chatId = useSelector((state: RootState) => state.pageProps.search?.chat);
 
     const ChatItm = STYLE === "compact" ? ChatItemCompact : ChatItem;
-    const PendingItm = STYLE == "compact" ? CompactPendingChatItem : PendingChatItem;
 
     const renderDivider = (label) => (
         <div className="text-gray-500 font-bold my-2" key={label}>{label}</div>
@@ -105,7 +105,7 @@ export function ChatsList({
 
         let lastDivider = null;
 
-        return chats.flatMap((chat) => {
+        return chats?.results.flatMap((chat) => {
             const chatDate = new Date(chat.newest_message.created);
             let divider = null;
 

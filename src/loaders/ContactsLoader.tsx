@@ -1,21 +1,26 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useSWR from "swr";
 import { useApi } from "../api/client2";
 import { fetchContacts } from "../store/contacts";
 import { RootState } from "../store/store";
 
-export function ContactsLoader() {
-    const api = useApi();
+export function useContacts() {
     const dispatch = useDispatch();
+    const api = useApi();
     const contacts = useSelector((state: RootState) => state.contacts.value);
+
+    const { data, error, mutate } = useSWR('contacts', async () => {
+        return api.chatsContactsList({
+            page_size: 20
+        });
+    });
+
     useEffect(() => {
-        if (!contacts) {
-            api.chatsContactsList({
-                page_size: 20
-            }).then((contacts) => {
-                dispatch(fetchContacts(contacts));
-            })
+        if (data) {
+            dispatch(fetchContacts(data));
         }
-    }, []);
-    return null
+    }, [data]);
+
+    return { contacts, error, mutate };
 }

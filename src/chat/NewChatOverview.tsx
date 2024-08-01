@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { ContactsLoader, PublicProfilesLoader } from "../loaders";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 import { useSelector } from "react-redux";
 import { GlobalContext } from "../context";
 import { cn } from '../lib/utils';
+import { useContacts } from '../loaders/ContactsLoader';
+import { usePublicProfiles } from '../loaders/PublicProfilesLoader';
 import { RootState } from "../store/store";
 import { Button } from '../ui/button';
 import {
@@ -82,14 +83,14 @@ export function NewChatOverview({
     onToggleCollapse
 }) {
     const [tab, setTab] = useState("contacts");
+    const { } = useContacts();
+    const { } = usePublicProfiles();
 
     const onTabChange = (value) => {
         setTab(value);
     }
 
     return <div className="flex flex-col h-full w-full content-center items-center bg-base-200">
-        <ContactsLoader />
-        <PublicProfilesLoader />
         <div className='flex flex-row w-full p-2 content-center items-center justify-center'>
             {leftPannelCollapsed && <CollapseIndicator leftPannelCollapsed={leftPannelCollapsed} onToggleCollapse={onToggleCollapse} />}
             <div className='flex-grow'></div>

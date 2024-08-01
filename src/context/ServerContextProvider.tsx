@@ -47,7 +47,13 @@ export function getInitalReduxState(props: ServerSideData) {
 }
 
 export function ContextBase({ store, children, globalContext }) {
-    return <GlobalContext.Provider value={globalContext}>
+    const [hostUrl, setHostUrl] = React.useState(defaultGlobalContext.hostUrl);
+
+    return <GlobalContext.Provider value={{
+        ...globalContext,
+        hostUrl,
+        setHostUrl
+    }}>
         <Provider store={store}>
             {children}
         </Provider>

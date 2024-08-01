@@ -1,6 +1,7 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { GlobalContext } from "./GlobalContext";
 import { useCustomEventHandler } from "./websocketEventHandler";
 
 export const buildMessage = (payload, action = "newMessage", type = "custom") => {
@@ -16,21 +17,19 @@ export const buildMessage = (payload, action = "newMessage", type = "custom") =>
 // @ts-ignore
 const useWs = useWebSocket?.default || useWebSocket;
 // determine if host http or https
-const socketProtocol = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss://" : "ws://";
-const defaultSocketUrl = socketProtocol + (typeof window !== "undefined" ? window.location.host : "localhost") + "/api/core/ws";
+// const socketProtocol = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss://" : "ws://";
+// let defaultSocketUrl = socketProtocol + (typeof window !== "undefined" ? window.location.host : "localhost") + "/api/core/ws";
 
 export const SocketContext = createContext({
   sendMessage: (data) => { },
   dataMessages: [],
   processedDataMessages: [],
   removeDataMessage: (uuid) => { },
-  websocketUrl: defaultSocketUrl
 })
 
 
 export const WebsocketBridge = ({
   children = null,
-  websocketUrl = defaultSocketUrl
 }) => {
   const dispatch = useDispatch();
   const [messageHistory, setMessageHistory] = useState([]);
@@ -39,7 +38,14 @@ export const WebsocketBridge = ({
   const customEventHandler = useCustomEventHandler(dispatch, (dataMessage) => {
     setDataMessages((prev) => prev.concat(dataMessage));
   });
-  console.log("WsURL", websocketUrl)
+  const { hostUrl } = useContext(GlobalContext);
+  const hostProtocol = hostUrl.split(":")[0];
+  const hostName = hostUrl.substring(hostUrl.indexOf(":") + 3);
+  const socketProtocol = hostProtocol === "https" ? "wss" : "ws";
+  const websocketUrl = `${socketProtocol}://${hostName}/api/core/ws`;
+
+  console.log("WEBSOCKET URL", websocketUrl);
+
   const { sendMessage, lastMessage, readyState } = useWs(websocketUrl);
 
   const handleIncomingMessage = (message) => {
@@ -80,5 +86,5 @@ export const WebsocketBridge = ({
     setProcessedDataMessages((prev) => prev.concat(dataMessage));
   }
 
-  return <SocketContext.Provider value={{ sendMessage, dataMessages, removeDataMessage, processedDataMessages, websocketUrl }}>{children}</SocketContext.Provider>
+  return <SocketContext.Provider value={{ sendMessage, dataMessages, removeDataMessage, processedDataMessages }}>{children}</SocketContext.Provider>
 };

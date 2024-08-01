@@ -1,23 +1,35 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useSWR from "swr";
 import { useApi } from "../api/client2";
 import { fetchMessages } from "../store/messages";
 import { RootState } from "../store/store";
 
-export function ChatMessagesLoader({ chatId }) {
-    const api = useApi();
+export function useMessages({
+    chatId
+}) {
     const dispatch = useDispatch();
-    const chatMessages = useSelector((state: RootState) => state.messages.chatMessages);
-    useEffect(() => {
-        if (chatId && !chatMessages?.[chatId]) {
-            api.messagesList({
-                chatUuid: chatId,
-                page_size: 20
-            }).then((messages) => {
-                dispatch(fetchMessages({ chatId, messages }));
-            })
-        }
+    const api = useApi();
+    const messages = useSelector((state: RootState) => state.messages.chatMessages?.[chatId]);
 
+    const { data, error, mutate } = useSWR('messages', async () => {
+        return api.messagesList({
+            chatUuid: chatId,
+            page_size: 20
+        });
+    });
+
+    useEffect(() => {
+        if (data) {
+            dispatch(fetchMessages({ chatId, messages: data }));
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (chatId) {
+            mutate();
+        }
     }, [chatId]);
-    return null
+
+    return { messages, error, mutate };
 }

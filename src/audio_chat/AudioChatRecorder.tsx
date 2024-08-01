@@ -2,7 +2,7 @@ import toWav from 'audiobuffer-to-wav';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MessageScrollView } from '../chat/MessageScrollView';
 import { SocketContext, buildMessage } from '../context/WebsocketBridge';
-import { ChatMessagesLoader } from '../loaders/MessagesLoader';
+import { useMessages } from '../loaders/MessagesLoader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { AudioChatStateMonitor } from './AudioChatStateMonitor';
 import { ToggleRecordingButton } from './ToggleRecordingButton';
@@ -18,6 +18,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
 
     const [isReceivingResponseSteam, setIsReceivingResponseSteam] = useState(false);
 
+    const { } = useMessages({ chatId });
     const [outDataMessages, setOutDataMessages] = useState([]);
     const recordingAudioContextRef = useRef(null); // Separate context for recording
     const playbackAudioContextRef = useRef(null); // Separate context for playback
@@ -359,7 +360,6 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                                 {!chat && <div>Loading chat...</div>}
                                 {chat && (
                                     <>
-                                        <ChatMessagesLoader chatId={chatId} />
                                         <MessageScrollView chat={chat} chatId={chatId} hideInput={true} />
                                     </>
                                 )}

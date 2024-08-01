@@ -103,8 +103,10 @@ function RegisterTab({
     </div>
 }
 
-export function LandingHero() {
-    const [tab, setTab] = useState("index")
+export function LandingHero({
+    defaultTab = "index"
+}) {
+    const [tab, setTab] = useState(defaultTab)
     const [showVideoCard, setShowVideoCard] = useState(false)
 
     const { logoUrl } = useContext(GlobalContext)

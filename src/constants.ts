@@ -19,3 +19,4 @@ export const LOGIN_ROUTE = metaOrDefault(() => { return import.meta.env.PUBLIC_E
 export const ROUTE_PREFIX = metaOrDefault(() => { return import.meta.env.PUBLIC_ENV__ROUTE_PREFIX }, "");
 export const DEBUG = metaOrDefault(() => { return import.meta.env.PUBLIC_ENV__DEBUG }, false);
 export const DOCS_AT_INTEX = metaOrDefault(() => { return import.meta.env.DOCS_AT_INTEX }, false);
+export const IS_NATIVE = metaOrDefault(() => { return import.meta.env.PUBLIC_ENV__IS_NATIVE }, false);

@@ -1,41 +1,58 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useSWR from "swr";
 import { useApi } from "../api/client2";
 import { fetchChats, getChatByChatId, insertChat } from "../store/chats";
 import { RootState } from "../store/store";
 
-export function ChatLoader({
+export function useChat({
     chatId
 }) {
-    const api = useApi();
     const dispatch = useDispatch();
+    const api = useApi();
     const chat = useSelector((state: RootState) => getChatByChatId(state, chatId));
 
-    useEffect(() => {
-        console.log("CHAT LOADER", chatId, chat)
-        if (!chat) {
-            api.chatsRetrieve(chatId).then((chat) => {
-                dispatch(insertChat(chat));
-                console.log("CHAT LOADER", chatId, chat)
-            })
-        }
-    }, []);
+    const { data, error, mutate } = useSWR('chat', async () => {
+        return api.chatsRetrieve(chatId);
+    });
 
-    return null
+    useEffect(() => {
+        if (data) {
+            console.log("INSERTING Chat", data)
+            dispatch(insertChat({ chat: data }));
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (chatId && !chat) {
+            console.log("Mutating Chat", chatId)
+            mutate();
+        }
+    }, [chatId]);
+
+    return { chat, error, mutate };
+
 }
 
-export function ChatsLoader() {
-    const api = useApi();
+export function useChats() {
     const dispatch = useDispatch();
+    const api = useApi();
     const chats = useSelector((state: RootState) => state.chats.value);
+
+    const { data, error, mutate } = useSWR('chats', async () => {
+        return api.chatsList({
+            page_size: 20
+        })
+    });
+
     useEffect(() => {
-        if (!chats) {
-            api.chatsList({
-                page_size: 20
-            }).then((chats) => {
-                dispatch(fetchChats(chats));
-            })
+        console.log("FChats", data)
+        if (data) {
+            dispatch(fetchChats(data));
         }
-    }, []);
-    return null
+    }, [data]);
+
+    console.log("FChats passed", chats, data)
+
+    return { chats, error, mutate };
 }

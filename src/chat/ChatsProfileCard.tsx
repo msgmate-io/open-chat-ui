@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useApi } from "../api/client2";
 import ThemeSelector from "../atoms/ThemeSelector";
 import { GlobalContext } from "../context/GlobalContext";
-import { ProfileLoader } from "../loaders";
-import { AppDispatch, RootState, logoutUser } from "../store/store";
+import { useProfile } from '../loaders/ProfileLoader';
+import { AppDispatch, logoutUser } from "../store/store";
 import {
     Card,
 } from "../ui/card";
@@ -19,11 +19,10 @@ import {
 } from "../ui/dropdown-menu";
 
 function ProfileCardButton() {
-    const profile = useSelector((state: RootState) => state.profile.value)
+    const { profile } = useProfile();
     const { logoUrl } = React.useContext(GlobalContext);
 
     return <>
-        <ProfileLoader />
         <DropdownMenuTrigger asChild>
             <Card className="border-0 bg-base-200 hover:bg-base-300 p-0 flex" key={"chatListHeader"}>
                 <div className="flex">

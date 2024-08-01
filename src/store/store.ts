@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { Dispatch } from 'redux';
 import { toast } from 'sonner';
 import { Api } from '../api/api';
+import { botsSlice, BotsState, fetchBots } from './bots';
 import { chatsSlice, ChatState, fetchChats } from './chats';
 import { contactsSlice, ContactsState } from './contacts';
 import { messagesSlice, MessagesState } from './messages';
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
     messages: messagesSlice.reducer,
     contacts: contactsSlice.reducer,
     profile: profileSlice.reducer,
+    bots: botsSlice.reducer,
     publicProfiles: PublicProfilesSlice.reducer,
 })
 
@@ -67,6 +69,7 @@ export const logoutUser = (
             dispatch(fetchChats(null));
             dispatch(fetchProfile(null));
             dispatch(fetchFrontend(null));
+            dispatch(fetchBots(null));
             // remove helper 'clientAuthorized' flag so +guard.js may be executed client side
             Cookies.remove("clientAuthorized");
             // Just be be sure - Is normally auto removed by the 'Set-Cookie' header
@@ -86,5 +89,6 @@ export interface RootState {
     pageProps: any,
     contacts: ContactsState,
     publicProfiles: PublicProfilesState,
+    bots: BotsState,
     frontend: any,
 }

@@ -4,8 +4,9 @@ import { toast } from "sonner";
 import { DataTypeEnum } from '../api/api';
 import { useApi } from "../api/client2";
 import { SocketContext, buildMessage } from '../context/WebsocketBridge';
+import { useMessages, useUser } from '../loaders';
 import { updateNewestMessage } from "../store/chats";
-import { getChatPartialMessage, getMessagesByChatId, insertMessage, replaceMessage } from "../store/messages";
+import { getChatPartialMessage, insertMessage, replaceMessage } from "../store/messages";
 import { RootState } from "../store/store";
 import { Button } from '../ui/button';
 import { MessageInput } from "./MessageInput";
@@ -47,6 +48,7 @@ function DebugPannel({
 
 export function MessageScrollView({ chatId, chat, hideInput = false }) {
     const { sendMessage, dataMessages, processedDataMessages, removeDataMessage } = useContext(SocketContext)
+    const { messages } = useMessages({ chatId })
     const [debugPannel, setDebugPannel] = useState(null)
 
     const [text, setText] = useState("");
@@ -56,9 +58,8 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
     const [isBotThinking, setIsBotThinking] = useState(false)
 
     const scrollRef = useRef<HTMLDivElement>(null)
-    const messages = useSelector((state: RootState) => getMessagesByChatId(state, chatId))
     const partialMessage = useSelector((state: RootState) => getChatPartialMessage(state, chatId))
-    const user = useSelector((state: RootState) => state.user.value)
+    const { user } = useUser()
     const isLoading = chatId && !messages
     const inputRef = useRef<HTMLTextAreaElement>(null)
 
