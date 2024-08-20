@@ -188,7 +188,7 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
     }
 
     return <div className="flex flex-col h-full w-full lg:max-w-[900px] relative">
-        <div ref={scrollRef} className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll relative pb-4 pt-2">
+        <div ref={scrollRef} className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-auto relative pb-4 pt-2">
             {SHOW_DEBUG_PANEL && <DebugBar debugPannel={debugPannel} setDebugPannel={setDebugPannel} isBotThinking={isBotThinking} isBotResponding={isBotResponding} />}
             {debugPannel === "data_messages" && <DebugPannel processedDataMessages={processedDataMessages} />}
             {!debugPannel && <>

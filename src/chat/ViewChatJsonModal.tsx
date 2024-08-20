@@ -21,7 +21,7 @@ export function ViewChatJsonModal({ chat }) {
             <DialogHeader>
                 <DialogTitle>Chat-Json</DialogTitle>
                 <DialogDescription>
-                    <div className="article prose max-h-80 overflow-x-scroll max-w-md">
+                    <div className="article prose max-h-80 overflow-x-auto max-w-md">
                         <Markdown>
                             {"```\n" + JSON.stringify(chat, null, 2) + "\n```"}
                         </Markdown>

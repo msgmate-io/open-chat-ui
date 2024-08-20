@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LoginInfo } from "../api/api";
 import { ErrorResult } from "../api/apiTypes";
@@ -13,16 +13,23 @@ import { Toaster } from "../ui/sonner";
 
 const SHOW_SERVER_SETTINGS = true;
 
-export function ServerSettings() {
+export function ServerSettings({
+    updateNativeConfig = () => { }
+}) {
     const { hostUrl, setHostUrl } = useContext(GlobalContext);
     const [host, setHost] = useState(hostUrl)
+
+    useEffect(() => {
+        setHost(hostUrl)
+    }, [hostUrl])
 
     return <div className="flex flex-col items-center content-center justify-center pb-2 w-full">
         Server Host:
         <Input type="text" className="w-full" value={host} onChange={(e) => setHost(e.target.value)} />
-        <Button variant="outline" className="rounded-full py-8 w-full border-2 text-bold text-xl" onClick={() => {
+        <Button variant="outline" className="rounded-full py-2 w-full border-2 text-bold text-xl" onClick={() => {
             console.log("setHostUrl", host)
             setHostUrl(host)
+            updateNativeConfig()
         }} >Save</Button>
     </div>
 }
@@ -64,7 +71,6 @@ export function LoginSection({
             <h1 className="text-2xl font-bold text-center">Welcome back!</h1>
             <p className="text-lg text-center">To Open-Chat! Login:</p>
         </div>
-        {SHOW_SERVER_SETTINGS && <ServerSettings />}
         <Button variant="outline" className="rounded-full py-8 w-full border-2 text-bold text-xl" onClick={() => navigate("/register")} >
             Login With Google
         </Button>

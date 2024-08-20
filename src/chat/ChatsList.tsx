@@ -133,7 +133,7 @@ export function ChatsList({
     return (
         <div className="flex flex-col gap-0 h-full relative w-full">
             <NewChatCard onToggleCollapse={onToggleCollapse} leftPannelCollapsed={leftPannelCollapsed} />
-            <div className="flex flex-col flex-grow gap-1 overflow-y-scroll pl-2 pr-2 relative w-full max-w-full">
+            <div className="flex flex-col flex-grow gap-1 overflow-y-auto pl-2 pr-2 relative w-full max-w-full">
                 <DefaultChatButtons />
                 {renderChatItems()}
             </div>

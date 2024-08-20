@@ -32,13 +32,13 @@ export function Docs() {
                 <div className="text-sm">v0.1.0</div>
             </div>
             <CinematicLogo />
-            <div className="flex flex-col w-full grow overflow-y-scroll gap-2 p-1">
+            <div className="flex flex-col w-full grow overflow-y-auto gap-2 p-1">
                 {sections.map(section => <Button variant="outline" key={section.id} onClick={() => setSection(section)} className={`w-full ${section.id === section.id ? 'bg-base-300' : 'bg-base-200'} text-left`}>
                     {section.title}
                 </Button>)}
             </div>
         </div>
-        <div className="flex flex-col grow w-3/4 bg-base-200 h-full max-h-screen overflow-y-scroll">
+        <div className="flex flex-col grow w-3/4 bg-base-200 h-full max-h-screen overflow-y-auto">
             {section?.id === 'project-description' && (
                 <>
                     <h1 id="project-description" className="text-4xl font-bold p-4">Project Description</h1>

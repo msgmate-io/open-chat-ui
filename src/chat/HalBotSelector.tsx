@@ -59,6 +59,23 @@ const models = [
         description:
             "OpenAI's GPT-4o, optimized for specific applications with advanced tool and function support.",
     },
+    { /** TODO: only include for local mode builds */
+        title: "phi-2",
+        href: "/docs/models/phi-2",
+        description: ""
+    },
+    {
+        title: "calme-2.3-phi3-4b",
+        href: "/docs/models/smollm-1.7b-instruct",
+        description:
+            "OpenAI's Smollm 1.7 billion parameter instruct model, designed for instruction-following tasks.",
+    },
+    {
+        title: "phi-3.1-mini-4k-instruct",
+        href: "/docs/models/smollm-1.7b-instruct",
+        description:
+            "OpenAI's Smollm 1.7 billion parameter instruct model, designed for instruction-following tasks.",
+    }
 ]
 
 export function HalBotSelector({

@@ -51,7 +51,7 @@ export function useApi() {
   const isServer = typeof window === "undefined";
   const { hostUrl } = useContext(GlobalContext);
 
-  return isServer ? getApi({
+  const api = isServer ? getApi({
     cookie: frontend.cookie,
     xcsrfToken: frontend.xcsrfToken,
     hostUrl
@@ -60,4 +60,6 @@ export function useApi() {
     cookie: null,
     hostUrl
   })
+
+  return api
 }

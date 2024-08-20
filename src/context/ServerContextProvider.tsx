@@ -52,7 +52,13 @@ export function ContextBase({ store, children, globalContext }) {
     return <GlobalContext.Provider value={{
         ...globalContext,
         hostUrl,
-        setHostUrl
+        setHostUrl: (url) => {
+            setHostUrl(url)
+            try {
+                // TODO: try only in native
+                window.electronAPI.setDefaultOrigin(url);
+            } catch (e) { }
+        }
     }}>
         <Provider store={store}>
             {children}

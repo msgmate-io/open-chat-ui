@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { CinematicLogo } from "../atoms/CinematicLogo";
 import { Typewriter } from "../atoms/TypewriterEffect";
 import { ExploreChatsIcon } from "../chat/ChatsList";
+import { IS_NATIVE } from "../constants";
 import { GlobalContext } from "../context/GlobalContext";
 import { ModeToggle } from "../landing_page/mode-toggle";
 import { Button } from "../ui/button";
@@ -108,8 +109,7 @@ export function LandingHero({
 }) {
     const [tab, setTab] = useState(defaultTab)
     const [showVideoCard, setShowVideoCard] = useState(false)
-
-    const { logoUrl } = useContext(GlobalContext)
+    const { logoUrl, navigate } = useContext(GlobalContext)
     return <>
         <div className="relative w-full z-40">
             <div className="absolute flex w-full p-4 font-bold text-2xl w-full">
@@ -134,7 +134,10 @@ export function LandingHero({
                 </div>
             </div>
             <div className="flex flex-col flex-grow items-center justify-center content-center bg-base-100 w-1/3 h-full">
-                <div className="flex flex-col items-end justify-end content-center w-full p-2">
+                <div className="flex flex-row items-end justify-end content-center w-full p-2">
+                    {IS_NATIVE && <Button variant="ghost" className="rounded-full z-40 py-2 text-xl text-bold text-indigo-200" onClick={() => {
+                        navigate("/native")
+                    }}>Client Settings</Button>}
                     <div className="p-2 hover:bg-base-300 rounded-xl z-40" onClick={() => {
                         setTab("index")
                     }}>

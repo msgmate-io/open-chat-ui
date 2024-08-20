@@ -316,7 +316,7 @@ export function StartChatCard({
                 </div>
             </div>
             <div className="flex flex-col h-full w-full lg:max-w-[900px] relativ">
-                <div className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-scroll justify-center">
+                <div className="flex flex-col flex-grow gap-2 items-center content-center overflow-y-auto justify-center">
                     {isLoading && <LoadingSpinner size={48} className="text-content" />}
                     {!isLoading && <>
                         {!profile?.is_bot && <UserChatCard onChangePassword={onChangePassword} userId={userId} isLoading={isLoading} profile={profile} />}
