@@ -65,7 +65,19 @@ const models = [
         description: ""
     },
     {
-        title: "calme-2.3-phi3-4b",
+        title: "emo-2b",
+        href: "/docs/models/smollm-1.7b-instruct",
+        description:
+            "EMO 2b",
+    },
+    {
+        title: "smollm-1.7b-instruct",
+        href: "/docs/models/smollm-1.7b-instruct",
+        description:
+            "OpenAI's Smollm 1.7 billion parameter instruct model, designed for instruction-following tasks.",
+    },
+    {
+        title: "meta-llama-3.1-8b-instruct",
         href: "/docs/models/smollm-1.7b-instruct",
         description:
             "OpenAI's Smollm 1.7 billion parameter instruct model, designed for instruction-following tasks.",
@@ -75,6 +87,12 @@ const models = [
         href: "/docs/models/smollm-1.7b-instruct",
         description:
             "OpenAI's Smollm 1.7 billion parameter instruct model, designed for instruction-following tasks.",
+    },
+    {
+        title: "tess-v2.5-phi-3-medium-128k-14b",
+        href: "/docs/models/tess-v2.5-phi-3-medium-128k-14b",
+        description:
+            "Tess 2.5, Phi 3, medium 128k, 14 billion parameter model, optimized for medium-scale applications.",
     }
 ]
 

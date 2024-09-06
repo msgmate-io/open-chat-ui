@@ -9,10 +9,10 @@ import { ToggleRecordingButton } from './ToggleRecordingButton';
 import { base64ToBlob, blobToBase64 } from './audioChatUtils';
 
 const AUTO_RECORD = false;
-const DEBUG_TABS_VISIBLE = false;
+const DEBUG_TABS_VISIBLE = true;
 const STOP_ON_SILENCE_THRESHOLD_REACHED = true;
 
-export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
+export function AudioChatRecorder({ chat, chatId, intervalMs = 100 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
     const [audioState, setAudioState] = useState("booted");
 
@@ -287,7 +287,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 data: {
                     signal: 'start-recording'
                 }
-            });
+            }, false);
         } else {
             sendDataMessage(`Signal: stop-recording`, {
                 hide_message: true,
@@ -295,7 +295,7 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 200 }) {
                 data: {
                     signal: 'stop-recording'
                 }
-            });
+            }, false);
             if (!isPlaying) {
                 if (recordingAudioContextRef.current) {
                     recordingAudioContextRef.current.close().then(() => {

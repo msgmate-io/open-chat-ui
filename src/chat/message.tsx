@@ -113,6 +113,10 @@ export function MessageItem({
     chat: ChatResult,
     selfIsSender?: boolean
 }) {
+    // Hide if it's a data message with hide = True
+    if (message?.hidden) {
+        return <></>
+    }
     const isBotChat = chat?.partner?.is_bot
     if (!isBotChat) {
         return <UserMessageItem message={message} chat={chat} selfIsSender={selfIsSender} />

@@ -65,7 +65,11 @@ function createEventHandler(dispatch, onReceiveDataMessage) {
                         }
                     )
                 )
-            console.debug("New partial message", { chat, message, senderId });
+
+            const type = hasDataMessage ? "data" : "text";
+            const visibility = isHidden ? "hidden" : "visible";
+            const signal = hasDataMessage ? hasDataMessage?.data?.signal : null;
+            console.debug("New partial message", { chat, message, senderId }, type, signal);
         },
     }
 }
