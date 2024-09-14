@@ -100,6 +100,7 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
                 let startResponding = newSignals.some(signal => signal.data_message.data.signal === 'start-generating-response');
                 let isBotResponding = newSignals.some(signal => signal.data_message.data.signal === 'generating-response');
                 let doneResponding = newSignals.some(signal => signal.data_message.data.signal === 'finished-generating-response');
+                let gotInterrupted = newSignals.some(signal => signal.data_message.data.signal === 'got-interrupted');
 
                 if (startResponding) {
                     scrollToBottom();
@@ -112,6 +113,11 @@ export function MessageScrollView({ chatId, chat, hideInput = false }) {
                 }
 
                 if (doneResponding) {
+                    setIsBotResponding(false);
+                    setIsBotThinking(false);
+                }
+
+                if (gotInterrupted) {
                     setIsBotResponding(false);
                     setIsBotThinking(false);
                 }

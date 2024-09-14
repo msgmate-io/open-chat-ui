@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AudioLevelDisplay } from './AudioLevelDisplay';
 
 export function AudioLevelMonitor({ analyserNode }) {
@@ -15,7 +14,6 @@ export function AudioLevelMonitor({ analyserNode }) {
             const sum = dataArray.reduce((acc, val) => acc + val, 0);
             const avg = sum / bufferLength;
             const normalized = avg - 100;
-            console.log("avg", avg);
             setAudioLevels(prevLevels => [...prevLevels.slice(1), normalized]);
         };
 

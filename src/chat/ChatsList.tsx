@@ -53,6 +53,21 @@ export function DefaultChatButtons() {
         <Card className={cn(
             "bg-base-200 hover:bg-base-300 p-2 border-0")}
             onClick={() => {
+                navigate(null, { chat: "createAudio", userName: "hal" })
+            }}
+        >
+            <div className="p-0">
+                <div className="flex flex-row text-nowrap text-lg whitespace-nowrap overflow-x-hidden">
+                    <div className='flex items-center content-center justify-start'>
+                        <img src={logoUrl} className="h-8 w-auto" alt="logo" />
+                        <div className="ml-2">Hal Audio Chat</div>
+                    </div>
+                </div>
+            </div>
+        </Card>
+        <Card className={cn(
+            "bg-base-200 hover:bg-base-300 p-2 border-0")}
+            onClick={() => {
                 navigate(null, { chat: "create", userName: "hal" })
             }}
         >

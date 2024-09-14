@@ -12,7 +12,7 @@ const AUTO_RECORD = false;
 const DEBUG_TABS_VISIBLE = true;
 const STOP_ON_SILENCE_THRESHOLD_REACHED = true;
 
-export function AudioChatRecorder({ chat, chatId, intervalMs = 100 }) {
+export function AudioChatRecorder({ chat, chatId, intervalMs = 50 }) {
     const { sendMessage, dataMessages, removeDataMessage } = useContext(SocketContext);
     const [audioState, setAudioState] = useState("booted");
 
@@ -64,6 +64,8 @@ export function AudioChatRecorder({ chat, chatId, intervalMs = 100 }) {
             const audiDataMessages = dataMessages.filter(segment => segment.data_message.data_type === 'audio_b64');
             const newAudioSegments = audiDataMessages.filter(segment => !audioQueue.some(audio => segegmentUUIDs.includes(audio.uuid)));
             const newSignals = dataMessages.filter(segment => segment.data_message.data_type === 'signal');
+
+            console.log("Signals: ", newSignals);
 
             let dbfsUpdate = newSignals.filter(signal => signal.data_message.data.signal === 'dbfs-level-update');
             if (dbfsUpdate.length > 0) {

@@ -10,7 +10,7 @@ import {
     NavigationMenuTrigger
 } from "../ui/navigation-menu"
 
-const models = [
+export const models = [
     {
         title: "llama3-70b-8192",
         href: "/docs/models/llama3-70b-8192",
@@ -58,23 +58,6 @@ const models = [
         href: "/docs/models/gpt-4o",
         description:
             "OpenAI's GPT-4o, optimized for specific applications with advanced tool and function support.",
-    },
-    { /** TODO: only include for local mode builds */
-        title: "phi-2",
-        href: "/docs/models/phi-2",
-        description: ""
-    },
-    {
-        title: "emo-2b",
-        href: "/docs/models/smollm-1.7b-instruct",
-        description:
-            "EMO 2b",
-    },
-    {
-        title: "smollm-1.7b-instruct",
-        href: "/docs/models/smollm-1.7b-instruct",
-        description:
-            "OpenAI's Smollm 1.7 billion parameter instruct model, designed for instruction-following tasks.",
     },
     {
         title: "meta-llama-3.1-8b-instruct",
@@ -128,7 +111,7 @@ export function HalBotSelector({
     )
 }
 
-const ListItem = React.forwardRef<
+export const ListItem = React.forwardRef<
     React.ElementRef<"a">,
     React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
