@@ -50,6 +50,7 @@ export function useApi() {
   const frontend = useSelector((state: any) => state.frontend);
   const isServer = typeof window === "undefined";
   const { hostUrl } = useContext(GlobalContext);
+  console.log("useApi", frontend, hostUrl)
 
   const api = isServer ? getApi({
     cookie: frontend.cookie,
