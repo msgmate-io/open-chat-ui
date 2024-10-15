@@ -42,7 +42,7 @@ export const WebsocketBridge = ({
   const hostProtocol = hostUrl.split(":")[0];
   const hostName = hostUrl.substring(hostUrl.indexOf(":") + 3);
   const socketProtocol = hostProtocol === "https" ? "wss" : "ws";
-  const websocketUrl = `${socketProtocol}://${hostName}/api/core/ws`;
+  const websocketUrl = `${socketProtocol}://${hostName}/api/core/ws/`;
 
   console.log("WEBSOCKET URL", websocketUrl);
 
