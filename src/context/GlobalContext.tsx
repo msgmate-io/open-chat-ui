@@ -8,7 +8,7 @@ export const GlobalContext = createContext({
 
 export const defaultGlobalContext = {
     logoUrl: "https://avatars.githubusercontent.com/u/163599389",
-    hostUrl: "http://localhost",
+    hostUrl: "", //"http://localhost",
     navigate: (url, ...props) => { console.log("NAVIGATE TO", url) },
     setHostUrl: (url) => { }
 }
