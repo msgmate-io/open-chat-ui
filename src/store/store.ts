@@ -1,8 +1,8 @@
+import { Api } from "@msgmate-io/open-chat-typescript-client";
 import * as toolkitRaw from '@reduxjs/toolkit';
 import Cookies from "js-cookie";
 import { Dispatch } from 'redux';
 import { toast } from 'sonner';
-import { Api } from '../api/api';
 import { botsSlice, BotsState, fetchBots } from './bots';
 import { chatsSlice, ChatState, fetchChats } from './chats';
 import { contactsSlice, ContactsState } from './contacts';

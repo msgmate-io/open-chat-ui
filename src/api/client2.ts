@@ -1,8 +1,8 @@
+import { Api } from "@msgmate-io/open-chat-typescript-client";
 import Cookies from "js-cookie";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { GlobalContext } from "../context";
-import { Api } from "./api";
 
 interface GetApiParamTypes {
   cookie: string;
