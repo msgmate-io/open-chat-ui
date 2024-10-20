@@ -1,8 +1,7 @@
+import { DataTypeEnum, useApi } from '@msgmate-io/open-chat-typescript-client';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-import { DataTypeEnum } from '../api/api';
-import { useApi } from "../api/client2";
 import { SocketContext, buildMessage } from '../context/WebsocketBridge';
 import { useMessages, useUser } from '../loaders';
 import { updateNewestMessage } from "../store/chats";

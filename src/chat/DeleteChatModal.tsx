@@ -1,7 +1,7 @@
+import { useApi } from "@msgmate-io/open-chat-typescript-client";
 import React from 'react';
 import Markdown from 'react-markdown';
 import { toast } from "sonner";
-import { useApi } from "../api/client2";
 import { Button } from "../ui/button";
 import {
     Dialog,

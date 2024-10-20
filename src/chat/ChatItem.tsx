@@ -1,5 +1,5 @@
+import { ChatResult } from "@msgmate-io/open-chat-typescript-client";
 import React, { useContext } from 'react';
-import { ChatResult } from "../api/api";
 import { cn } from "../lib/utils";
 import { Button } from "../ui/button";
 import {

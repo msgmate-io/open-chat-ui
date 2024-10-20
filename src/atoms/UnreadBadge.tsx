@@ -1,6 +1,6 @@
-import { ChatResult } from "../api/api"
+import { ChatResult } from "@msgmate-io/open-chat-typescript-client";
 import React from 'react';
-import { Badge } from "../ui/badge"
+import { Badge } from "../ui/badge";
 
 export function UnreadBadge({
     chat

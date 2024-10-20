@@ -1,9 +1,8 @@
+import { LoginInfo, useApi } from "@msgmate-io/open-chat-typescript-client";
+import { ErrorResult } from "@msgmate-io/open-chat-typescript-client/apiTypes";
 import Cookies from "js-cookie";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { LoginInfo } from "../api/api";
-import { ErrorResult } from "../api/apiTypes";
-import { useApi } from "../api/client2";
 import { GlobalContext } from "../context";
 import LoginHero from "../hero/login";
 import { fetchUser } from "../store/user";

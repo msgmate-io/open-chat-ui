@@ -1,7 +1,7 @@
+import { useApi } from '@msgmate-io/open-chat-typescript-client';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "sonner";
-import { useApi } from '../api/client2';
 import { LoadingSpinner } from '../atoms/LoadingSpinnter';
 import { MobileBackButton } from "../atoms/MobileBackButton";
 import { OnlineIndicator } from "../atoms/OnlineIndicator";

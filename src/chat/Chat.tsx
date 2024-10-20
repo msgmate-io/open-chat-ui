@@ -1,6 +1,6 @@
+import { useApi } from '@msgmate-io/open-chat-typescript-client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from "react-redux";
-import { useApi } from '../api/client2';
 import { AudioChatBase } from "../audio_chat/AudioChat";
 import { ChatsList } from "../chat/ChatsList";
 import { MessagesView } from "../chat/MessageView";

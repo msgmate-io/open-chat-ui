@@ -1,7 +1,7 @@
+import { useApi } from "@msgmate-io/open-chat-typescript-client";
 import React, { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
-import { useApi } from "../api/client2";
 import { useChat } from '../loaders';
 import { markChatAsRead } from "../store/chats";
 import { markChatMessagesAsRead } from "../store/messages";

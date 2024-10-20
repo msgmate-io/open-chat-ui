@@ -1,6 +1,6 @@
+import { useApi } from "@msgmate-io/open-chat-typescript-client";
 import React, { useContext } from 'react';
 import { useDispatch } from "react-redux";
-import { useApi } from "../api/client2";
 import ThemeSelector from "../atoms/ThemeSelector";
 import { GlobalContext } from "../context/GlobalContext";
 import { useProfile } from '../loaders/ProfileLoader';

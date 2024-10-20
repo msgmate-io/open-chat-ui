@@ -1,5 +1,5 @@
+import { PaginatedBotsControlList } from '@msgmate-io/open-chat-typescript-client';
 import * as toolkitRaw from '@reduxjs/toolkit';
-import { PaginatedBotsControlList } from '../api/api'; // Assuming you have a similar API structure for bots
 // @ts-ignore
 const { createSlice } = toolkitRaw?.default ?? toolkitRaw;
 

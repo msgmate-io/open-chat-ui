@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ErrorResult } from '@msgmate-io/open-chat-typescript-client/apiTypes';
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { EyeIcon, EyeOff } from 'lucide-react';
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { ErrorResult } from '../api/apiTypes';
 import { Button } from "../ui/button";
 import {
     FormControl,

@@ -1,5 +1,5 @@
+import { ChatResult, PaginatedChatResultList } from '@msgmate-io/open-chat-typescript-client';
 import * as toolkitRaw from '@reduxjs/toolkit';
-import { ChatResult, PaginatedChatResultList } from '../api/api';
 import { RootState } from './store';
 // @ts-ignore
 const { createSlice } = toolkitRaw?.default ?? toolkitRaw;

@@ -1,6 +1,6 @@
+import { useApi } from "@msgmate-io/open-chat-typescript-client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useApi } from "../api/client2";
 import { fetchBots } from "../store/bots";
 import { RootState } from "../store/store";
 

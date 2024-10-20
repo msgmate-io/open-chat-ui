@@ -1,6 +1,6 @@
+import { ChatResult, Message } from "@msgmate-io/open-chat-typescript-client";
 import React, { useContext } from 'react';
 import Markdown from 'react-markdown';
-import { ChatResult, Message } from "../api/api";
 import { CinematicLogo } from '../atoms/CinematicLogo';
 import { GlobalContext } from '../context';
 

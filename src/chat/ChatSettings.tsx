@@ -8,10 +8,10 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 
+import { useApi } from "@msgmate-io/open-chat-typescript-client";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
-import { useApi } from "../api/client2";
 import { GlobalContext } from "../context";
 import { deleteChat, updateChatSettings } from "../store/chats";
 import { DeleteChatModal } from "./DeleteChatModal";
